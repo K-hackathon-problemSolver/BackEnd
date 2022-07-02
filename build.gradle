@@ -1,0 +1,49 @@
+plugins {
+    id 'org.springframework.boot' version '2.7.1'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+    id 'war'
+}
+
+group = 'pnu.problemSolver'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    annotationProcessor 'org.projectlombok:lombok'
+    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client
+    implementation 'org.mariadb.jdbc:mariadb-java-client:2.7.0' //함부로 버전명시하지 말것.
+//    implementation 'org.mariadb.jdbc:mariadb-java-client'
+
+    //test에서 lombok사용
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-validation 부트 2.3버전부터 validation이 starter-web에서 빠졌다.
+    implementation 'org.springframework.boot:spring-boot-starter-validation:2.7.0'
+
+    // https://mvnrepository.com/artifact/org.javassist/javassist
+    implementation 'org.javassist:javassist:3.27.0-GA'
+
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
