@@ -115,5 +115,4 @@ class StoreRepositoryTest {
         storeRepository.deleteStoreByIdLessThan("id5");
     }
 
-
 }

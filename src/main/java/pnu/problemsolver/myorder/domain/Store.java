@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 @ToString
 
 @Getter
-@Setter
+//@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -41,6 +41,4 @@ public class Store {
 
     @Column(columnDefinition = "VARCHAR(11)", nullable = false)
     private String owner_phone_num;
-
-
 }

@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 
 @Getter
-@Setter
+//@Setter
 @Entity
 public class Orders {
 

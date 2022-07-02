@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter
+//@Setter
 @Getter
 @Builder
 @Table(name = "cake")
