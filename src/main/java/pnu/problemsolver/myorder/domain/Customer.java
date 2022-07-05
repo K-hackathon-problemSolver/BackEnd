@@ -15,12 +15,10 @@ import javax.validation.constraints.NotNull;
 @Getter
 //@Setter
 @Builder
-
 @Entity
-
 public class Customer {
     @Id
-    private String id;
+    private String email;//email이 낫겠는데?
 
     @Column(nullable = false)
     private String pw;

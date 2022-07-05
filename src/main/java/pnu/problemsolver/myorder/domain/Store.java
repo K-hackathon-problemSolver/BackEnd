@@ -19,8 +19,8 @@ import javax.validation.constraints.Size;
 public class Store {
 
     @Id
-    @Column(columnDefinition = "VARCHAR(20)") //db에 check로 값이 설정되지는 않는다.
-    private String id;
+    @Column(columnDefinition = "VARCHAR(20)") //db에 check로 값이 설정되지는 않는다. enail이 낫겠는데?
+    private String email;
 
     @Column(columnDefinition = "VARCHAR(20)", nullable = false)
     private String pw;

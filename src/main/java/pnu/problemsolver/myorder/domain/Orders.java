@@ -37,4 +37,6 @@ public class Orders {
 
     @Column(nullable = false)
     private int min_price;
+
+
 }
