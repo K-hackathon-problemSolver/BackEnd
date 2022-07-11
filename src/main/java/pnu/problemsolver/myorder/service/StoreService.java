@@ -22,15 +22,22 @@ public class StoreService {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 
+    /**
+     * findById()를 오버로딩. 필요에 따라 2개 필요할 것 같아서! 그리고 다른 함수를 사용해서 작성하는게 수정에 유리.
+     * @param storeDTO
+     * @return
+     */
+    public StoreDTO findById(StoreDTO storeDTO) {
+        return findById(storeDTO.getEmail());
+    }
 
-    //
     public StoreDTO findById(String email) {
         Optional<Store> store = storeRepository.findById(email);
-        StoreDTO storeDTO = null;
+        StoreDTO resDTO = null;
         if (store.isPresent()) {
-            storeDTO=mapper.map(store, StoreDTO.class);
+            resDTO=mapper.map(store, StoreDTO.class);
         }
-        return storeDTO;
+        return resDTO;
     }
 
     public StoreDTO saveStore(StoreDTO storeDTO) {
@@ -48,8 +55,7 @@ public class StoreService {
             if (store.get().getPw().equals(storeDto.getPw())) {
                 email = storeDto.getEmail();
             } else {
-                log.error("PW불일치!");
-
+                log.error("PW 불일치!");
             }
         }
         else{

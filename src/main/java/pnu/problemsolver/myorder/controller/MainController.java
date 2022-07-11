@@ -9,14 +9,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import pnu.problemsolver.myorder.dto.JWTRequest;
 import pnu.problemsolver.myorder.dto.JWTResponse;
-import pnu.problemsolver.myorder.dto.MemberType;
 import pnu.problemsolver.myorder.dto.StoreDTO;
 import pnu.problemsolver.myorder.security.JwtTokenProvider;
 import pnu.problemsolver.myorder.service.StoreService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
 
 //@Controller
 @RestController//restController안에 @controller, @ResponseBody있다.
@@ -41,12 +39,9 @@ public class MainController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String, String> body) {
+    public ResponseEntity<?> login(HttpServletRequest request, HttpServletResponse response, @RequestBody String jsonBody) {
         log.info("/login 까지 왔다!");
-        JWTRequest jwtRequest = new JWTRequest();
-
-        jwtRequest.setEmail(body.get("email"));
-        jwtRequest.setMemberType(MemberType.valueOf(body.get("memberType").toUpperCase()));
+        JWTRequest jwtRequest = JWTRequest.getInstance(jsonBody, objectMapper);
 
 
         StoreDTO storeDto = storeService.findById(jwtRequest.getEmail());

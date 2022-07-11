@@ -1,16 +1,16 @@
 package pnu.problemsolver.myorder.filter;
 
 import io.jsonwebtoken.Claims;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import pnu.problemsolver.myorder.controller.converter.StringToJWTRequestConverter;
-import pnu.problemsolver.myorder.dto.MemberType;
+import pnu.problemsolver.myorder.domain.Role;
+import pnu.problemsolver.myorder.repository.CustomerRepository;
+import pnu.problemsolver.myorder.repository.StoreRepository;
 import pnu.problemsolver.myorder.security.JwtTokenProvider;
+import pnu.problemsolver.myorder.service.CustomerService;
+import pnu.problemsolver.myorder.service.StoreService;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -20,39 +20,53 @@ import java.io.IOException;
 
 
 @Slf4j
+@Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 
+    //    private final StringToJWTRequestConverter stringToJWTRequestConverter;
     private final JwtTokenProvider tokenProvider;
-    private final StringToJWTRequestConverter stringToJWTRequestConverter;
+    private final StoreService storeService;
+    private final CustomerService customerService;
 
 
     //filter에서도 Bean주입받을 수 있다.
     @Autowired
-    public JwtAuthenticationFilter(JwtTokenProvider tokenProvider, StringToJWTRequestConverter stringToJWTRequestConverter) {
-        this.stringToJWTRequestConverter = stringToJWTRequestConverter;
+    public JwtAuthenticationFilter(JwtTokenProvider tokenProvider, StoreService storeService, CustomerService customerService) {
+//        this.stringToJWTRequestConverter = stringToJWTRequestConverter;
         this.tokenProvider = tokenProvider;
+        this.storeService = storeService;
+        this.customerService = customerService;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String jwt = getJwtFromRequest(request); //request에서 jwt 토큰을 꺼낸다.
         if (jwt != null && !jwt.isEmpty()) {
-
             if (tokenProvider.isValidate(jwt)) {
                 Claims claims = tokenProvider.getClaims(jwt);
-                if (!claims.keySet().contains("email")) {
+                if (claims.keySet().contains("email")) {
+                    String email = (String) claims.get("email");
+
+
+
+                    //여기오면 로그인 된 상황임.
+
+
+                    request.setAttribute("role", Role.MEMBER);
+                } else {
                     log.info("email을 찾지 못했습니다.");
-//                        request.setAttribute("unauthorization", "email을 찾지 못했습니다.");
-                    filterChain.doFilter(request, response);
-                    return;
+                    request.setAttribute("role", Role.GUEST);
                 }
+
             } else {
                 log.info("JwtTokenProvider.isValidate()를 통과못함!");
+                request.setAttribute("role", Role.GUEST);
 //                    request.setAttribute("unauthorization", "JwtTokenProvider.isValidate()를 통과못함!");
             }
         } else {
             log.info("헤더에 jwt가 없습니다!");
+            request.setAttribute("role", Role.GUEST);
         }
         filterChain.doFilter(request, response); //다음 필터로 넘겨줘야함.
     }
