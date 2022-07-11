@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 public class Customer {
     @Id
-    private String email;//email이 낫겠는데?
+    private String email;
 
     @Column(nullable = false)
     private String pw;

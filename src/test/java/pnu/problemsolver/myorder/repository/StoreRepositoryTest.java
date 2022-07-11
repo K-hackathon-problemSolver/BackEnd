@@ -1,6 +1,5 @@
 package pnu.problemsolver.myorder.repository;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +26,7 @@ class StoreRepositoryTest {
     public void testinsertDummies(){
         IntStream.rangeClosed(1, 20).forEach(i->{
             Store store = Store.builder()
-                    .id("id" + i)
+                    .email("id" + i)
                     .pw("pw" + i)
                     .name("신민건")
                     .description("부산대" + i)
@@ -48,7 +47,7 @@ class StoreRepositoryTest {
     @Test
     public void NotNUll테스트(){//entity에는 null이 들어갈 수 있다. @NotNull을 사용해도 마찬가지였음.
             Store store = Store.builder()
-                    .id("id")
+                    .email("id")
                     .pw("pw")
                     .name(null)
                     .location(null)
@@ -61,7 +60,7 @@ class StoreRepositoryTest {
     @Test
     public void updateTest() {
         Store store = Store.builder()
-                .id("id5")
+                .email("id5")
                 .pw("update")
                 .name("update")
                 .description("update")
@@ -69,14 +68,14 @@ class StoreRepositoryTest {
                 .store_phone_num("update")
                 .owner_phone_num("update")
                 .build();
-        assertEquals(storeRepository.save(store).getId(), "id5");//저장한 엔티티를 반환한다.
+        assertEquals(storeRepository.save(store).getEmail(), "id5");//저장한 엔티티를 반환한다.
     }
 
     @Test
     public void findById테스트() {//key로 찾는다.
         Optional<Store> store = storeRepository.findById("id5");
         store.ifPresent(st -> {
-            assertEquals(st.getId(), "id5");
+            assertEquals(st.getEmail(), "id5");
         });
     }
 
@@ -103,7 +102,7 @@ class StoreRepositoryTest {
 
     @Test
     public void 쿼리메소드테스트() {
-        List<Store> list = storeRepository.findByIdBetweenOrderByIdDesc("id1", "id99");
+        List<Store> list = storeRepository.findByEmailBetweenOrderByEmailDesc("id1", "id99");
         list.stream().forEach(System.out::println);
     }
 
@@ -112,7 +111,7 @@ class StoreRepositoryTest {
     @Transactional
     @Commit
     public void 쿼리메소드delete() {
-        storeRepository.deleteStoreByIdLessThan("id5");
+        storeRepository.deleteStoreByEmailLessThan("id5");
     }
 
 }

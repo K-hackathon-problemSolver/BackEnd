@@ -16,8 +16,9 @@ public interface StoreRepository extends JpaRepository<Store, String> {
 //페이징 필요
 
     //쿼리메소드
-    List<Store> findByIdBetweenOrderByIdDesc(String from, String to);
+    List<Store> findByEmailBetweenOrderByEmailDesc(String from, String to);
 
-    void deleteStoreByIdLessThan(String id);
+    //쿼리메소드에서는 Id가 PK의 id가 아니라 필드변수명을 뜻한다.
+    void deleteStoreByEmailLessThan(String id);
 
 }
