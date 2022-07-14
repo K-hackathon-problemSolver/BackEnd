@@ -35,7 +35,7 @@ public class MainController {
 
     @PostMapping
     public StoreDTO saveStore(StoreDTO storeDTO) {
-        return storeService.saveStore(storeDTO);
+        return storeService.save(storeDTO);
     }
 
     @PostMapping("/login")
@@ -67,7 +67,7 @@ public class MainController {
                 .location("부산")
                 .build();
 
-        storeService.saveStore(storeDTO);
+        storeService.save(storeDTO);
         log.info("tmp()실행!");
 
     }

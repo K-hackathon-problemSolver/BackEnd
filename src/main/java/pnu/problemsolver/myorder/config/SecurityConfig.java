@@ -43,10 +43,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        http.
-//                authorizeRequests()
-//                .antMatchers("/api/hello").permitAll()
-//                .anyRequest().authenticated();
 
         //빌더패턴을 사용함.
         http

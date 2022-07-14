@@ -1,6 +1,7 @@
 package pnu.problemsolver.myorder.dto;
 
 import lombok.*;
+import pnu.problemsolver.myorder.domain.Customer;
 import pnu.problemsolver.myorder.domain.Store;
 
 @Data
@@ -22,5 +23,15 @@ public class StoreDTO {
     private String store_phone_num;
 
     private String owner_phone_num;
+
+    private String impossibleDate;
+
+
+
+
+//    public static Store toDTO(Store store) {
+//
+//    }
+
 
 }

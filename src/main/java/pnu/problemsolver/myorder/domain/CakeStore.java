@@ -17,13 +17,13 @@ public class CakeStore {
     @GeneratedValue(strategy = GenerationType.IDENTITY) //= AI
     private Long id;
 
-//    @Column(/*columnDefinition = "VARCHAR(20)", nullable = false*/) //db에 check로 값이 설정되지는 않는다.
-@ManyToOne(fetch = FetchType.LAZY)
-private Store store;
+    //    @Column(/*columnDefinition = "VARCHAR(20)", nullable = false*/) //db에 check로 값이 설정되지는 않는다.
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Store store;
 
 
-//    @Column(nullable = false)
-@ManyToOne(fetch = FetchType.LAZY)
+    //    @Column(nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
 //ManyToOne에는 @Column못쓴다.!
     private Demand demand;
 

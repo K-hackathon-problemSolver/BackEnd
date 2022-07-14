@@ -39,8 +39,12 @@ public class Store {
     @Column(columnDefinition = "VARCHAR(15)")
     private String store_phone_num;
 
-    @Column(columnDefinition = "VARCHAR(11)", nullable = false)
+    @Column(columnDefinition = "VARCHAR(15)", nullable = false)
     private String owner_phone_num;
+
+    @Column(columnDefinition = "JSON", nullable = false)
+    private String impossibleDate;
+
 
     public static Store toEntity(StoreDTO storeDTO) {
         Store store = Store.builder()
@@ -51,7 +55,9 @@ public class Store {
                 .location(storeDTO.getLocation())
                 .store_phone_num(storeDTO.getStore_phone_num())
                 .owner_phone_num(storeDTO.getOwner_phone_num())
+                .impossibleDate(storeDTO.getImpossibleDate())
                 .build();
+
         return store;
     }
 }

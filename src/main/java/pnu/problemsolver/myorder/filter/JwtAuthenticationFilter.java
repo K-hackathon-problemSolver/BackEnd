@@ -30,7 +30,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final CustomerService customerService;
 
 
-    //filter에서도 Bean주입받을 수 있다.
+    //filter에서도 Bean주입받을 수 있다. 예전에는 안되서 안된다고 설명한 책도 있음.
     @Autowired
     public JwtAuthenticationFilter(JwtTokenProvider tokenProvider, StoreService storeService, CustomerService customerService) {
 //        this.stringToJWTRequestConverter = stringToJWTRequestConverter;
@@ -47,27 +47,25 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 Claims claims = tokenProvider.getClaims(jwt);
                 if (claims.keySet().contains("email")) {
                     String email = (String) claims.get("email");
-
-
-
                     //여기오면 로그인 된 상황임.
 
 
                     request.setAttribute("role", Role.MEMBER);
                 } else {
                     log.info("email을 찾지 못했습니다.");
-                    request.setAttribute("role", Role.GUEST);
+//                    request.setAttribute("role", Role.GUEST);
                 }
 
             } else {
                 log.info("JwtTokenProvider.isValidate()를 통과못함!");
-                request.setAttribute("role", Role.GUEST);
+//                request.setAttribute("role", Role.GUEST);
 //                    request.setAttribute("unauthorization", "JwtTokenProvider.isValidate()를 통과못함!");
             }
         } else {
             log.info("헤더에 jwt가 없습니다!");
-            request.setAttribute("role", Role.GUEST);
+//            request.setAttribute("role", Role.GUEST);
         }
+        request.setAttribute("role", Role.GUEST);//JWT가 있어도 올바르지 않다면 GUEST권한을 부여함.
         filterChain.doFilter(request, response); //다음 필터로 넘겨줘야함.
     }
 

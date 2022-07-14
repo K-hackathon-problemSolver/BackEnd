@@ -40,7 +40,7 @@ public class StoreService {
         return resDTO;
     }
 
-    public StoreDTO saveStore(StoreDTO storeDTO) {
+    public StoreDTO save(StoreDTO storeDTO) {
         Store store = Store.toEntity(storeDTO);
         store=storeRepository.save(store);
         return mapper.map(store, StoreDTO.class);//삽입된 store를 다시 반환
