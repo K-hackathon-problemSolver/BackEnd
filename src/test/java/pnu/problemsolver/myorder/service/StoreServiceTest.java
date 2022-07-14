@@ -33,7 +33,6 @@ class StoreServiceTest {
                 .owner_phone_num("123")
                 .impossibleDate("{\"a\":\"1\"}")
                 .build();
-//
         System.out.println(storeDto);
         System.out.println();
 
