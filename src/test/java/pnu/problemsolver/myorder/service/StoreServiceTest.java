@@ -38,7 +38,7 @@ class StoreServiceTest {
 
         Store store = Store.toEntity(storeDto);
         System.out.println(store);
-
+//
         storeService.save(storeDto);
 
     }
