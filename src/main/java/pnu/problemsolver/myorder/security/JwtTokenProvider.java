@@ -19,8 +19,7 @@ import java.util.Map;
 public class JwtTokenProvider {
 
     //Logger import할 때 slf4j.Logger사용해야함. 함수 먼저 사용하고 리팩토링 기능 사용하자.
-    private final Logger log = LoggerFactory.getLogger(this.getClass());
-
+    private static final Logger log = LoggerFactory.getLogger("JwtTokenProvider");
     private final Environment environment;
 
 //    @Value("${jwt.secrete}") //lombok이 아니라 spring 어노테이션

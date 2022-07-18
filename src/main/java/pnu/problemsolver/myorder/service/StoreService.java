@@ -22,7 +22,6 @@ public class StoreService {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-
     /**
      * findById()를 오버로딩. 필요에 따라 2개 필요할 것 같아서! 그리고 다른 함수를 사용해서 작성하는게 수정에 유리.
      * @param storeDTO
