@@ -26,7 +26,7 @@ public class CustomerService {
      */
     public CustomerDTO findById(CustomerDTO customerDTO) {
 
-        Optional<Customer> customerOptional = customerRepository.findById(customerDTO.getEmail());
+        Optional<Customer> customerOptional = customerRepository.findById(customerDTO.getUuid());
         if (customerOptional.isPresent()) {
             CustomerDTO resDTO = modelMapper.map(customerOptional, CustomerDTO.class);
             return resDTO;

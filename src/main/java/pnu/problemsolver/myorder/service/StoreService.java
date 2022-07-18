@@ -1,23 +1,24 @@
 package pnu.problemsolver.myorder.service;
 
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import pnu.problemsolver.myorder.domain.Store;
 import pnu.problemsolver.myorder.dto.StoreDTO;
 import pnu.problemsolver.myorder.repository.StoreRepository;
+import pnu.problemsolver.myorder.util.Mapper;
 
 import javax.transaction.Transactional;
 import java.util.Optional;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
 @Transactional //service에서 필수!
 public class StoreService {
     private final StoreRepository storeRepository;
-    private final ModelMapper mapper;
+//    private final ModelMapper mapper;
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -28,14 +29,14 @@ public class StoreService {
      * @return
      */
     public StoreDTO findById(StoreDTO storeDTO) {
-        return findById(storeDTO.getEmail());
+        return findById(storeDTO.getUuid());
     }
 
-    public StoreDTO findById(String email) {
-        Optional<Store> store = storeRepository.findById(email);
+    public StoreDTO findById(UUID uuid) {
+        Optional<Store> store = storeRepository.findById(uuid);
         StoreDTO resDTO = null;
         if (store.isPresent()) {
-            resDTO=mapper.map(store, StoreDTO.class);
+            resDTO= Mapper.modelMapper.map(store, StoreDTO.class);
         }
         return resDTO;
     }
@@ -43,12 +44,12 @@ public class StoreService {
     public StoreDTO save(StoreDTO storeDTO) {
         Store store = Store.toEntity(storeDTO);
         store=storeRepository.save(store);
-        return mapper.map(store, StoreDTO.class);//삽입된 store를 다시 반환
+        return Mapper.modelMapper.map(store, StoreDTO.class);//삽입된 store를 다시 반환
     }
 
     //성공하면 email반환. 실패하면 null반환.
     public String login(StoreDTO storeDto) {
-        Optional<Store> store = storeRepository.findById(storeDto.getEmail());
+        Optional<Store> store = storeRepository.findById(storeDto.getUuid());
         String email = null;
 
         if (store.isPresent()) {

@@ -4,11 +4,14 @@ import lombok.*;
 import pnu.problemsolver.myorder.domain.Customer;
 import pnu.problemsolver.myorder.domain.Store;
 
+import java.util.UUID;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class StoreDTO {
+    private UUID uuid;
 
     private String email;
 

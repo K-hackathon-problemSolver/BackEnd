@@ -4,6 +4,7 @@ package pnu.problemsolver.myorder.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @ToString
 
@@ -14,27 +15,32 @@ import javax.persistence.*;
 @Getter
 //@Setter
 @Entity
-public class Demand {
+public class Demand extends BaseTimeEntitiy {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UUID uuid;
 
-    private String customer_id;
+    @ManyToOne
+    private Customer customer;
 
-    private String store_id;
+    @ManyToOne
+    private Store store;
 
-    @Column(nullable = false)
+    @Column(nullable = false) //0 : 주문대기, 1 : 승락, 2 : 완료
     private int status;
 
-    @Column(columnDefinition = "JSON", nullable = false)
+    @Column(columnDefinition = "JSON")
     private String option;
-
-    @Column(nullable = false)
-    private String name;
-
-    private String description;
+//
+//    @Column(nullable = false)
+//    private String name; //케이크이름
+//
+//    private String description;
 
     @Column(nullable = false)
     private int min_price;
+
+    private String fillPath;
+
 
 }

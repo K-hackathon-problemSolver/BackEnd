@@ -9,6 +9,8 @@ import pnu.problemsolver.myorder.domain.Customer;
 import pnu.problemsolver.myorder.domain.Store;
 import pnu.problemsolver.myorder.dto.StoreDTO;
 
+import java.util.UUID;
+
 
 @SpringBootTest
 class StoreServiceTest {
@@ -24,6 +26,7 @@ class StoreServiceTest {
 //    @Transactional
     public void save테스트() {
         StoreDTO storeDto = StoreDTO.builder()
+//                .uuid(UUID.randomUUID())
                 .email("sdf")
                 .pw("testPW")
                 .name("아름다운가게")
@@ -33,6 +36,7 @@ class StoreServiceTest {
                 .owner_phone_num("123")
                 .impossibleDate("{\"a\":\"1\"}")
                 .build();
+
         System.out.println(storeDto);
         System.out.println();
 
@@ -40,7 +44,28 @@ class StoreServiceTest {
         System.out.println(store);
 //
         storeService.save(storeDto);
+    }
 
+    public void findById테스트() {
+        StoreDTO storeDto = StoreDTO.builder()
+                .email("sdf")
+                .pw("testPW")
+                .name("아름다운가게")
+                .description("이건설명")
+                .location("dkv")
+                .store_phone_num("311")
+                .owner_phone_num("123")
+                .impossibleDate("{\"a\":\"1\"}")
+                .build();
+
+        System.out.println(storeDto);
+        System.out.println();
+
+        Store store = Store.toEntity(storeDto);
+        System.out.println(store);
+//
+        storeService.save(storeDto);
+        storeService.findById(storeDto);
     }
 
 }

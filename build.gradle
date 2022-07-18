@@ -38,9 +38,9 @@ dependencies {
 
     // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-validation 부트 2.3버전부터 validation이 starter-web에서 빠졌다.
     implementation 'org.springframework.boot:spring-boot-starter-validation:2.7.0'
-
-    // https://mvnrepository.com/artifact/org.javassist/javassist
-    implementation 'org.javassist:javassist:3.27.0-GA'
+//
+//    // https://mvnrepository.com/artifact/org.javassist/javassist
+//    implementation 'org.javassist:javassist:3.27.0-GA'
 
     // https://mvnrepository.com/artifact/org.modelmapper/modelmapper
     implementation 'org.modelmapper:modelmapper:3.1.0'

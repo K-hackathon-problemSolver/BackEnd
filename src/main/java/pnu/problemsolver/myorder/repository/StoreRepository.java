@@ -5,8 +5,9 @@ import org.springframework.stereotype.Repository;
 import pnu.problemsolver.myorder.domain.Store;
 
 import java.util.List;
+import java.util.UUID;
 
-public interface StoreRepository extends JpaRepository<Store, String> {//extends JpaRepository하면 @Repository안해도 된다.
+public interface StoreRepository extends JpaRepository<Store, UUID> {//extends JpaRepository하면 @Repository안해도 된다.
     //여기에 코드가 없어도 알아서 CRUD구현해줌.
     // save(entity)
     // findById(key), getOne(key) : 필요할 때 sql실행. 오버헤드있을 것.
