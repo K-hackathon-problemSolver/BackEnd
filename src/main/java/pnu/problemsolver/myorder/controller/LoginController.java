@@ -73,7 +73,7 @@ public class LoginController {
         }
         urlMap.put("naver", "https://nid.naver.com/oauth2.0/authorize?client_id=i6vA823oE3F_9QtAonj6&response_type=code&redirect_uri="
                 + encodedRedirectURL + "&state=" + stateToken);
-        System.out.println(urlMap.get("naver"));
+//        System.out.println(urlMap.get("naver"));
 
         return urlMap;
     }
