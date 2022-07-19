@@ -20,7 +20,6 @@ import java.io.IOException;
 
 
 @Slf4j
-@Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 
@@ -50,13 +49,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 if (claims.keySet().contains("email")) {
                     String email = (String) claims.get("email");
                     //여기오면 로그인 된 상황임.
-
-
                     request.setAttribute("role", Role.MEMBER);
                 } else {
                     log.info("email을 찾지 못했습니다.");
                 }
-
             } else {
                 log.info("JwtTokenProvider.isValidate()를 통과못함!");
             }

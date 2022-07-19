@@ -1,6 +1,7 @@
 package pnu.problemsolver.myorder.domain;
 
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.transform.AliasedTupleSubsetResultTransformer;
 
 import javax.persistence.Column;
@@ -8,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
+import java.util.UUID;
+
 @ToString
 
 @NoArgsConstructor
@@ -18,14 +21,14 @@ import javax.validation.constraints.NotNull;
 @Entity
 public class Customer {
     @Id
-    private String email;
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    @Column(columnDefinition = "BINARY(16)")
+    private UUID uuid;
 
-    @Column(nullable = false)
     private String pw;
 
-    @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
     private String phone_num;
 }

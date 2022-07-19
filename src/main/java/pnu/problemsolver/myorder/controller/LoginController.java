@@ -44,7 +44,7 @@ public class LoginController {
 //        this.restTemplate = restTemplate;
         this.tokenProvider = tokenProvider;
         this.storeService = storeService;
-        stateToken = environment.getProperty("Auth.stateToken");
+        stateToken = environment.getProperty("OAuth.stateToken");
         redirectURL = environment.getProperty("OAuth.naver.redirectURL");
         clientID = environment.getProperty("OAuth.naver.clientID");
         secret = environment.getProperty("OAuth.naver.secret");
@@ -73,6 +73,8 @@ public class LoginController {
         }
         urlMap.put("naver", "https://nid.naver.com/oauth2.0/authorize?client_id=i6vA823oE3F_9QtAonj6&response_type=code&redirect_uri="
                 + encodedRedirectURL + "&state=" + stateToken);
+        System.out.println(urlMap.get("naver"));
+
         return urlMap;
     }
 
@@ -88,6 +90,8 @@ public class LoginController {
                 stateToken +
                 "&code=" +
                 httpServletRequest.getParameter("code");
+
+        System.out.println(url);
 
 //        HttpHeaders headers = new HttpHeaders();
 //        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
@@ -105,10 +109,20 @@ public class LoginController {
         log.info("tokens! : " + tokens);
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(tokens.get("access_token"));
-        System.out.println("headers! : " + headers);
+        log.info("headers! : " + headers);
         HttpEntity entity = new HttpEntity(headers);
 
-        ResponseEntity<String> exchange = Request.restTemplate.exchange(naverMemberInfoURL, HttpMethod.GET, entity, String.class);
+        ResponseEntity<Map> map = Request.restTemplate.exchange(naverMemberInfoURL, HttpMethod.GET, entity, Map.class);
+
+//        log.info(map.getClass().toString());
+//        log.info(map.getBody().getClass().toString());
+//
+//        log.info(map.toString());
+//        log.info(map.getBody().toString());
+//        log.info(map.getBody().keySet().toString());
+        log.info(map.getBody().get("response").toString());
+        Map memberInfo = (Map) map.getBody().get("response");
+
         //exchange에 Member정보가 들어있음.
         return "success";
     }

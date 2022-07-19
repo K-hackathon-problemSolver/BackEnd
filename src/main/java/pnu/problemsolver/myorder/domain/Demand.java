@@ -2,6 +2,7 @@ package pnu.problemsolver.myorder.domain;
 
 
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -18,6 +19,9 @@ import java.util.UUID;
 public class Demand extends BaseTimeEntitiy {
 
     @Id
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    @Column(columnDefinition = "BINARY(16)")
     private UUID uuid;
 
     @ManyToOne
@@ -41,6 +45,10 @@ public class Demand extends BaseTimeEntitiy {
     private int min_price;
 
     private String fillPath;
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
 
 
 }

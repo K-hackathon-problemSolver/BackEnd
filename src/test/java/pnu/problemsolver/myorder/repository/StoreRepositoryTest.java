@@ -38,38 +38,38 @@ class StoreRepositoryTest {
         });
     }
 
-    @Test
-    public void DI확인() {
-        System.out.println(storeRepository.getClass().getName());
-    }
+//    @Test
+//    public void DI확인() {
+//        System.out.println(storeRepository.getClass().getName());
+//    }
 
 
-    @Test
-    public void NotNUll테스트(){//entity에는 null이 들어갈 수 있다. @NotNull을 사용해도 마찬가지였음.
-            Store store = Store.builder()
-                    .email("id")
-                    .pw("pw")
-                    .name(null)
-                    .location(null)
-                    .description("부산대")
-                    .store_phone_num("051341342")
-                    .owner_phone_num("01033916486")
-                    .build();
-    }
+//    @Test
+//    public void NotNUll테스트(){//entity에는 null이 들어갈 수 있다. @NotNull을 사용해도 마찬가지였음.
+//            Store store = Store.builder()
+//                    .email("id")
+//                    .pw("pw")
+//                    .name(null)
+//                    .location(null)
+//                    .description("부산대")
+//                    .store_phone_num("051341342")
+//                    .owner_phone_num("01033916486")
+//                    .build();
+//    }
 
-    @Test
-    public void updateTest() {
-        Store store = Store.builder()
-                .email("id5")
-                .pw("update")
-                .name("update")
-                .description("update")
-                .location("update")
-                .store_phone_num("update")
-                .owner_phone_num("update")
-                .build();
-        assertEquals(storeRepository.save(store).getEmail(), "id5");//저장한 엔티티를 반환한다.
-    }
+//    @Test
+//    public void updateTest() {
+//        Store store = Store.builder()
+//                .email("id5")
+//                .pw("update")
+//                .name("update")
+//                .description("update")
+//                .location("update")
+//                .store_phone_num("update")
+//                .owner_phone_num("update")
+//                .build();
+//        assertEquals(storeRepository.save(store).getEmail(), "id5");//저장한 엔티티를 반환한다.
+//    }
 
     @Test
     public void findById테스트() {//key로 찾는다.
@@ -98,20 +98,6 @@ class StoreRepositoryTest {
         result.getContent().stream().forEach(store ->{
             System.out.println(store);
         });
-    }
-
-    @Test
-    public void 쿼리메소드테스트() {
-        List<Store> list = storeRepository.findByEmailBetweenOrderByEmailDesc("id1", "id99");
-        list.stream().forEach(System.out::println);
-    }
-
-    @Test
-    //아래 2개 빠지면 동작안한다. select, delete가 따로 이뤄지기 때문이라고 함.
-    @Transactional
-    @Commit
-    public void 쿼리메소드delete() {
-        storeRepository.deleteStoreByEmailLessThan("id5");
     }
 
 }
