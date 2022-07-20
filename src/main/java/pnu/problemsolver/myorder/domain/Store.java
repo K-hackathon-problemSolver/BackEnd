@@ -19,7 +19,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @Entity
-public class Store {
+public class Store extends BaseTimeEntitiy{
 
     @Id
     @GeneratedValue(generator = "uuid2")

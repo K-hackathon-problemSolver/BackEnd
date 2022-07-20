@@ -19,7 +19,7 @@ import java.util.UUID;
 //@Setter
 @Builder
 @Entity
-public class Customer {
+public class Customer extends BaseTimeEntitiy{
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
@@ -31,4 +31,6 @@ public class Customer {
     private String name;
 
     private String phone_num;
+
+    private String sns;
 }

@@ -37,4 +37,7 @@ public class CakeStore {
 
     @Column(nullable = false)
     private int min_price;
+
+    private String sns;
+
 }

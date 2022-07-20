@@ -7,8 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+import pnu.problemsolver.myorder.domain.Customer;
+import pnu.problemsolver.myorder.dto.NaverOAuthDTO;
 import pnu.problemsolver.myorder.dto.StoreDTO;
 import pnu.problemsolver.myorder.security.JwtTokenProvider;
+import pnu.problemsolver.myorder.service.CustomerService;
 import pnu.problemsolver.myorder.service.StoreService;
 import pnu.problemsolver.myorder.util.Mapper;
 import pnu.problemsolver.myorder.util.Request;
@@ -27,6 +30,7 @@ public class LoginController {
 
     private final JwtTokenProvider tokenProvider;
     private final StoreService storeService;
+    private final CustomerService customerService;
 
 
     private final String clientID;
@@ -37,13 +41,13 @@ public class LoginController {
     private final String naverMemberInfoURL = "https://openapi.naver.com/v1/nid/me";
 
 
-//    private final RestTemplate restTemplate;
-
     @Autowired
-    public LoginController(Environment environment, JwtTokenProvider tokenProvider, StoreService storeService) {
+    public LoginController(Environment environment, JwtTokenProvider tokenProvider, StoreService storeService, CustomerService customerService) {
 //        this.restTemplate = restTemplate;
         this.tokenProvider = tokenProvider;
         this.storeService = storeService;
+        this.customerService = customerService;
+
         stateToken = environment.getProperty("OAuth.stateToken");
         redirectURL = environment.getProperty("OAuth.naver.redirectURL");
         clientID = environment.getProperty("OAuth.naver.clientID");
@@ -78,7 +82,7 @@ public class LoginController {
         return urlMap;
     }
 
-    @GetMapping("/login/naver")
+    @GetMapping("/login/naver")    //redirectURL
     public String loginNaver(HttpServletRequest httpServletRequest) {
         System.out.println(httpServletRequest.getQueryString());
 
@@ -120,8 +124,11 @@ public class LoginController {
 //        log.info(map.toString());
 //        log.info(map.getBody().toString());
 //        log.info(map.getBody().keySet().toString());
-        log.info(map.getBody().get("response").toString());
-        Map memberInfo = (Map) map.getBody().get("response");
+        log.info(map.getBody().get("response").getClass().toString());//map에서 그대로 사용하면 나중에 또 문자열 출력해서 확인해야한다. 무조건 객체 만드는 것이 이득임. 관리, 유지보수가 편하다.
+        Map memberInfoMap = (Map) map.getBody().get("response");
+//        NaverOAuthDTO naverOAuthDTO = new NaverOAuthDTO(memberInfoMap);
+        NaverOAuthDTO naverOAuthDTO = Mapper.modelMapper.map(memberInfoMap, NaverOAuthDTO.class);//맵퍼로 동작안하면 생성자로 만들어주면 됨.
+        log.info(naverOAuthDTO.toString());
 
         //exchange에 Member정보가 들어있음.
         return "success";
@@ -129,7 +136,6 @@ public class LoginController {
 
     @GetMapping("/test")
     public void tmp() {
-
         StoreDTO storeDTO = StoreDTO.builder()
                 .email("test")
                 .pw("testpw")
