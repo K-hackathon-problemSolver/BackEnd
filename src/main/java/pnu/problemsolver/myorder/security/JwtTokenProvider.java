@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 //@RequiredArgsConstructor
 //@NoArgsConstructor
@@ -31,7 +32,7 @@ public class JwtTokenProvider {
     public JwtTokenProvider(Environment environment) {
         this.environment = environment;
         this.SECRET_KEY = environment.getProperty("jwt.secret");
-        this.JWT_TOKEN_VALIDITY = Long.parseLong(environment.getProperty("jwt.validity.time"));//string으로 읽어오기 때문
+        this.JWT_TOKEN_VALIDITY = Long.parseLong(Objects.requireNonNull(environment.getProperty("jwt.validity.time"), "application.properties jwt.validity.time 로드 실패"));//string으로 읽어오기 때문
     }
 
     public String createToken() {

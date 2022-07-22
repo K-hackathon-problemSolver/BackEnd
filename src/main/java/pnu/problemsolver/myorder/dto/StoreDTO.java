@@ -39,13 +39,27 @@ public class StoreDTO {
     //경도 : 동, 서쪽으로 얼마나?
     private float longitude;
 
-
-    //TODO : file_path가 아니라 base 64인코딩임.
+    //여기서는 String이다. SaveDTO에서는 byte[]임.
     private String filePath;
 
-//    public static Store toDTO(Store store) {
-//
-//    }
-
-
+    public static StoreDTO toDTO(Store s) {
+        StoreDTO storeDTO = StoreDTO.builder()
+                .uuid(s.getUuid())
+                .email(s.getEmail())
+                .pw(s.getPw())
+                .name(s.getName())
+                .description(s.getDescription())
+                .location(s.getLocation())
+                .store_phone_num(s.getStore_phone_num())
+                .owner_phone_num(s.getOwner_phone_num())
+                .impossibleDate(s.getImpossibleDate())
+                .latitude(s.getLatitude())
+                .longitude(s.getLongitude())
+//                .filePath(s.getFilePath())
+                .build();
+        return storeDTO;
+    }
 }
+
+
+

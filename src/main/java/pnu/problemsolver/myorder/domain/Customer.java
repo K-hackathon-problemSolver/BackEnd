@@ -26,6 +26,7 @@ public class Customer extends BaseTimeEntitiy{
     @Column(columnDefinition = "BINARY(16)")
     private UUID uuid;
 
+    private String email;
     private String pw;
 
     private String name;
