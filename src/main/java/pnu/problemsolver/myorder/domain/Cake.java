@@ -1,6 +1,8 @@
 package pnu.problemsolver.myorder.domain;
 
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
+import pnu.problemsolver.myorder.dto.CakeDTO;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -12,9 +14,12 @@ import java.util.UUID;
 @Getter
 @Builder
 @Entity
-public class CakeStore {
+public class Cake {
 
     @Id
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    @Column(columnDefinition = "BINARY(16)")
     private UUID uuid;
 
     //    @Column(/*columnDefinition = "VARCHAR(20)", nullable = false*/) //db에 check로 값이 설정되지는 않는다.
@@ -22,8 +27,8 @@ public class CakeStore {
     private Store store;
 
     //    @Column(nullable = false) ManyToOne에는 @Column못쓴다.!
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Demand demand;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    private Demand demand;
 
     private String filePath;
 
@@ -38,6 +43,17 @@ public class CakeStore {
     @Column(nullable = false)
     private int min_price;
 
-    private String sns;
+    public static Cake toEntity(CakeDTO cakeDTO) {
+        Cake cake = Cake.builder()
+                .uuid(cakeDTO.getUuid())
+                .store(Store.builder().uuid(cakeDTO.getStoreUUID()).build())
+                .filePath(cakeDTO.getFilePath())
+                .option(cakeDTO.getOption())
+                .name(cakeDTO.getName())
+                .description(cakeDTO.getDescription())
+                .min_price(cakeDTO.getMin_price())
+                .build();
+        return cake;
+    }
 
 }

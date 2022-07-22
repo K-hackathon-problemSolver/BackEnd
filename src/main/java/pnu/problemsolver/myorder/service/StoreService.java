@@ -6,9 +6,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import pnu.problemsolver.myorder.domain.Store;
 import pnu.problemsolver.myorder.dto.StoreDTO;
-import pnu.problemsolver.myorder.dto.StoreUpdateDTO;
+import pnu.problemsolver.myorder.dto.StoreEditDTO;
 import pnu.problemsolver.myorder.repository.StoreRepository;
-import pnu.problemsolver.myorder.util.Mapper;
 
 import javax.transaction.Transactional;
 import java.util.Optional;
@@ -47,7 +46,8 @@ public class StoreService {
         return StoreDTO.toDTO(store);
     }
 
-    public void save(StoreUpdateDTO updateDTO) {
+    public void save(StoreEditDTO updateDTO) {
+
 
     }
 
