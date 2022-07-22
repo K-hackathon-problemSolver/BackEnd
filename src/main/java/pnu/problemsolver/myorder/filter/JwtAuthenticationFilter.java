@@ -62,7 +62,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         request.setAttribute("role", Role.GUEST);//JWT가 있어도 올바르지 않다면 GUEST권한을 부여함.
         filterChain.doFilter(request, response); //다음 필터로 넘겨줘야함.
     }
-    //헤더에서 bearer값만 가져온다.
+    //헤더에서 bearer값만 가져온다. jwt는 헤더에 있는 값임. body에 없으니 안심!
     private String getJwtFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {//null을 먼저 검사해야함. NPE뜬다.

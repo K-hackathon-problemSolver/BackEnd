@@ -35,7 +35,8 @@ public class StoreService {
         Optional<Store> store = storeRepository.findById(uuid);
         StoreDTO resDTO = null;
         if (store.isPresent()) {
-            resDTO= Mapper.modelMapper.map(store, StoreDTO.class);
+            //TODO : 바꾸기.
+//            resDTO= Mapper.modelMapper.map(store, StoreDTO.class);
         }
         return resDTO;
     }
@@ -43,7 +44,9 @@ public class StoreService {
     public StoreDTO save(StoreDTO storeDTO) {
         Store store = Store.toEntity(storeDTO);
         store=storeRepository.save(store);
-        return Mapper.modelMapper.map(store, StoreDTO.class);//삽입된 store를 다시 반환
+        //TODO : 바꾸기
+//        return Mapper.modelMapper.map(store, StoreDTO.class);//삽입된 store를 다시 반환
+        return new StoreDTO();
     }
 
     //성공하면 email반환. 실패하면 null반환.

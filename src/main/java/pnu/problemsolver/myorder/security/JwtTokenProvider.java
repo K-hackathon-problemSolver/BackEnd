@@ -11,11 +11,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-@Component
 //@RequiredArgsConstructor
 //@NoArgsConstructor
 //@RequiredArgsConstructor
 // 이 클래스에서는 거의 jjwt라이브러리만 쓴다.
+@Component
 public class JwtTokenProvider {
 
     //Logger import할 때 slf4j.Logger사용해야함. 함수 먼저 사용하고 리팩토링 기능 사용하자.
