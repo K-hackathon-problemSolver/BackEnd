@@ -25,16 +25,14 @@ public class UploadController {
     private String uploadPath;
 
     @PostMapping("/store")
+    //자동으로 StoreSaveDTO로 맵핑된다!
     public void uploadFiles(@RequestBody StoreSaveDTO storeSaveDTO) throws IOException {
 //        File file = new File("C:\\Users\\minkun\\Desktop\\minkun\\BackEnd\\src\\main\\java\\pnu\\problemsolver\\myorder\\controller\\testPicture.jpg");
 //        System.out.println(file.toPath());
-//        byte[] bytes = null;
-//        bytes = Files.readAllBytes(file.toPath());
-//        log.info("테스트!"+Mapper.objectMapper.writeValueAsString(storeSaveDTO));
-
 
         byte[] encodedBytes = storeSaveDTO.getMainImg();
-        Path path = Paths.get("src/main/java/pnu/problemsolver/myorder/controller/gen1.jpg");
+        Path path = Paths.get(uploadPath+"/"+"mainImg");
+
         encodedBytes = Base64.getDecoder().decode(encodedBytes);
         Files.write(path, encodedBytes);
     }
