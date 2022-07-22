@@ -116,7 +116,7 @@ public class LoginController {
         log.info("headers! : " + headers);
         HttpEntity entity = new HttpEntity(headers);
 
-        ResponseEntity<Map> map = Request.restTemplate.exchange(naverMemberInfoURL, HttpMethod.GET, entity, Map.class);
+        ResponseEntity<Map> map = Request.restTemplate.exchange(naverMemberInfoURL, HttpMethod.GET, entity, Map.class);//여기서 Map으로 맵핑.
 
 //        log.info(map.getClass().toString());
 //        log.info(map.getBody().getClass().toString());
@@ -127,7 +127,7 @@ public class LoginController {
         log.info(map.getBody().get("response").getClass().toString());//map에서 그대로 사용하면 나중에 또 문자열 출력해서 확인해야한다. 무조건 객체 만드는 것이 이득임. 관리, 유지보수가 편하다.
         Map memberInfoMap = (Map) map.getBody().get("response");
 //        NaverOAuthDTO naverOAuthDTO = new NaverOAuthDTO(memberInfoMap);
-        NaverOAuthDTO naverOAuthDTO = Mapper.modelMapper.map(memberInfoMap, NaverOAuthDTO.class);//맵퍼로 동작안하면 생성자로 만들어주면 됨.
+        NaverOAuthDTO naverOAuthDTO = new NaverOAuthDTO(memberInfoMap);//맵퍼로 동작안하면 생성자로 만들어주면 됨.
         log.info(naverOAuthDTO.toString());
 
         //exchange에 Member정보가 들어있음.

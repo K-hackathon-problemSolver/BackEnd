@@ -58,6 +58,8 @@ public class Store extends BaseTimeEntitiy{
     //경도 : 동, 서쪽으로 얼마나?
    private float longitude;
 
+   private String filePath;
+
 
     public static Store toEntity(StoreDTO storeDTO) {
         Store store = Store.builder()
