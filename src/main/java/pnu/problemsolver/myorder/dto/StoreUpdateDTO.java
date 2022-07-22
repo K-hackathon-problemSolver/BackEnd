@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 가게 저장, 수정하는 DTO
@@ -16,8 +17,8 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class StoreSaveDTO {
-
+public class StoreUpdateDTO {
+    private UUID uuid;
     private byte[] mainImg; //base64인코딩 된 상태.
 
     private String name;//가게이름.

@@ -60,7 +60,6 @@ public class Store extends BaseTimeEntitiy{
 
    private String filePath;
 
-
     public static Store toEntity(StoreDTO storeDTO) {
         Store store = Store.builder()
                 .email(storeDTO.getEmail())

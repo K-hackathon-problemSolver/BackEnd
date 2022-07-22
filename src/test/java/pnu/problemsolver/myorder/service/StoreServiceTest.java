@@ -1,10 +1,10 @@
 package pnu.problemsolver.myorder.service;
 
 import org.junit.jupiter.api.Test;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
+import org.springframework.transaction.annotation.Transactional;
 import pnu.problemsolver.myorder.domain.Customer;
 import pnu.problemsolver.myorder.domain.Store;
 import pnu.problemsolver.myorder.dto.StoreDTO;
@@ -13,18 +13,16 @@ import java.util.UUID;
 
 
 @SpringBootTest
+@Commit
+@Transactional
 class StoreServiceTest {
 
 
     @Autowired
     StoreService storeService;
-    @Autowired
-    ModelMapper mapper;
 
     @Test
-    @Commit
-//    @Transactional
-    public void save테스트() {
+    public void saveTest() {
         StoreDTO storeDto = StoreDTO.builder()
 //                .uuid(UUID.randomUUID())
                 .email("sdf")
@@ -46,7 +44,7 @@ class StoreServiceTest {
         storeService.save(storeDto);
     }
 
-    public void findById테스트() {
+    public void findByIdTest() {
         StoreDTO storeDto = StoreDTO.builder()
                 .email("sdf")
                 .pw("testPW")
@@ -66,6 +64,27 @@ class StoreServiceTest {
 //
         storeService.save(storeDto);
         storeService.findById(storeDto);
+    }
+
+    @Test
+
+    public void partialSaveTest() {
+
+        StoreDTO storeDto = StoreDTO.builder()
+//                .uuid(UUID.randomUUID())
+                .email("sdf")
+                .name("아름다운가게")
+                .location("dkv")
+                .store_phone_num("000")
+                .owner_phone_num("123")
+                .build();
+        StoreDTO newDTO = storeService.save(storeDto);
+        System.out.println("테스트"+newDTO.getUuid());
+
+        newDTO.setEmail("changed!!");
+        storeService.save(newDTO);
+
+
     }
 
 }

@@ -7,9 +7,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.RequestBuilder;
 import pnu.problemsolver.myorder.dto.CakeSaveDTO;
-import pnu.problemsolver.myorder.dto.StoreSaveDTO;
+import pnu.problemsolver.myorder.dto.StoreDTO;
+import pnu.problemsolver.myorder.dto.StoreUpdateDTO;
 import pnu.problemsolver.myorder.security.JwtTokenProvider;
 import pnu.problemsolver.myorder.service.CustomerService;
 import pnu.problemsolver.myorder.service.StoreService;
@@ -21,13 +21,12 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @MockBean(JpaMetamodelMappingContext.class)//jpaAuditing때문에 해줘야함.
 @WebMvcTest
-class UploadControllerTest {
+class StoreControllerTest {
 
     @Autowired
     MockMvc mvc;
@@ -43,6 +42,21 @@ class UploadControllerTest {
     CustomerService customerService;
 
 
+    @Test
+    public void saveTest() throws Exception {
+        StoreDTO storeDTo = StoreDTO.builder()
+                .email("zhdf@")
+                .name("na")
+                .location("loc")
+                .store_phone_num("324")
+                .build();
+
+        String json = Mapper.objectMapper.writeValueAsString(storeDTo);
+        mvc.perform(post("/store/save")
+                .content(json)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print());
+    }
     @Test
     public void uploadTest() throws Exception {
         File mainImgFile= new File("src/main/resources/static/testPicture.jpg");
@@ -64,14 +78,14 @@ class UploadControllerTest {
         cakeList.add(cake1);
         cakeList.add(cake2);
 
-        StoreSaveDTO storeSaveDTO = StoreSaveDTO.builder()
+        StoreUpdateDTO storeUpdateDTO = StoreUpdateDTO.builder()
                 .name("가게1")
                 .description("맛있다!")
                 .cakeList(cakeList)
                 .mainImg(mainImg)
                 .build();
 
-        String json = Mapper.objectMapper.writeValueAsString(storeSaveDTO);
+        String json = Mapper.objectMapper.writeValueAsString(storeUpdateDTO);
 
         mvc.perform(post("/upload/store")
                 .contentType(MediaType.APPLICATION_JSON)

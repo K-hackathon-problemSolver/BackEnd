@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import pnu.problemsolver.myorder.domain.Store;
 import pnu.problemsolver.myorder.dto.StoreDTO;
+import pnu.problemsolver.myorder.dto.StoreUpdateDTO;
 import pnu.problemsolver.myorder.repository.StoreRepository;
 import pnu.problemsolver.myorder.util.Mapper;
 
@@ -33,38 +34,39 @@ public class StoreService {
 
     public StoreDTO findById(UUID uuid) {
         Optional<Store> store = storeRepository.findById(uuid);
-        StoreDTO resDTO = null;
+        StoreDTO storeDTO = null;
         if (store.isPresent()) {
-            //TODO : 바꾸기.
-//            resDTO= Mapper.modelMapper.map(store, StoreDTO.class);
+            storeDTO = StoreDTO.toDTO(store.get());
         }
-        return resDTO;
+        return storeDTO;
     }
 
     public StoreDTO save(StoreDTO storeDTO) {
         Store store = Store.toEntity(storeDTO);
         store=storeRepository.save(store);
-        //TODO : 바꾸기
-//        return Mapper.modelMapper.map(store, StoreDTO.class);//삽입된 store를 다시 반환
-        return new StoreDTO();
+        return StoreDTO.toDTO(store);
+    }
+
+    public void save(StoreUpdateDTO updateDTO) {
+
     }
 
     //성공하면 email반환. 실패하면 null반환.
-    public String login(StoreDTO storeDto) {
-        Optional<Store> store = storeRepository.findById(storeDto.getUuid());
-        String email = null;
-
-        if (store.isPresent()) {
-            if (store.get().getPw().equals(storeDto.getPw())) {
-                email = storeDto.getEmail();
-            } else {
-                log.error("PW 불일치!");
-            }
-        }
-        else{
-            log.error("email이 없습니다!");
-        }
-        return email;
-
-    }
+//    public String login(StoreDTO storeDto) {
+//        Optional<Store> store = storeRepository.findById(storeDto.getUuid());
+//        String email = null;
+//
+//        if (store.isPresent()) {
+//            if (store.get().getPw().equals(storeDto.getPw())) {
+//                email = storeDto.getEmail();
+//            } else {
+//                log.error("PW 불일치!");
+//            }
+//        }
+//        else{
+//            log.error("email이 없습니다!");
+//        }
+//        return email;
+//
+//    }
 }
