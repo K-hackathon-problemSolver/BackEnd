@@ -1,6 +1,5 @@
 package pnu.problemsolver.myorder.repository;
 
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -9,8 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import pnu.problemsolver.myorder.domain.Customer;
 import pnu.problemsolver.myorder.domain.Demand;
 import pnu.problemsolver.myorder.domain.Store;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -47,7 +44,7 @@ class DemandRepositoryTest {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        demand.setStatus(1);
+        demand.acceptDemand();//주문수락
         demandRepository.save(demand);
     }
 

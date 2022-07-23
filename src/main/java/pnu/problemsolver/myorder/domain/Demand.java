@@ -30,7 +30,7 @@ public class Demand extends BaseTimeEntitiy {
     @ManyToOne
     private Store store;
 
-    @Column(nullable = false) //0 : 주문대기, 1 : 승락, 2 : 완료
+    @Column(nullable = false) //0 : 주문대기, 1 : 승락, 2 : 완료, -1 : 거절
     private int status;
 
     @Column(columnDefinition = "JSON")
@@ -46,8 +46,21 @@ public class Demand extends BaseTimeEntitiy {
 
     private String fillPath;
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void acceptDemand() {
+        if (status == 0) {
+            this.status = 1;
+        }
+
+    }
+    public void rejectDemand() {
+        if (status == 0) {
+        this.status = -1;
+        }
+    }
+    public void completeDemand() {
+        if (status == 1) {
+        this.status = 2;
+        }
     }
 
 
