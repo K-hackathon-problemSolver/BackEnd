@@ -34,10 +34,10 @@ public class StoreDTO {
     private String impossibleDate;
 
     //위도 : 북쪽, 남쪽으로 얼마나
-    private float latitude;
+    private double latitude;
 
     //경도 : 동, 서쪽으로 얼마나?
-    private float longitude;
+    private double longitude;
 
     //여기서는 String이다. SaveDTO에서는 byte[]임.
     private String filePath;

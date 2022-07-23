@@ -3,11 +3,12 @@ package pnu.problemsolver.myorder.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
-import pnu.problemsolver.myorder.dto.CakeDTO;
-import pnu.problemsolver.myorder.dto.CakeEditDTO;
-import pnu.problemsolver.myorder.dto.StoreDTO;
-import pnu.problemsolver.myorder.dto.StoreEditDTO;
+import pnu.problemsolver.myorder.domain.Store;
+import pnu.problemsolver.myorder.dto.*;
 import pnu.problemsolver.myorder.service.CakeService;
 import pnu.problemsolver.myorder.service.StoreService;
 import pnu.problemsolver.myorder.util.Mapper;
@@ -112,9 +113,17 @@ public class StoreController {
 
     }
 
-    @GetMapping("/")
-    public
+    @GetMapping("/list")//GET으로 오면 preflight만 준다.
+    public List<StoreDTOForListPreflight> listPreflights() {
+        List<StoreDTOForListPreflight> li = storeService.getAllPreflights();
+        return li;
 
+    }
+
+    @PostMapping("/list")
+    public List<StoreDTOForList> list() {
+
+    }
 
     public boolean isFileExtensionOk(String extension) {
 
