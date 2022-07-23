@@ -1,5 +1,7 @@
 package pnu.problemsolver.myorder.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import lombok.AllArgsConstructor;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +21,7 @@ import pnu.problemsolver.myorder.util.Mapper;
 
 import java.io.File;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static java.util.Collections.copy;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -130,5 +129,32 @@ class StoreControllerTest {
         assertEquals(f1.exists(), true);
         assertEquals(f2.exists(), true);
 
+    }
+
+    @Test
+    public void editImpossibleDateTest() throws JsonProcessingException {
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("uuid", UUID.randomUUID().toString());
+        map.put("impossibleDate", "[{\"start\":\"2022-07-20\", \"end\" : \"2022-07-24\"}]");
+        String json = "{\"uuid\":\"" + UUID.randomUUID().toString() + "\", \"impossibleDate\" : [{\"start\":\"2022-02-03\", \"end\" : \"2022-02-03\"}]}";
+//        List<Tmp> li = new ArrayList<>();
+//        li.add(new Tmp("2022-07-20", "2022-07-21"));
+//        li.add(new Tmp("2022-07-20", "2022-07-21"));
+//        map.put("impossibleDate", li);
+//        String json = Mapper.objectMapper.writeValueAsString(map);
+//        System.out.println(json);
+
+        ArrayList res = Mapper.objectMapper.readValue("[{\"start\":\"2022-07-20\", \"end\" : \"2022-07-24\"}]", ArrayList.class);
+        System.out.println(res);
+        Map map1 = Mapper.objectMapper.readValue(json, Map.class);
+        System.out.println(map1);
+        System.out.println(map1.getClass());
+    }
+
+    @AllArgsConstructor
+    class Tmp {
+        public String start;
+        public String end;
     }
 }

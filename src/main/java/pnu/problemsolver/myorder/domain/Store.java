@@ -33,7 +33,6 @@ public class Store extends BaseTimeEntitiy{
     @Column(columnDefinition = "VARCHAR(20)")
     private String pw;
 
-    @Size(min = 1)
     @Column(columnDefinition = "VARCHAR(30)")
     private String name;
 

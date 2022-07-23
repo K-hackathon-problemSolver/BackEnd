@@ -27,6 +27,7 @@ public class StoreEditDTO {
     private String name;//가게이름.
 
     private String description;
+
 //    private String impossibleDate;
 
     private List<CakeEditDTO> cakeList;

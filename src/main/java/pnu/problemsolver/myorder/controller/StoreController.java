@@ -39,8 +39,8 @@ public class StoreController {
     }
 
     @PostMapping("/save")
-    public StoreDTO saveStore(@RequestBody StoreDTO storeDTO) throws JsonProcessingException {
-        log.info(Mapper.objectMapper.writeValueAsString(storeDTO));
+    public StoreDTO saveStore(@RequestBody StoreDTO storeDTO)  {
+//        log.info(Mapper.objectMapper.writeValueAsString(storeDTO));
         StoreDTO resDTO = storeService.save(storeDTO); //없으면 저장하고 있다면 null아닌 것만 자동으로 덮어써진다.!
         return resDTO;
     }
@@ -101,10 +101,22 @@ public class StoreController {
             cakeService.save(cakeDTO);
 
         }
-        return "";
+        return "success";
+    }
+
+    @PostMapping("/editImpossibleDate")
+    public String editImpossibleDate(@RequestBody Map map) {
+        StoreDTO storeDTO = StoreDTO.builder()
+                .uuid(UUID.fromString((String) map.get("uuid")) )
+                .impossibleDate((String) map.get("impossibleDate"))
+                .build();
+        storeService.save(storeDTO);
+        return "success";
+
     }
 
     public boolean isFileExtensionOk(String extension) {
+
         return Arrays.asList("jpg", "jpeg", "png", "bmp", "pdf", "jfif").contains(extension);
     }
 
