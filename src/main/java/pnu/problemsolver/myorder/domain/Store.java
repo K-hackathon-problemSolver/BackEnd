@@ -19,7 +19,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @Entity
-public class Store extends BaseTimeEntitiy{
+public class Store extends BaseTimeEntitiy {
 
     @Id
     @GeneratedValue(generator = "uuid2")
@@ -55,9 +55,12 @@ public class Store extends BaseTimeEntitiy{
     private float latitude;
 
     //경도 : 동, 서쪽으로 얼마나?
-   private float longitude;
+    private float longitude;
 
-   private String filePath;
+    private String filePath;
+
+    private String account;
+    private String bank;
 
     public static Store toEntity(StoreDTO storeDTO) {
         Store store = Store.builder()
