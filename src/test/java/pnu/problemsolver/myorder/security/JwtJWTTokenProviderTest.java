@@ -20,7 +20,7 @@ class JwtJWTTokenProviderTest {
     public Environment env;
 
     @Autowired
-    public JwtTokenProvider tokenProvider;
+    public JwtTokenProvider tokenProvider; //environment를 DI받아서 springbootTest해야한다.
 
     public final Logger logger = LoggerFactory.getLogger(this.getClass());
 

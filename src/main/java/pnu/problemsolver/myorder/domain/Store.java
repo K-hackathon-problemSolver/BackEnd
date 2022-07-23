@@ -19,7 +19,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @Entity
-public class Store extends BaseTimeEntitiy{
+public class Store extends BaseTimeEntitiy {
 
     @Id
     @GeneratedValue(generator = "uuid2")
@@ -33,7 +33,6 @@ public class Store extends BaseTimeEntitiy{
     @Column(columnDefinition = "VARCHAR(20)")
     private String pw;
 
-    @Size(min = 1)
     @Column(columnDefinition = "VARCHAR(30)")
     private String name;
 
@@ -53,12 +52,15 @@ public class Store extends BaseTimeEntitiy{
     private String impossibleDate;
 
     //위도 : 북쪽, 남쪽으로 얼마나
-    private float latitude;
+    private double latitude;
 
     //경도 : 동, 서쪽으로 얼마나?
-   private float longitude;
+    private double longitude;
 
-   private String filePath;
+    private String filePath;
+
+    private String account;
+    private String bank;
 
     public static Store toEntity(StoreDTO storeDTO) {
         Store store = Store.builder()
