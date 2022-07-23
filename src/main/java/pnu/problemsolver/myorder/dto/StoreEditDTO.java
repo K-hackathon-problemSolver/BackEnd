@@ -23,7 +23,6 @@ public class StoreEditDTO {
 
     private String extension; //byte파일의 확장자.
 
-
     private String name;//가게이름.
 
     private String description;

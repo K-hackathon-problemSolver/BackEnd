@@ -3,10 +3,7 @@ package pnu.problemsolver.myorder.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pnu.problemsolver.myorder.dto.CakeDTO;
 import pnu.problemsolver.myorder.dto.CakeEditDTO;
 import pnu.problemsolver.myorder.dto.StoreDTO;
@@ -114,6 +111,10 @@ public class StoreController {
         return "success";
 
     }
+
+    @GetMapping("/")
+    public
+
 
     public boolean isFileExtensionOk(String extension) {
 
