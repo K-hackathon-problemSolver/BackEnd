@@ -27,8 +27,9 @@ class DemandRepositoryTest {
     DemandRepository demandRepository;
 
     @Test
-    public void saveTest() {
+    public void save생성_수정_시간차이확인() {
         Customer customer = Customer.builder().build();
+//        System.out.println("유유아이디"+customer.getUuid());
         customerRepository.save(customer);
 
         Store store = Store.builder().build();

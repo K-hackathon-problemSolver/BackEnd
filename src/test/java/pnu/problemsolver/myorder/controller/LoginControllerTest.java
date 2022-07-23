@@ -17,6 +17,7 @@ import java.util.Map;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 //@WebMvcTest
 @SpringBootTest
@@ -35,7 +36,8 @@ class LoginControllerTest {
     @Test
     void index() throws Exception {
         mvc.perform(get("/"))
-                .andDo(print());
+                .andExpect(content().string("index"));
+
     }
 
 //    @Test
@@ -69,19 +71,10 @@ class LoginControllerTest {
 //
 //    }
 //
+//
 
     @Test
-    public void MapTest() {
-        Map map = new HashMap();
-        map.put("a", 1);
-        map.put(1, "a");
-        System.out.println(map.get("a"));
-        System.out.println(map.get(1));
-
-    }
-
-    @Test
-    public void JSONparesTest() {
+    public void JSONparesTest() {//계층구조를 가지고 있어서 맵 잘 된다.
         String json = "{\"resultcode\":\"00\", \"message\":\"success\", \"response\":{\"id\":\"51ICfhCQb2yZ5P8B2zR1XrACj-O8aLaUSxljfFZ52g4\", \"age\":\"20-29\"}}";
         Map<Object, Object> map;
         try {
@@ -90,6 +83,7 @@ class LoginControllerTest {
             throw new RuntimeException(e);
         }
         System.out.println(map.get("response").getClass());
+        System.out.println(map.get("response"));
 
     }
 }

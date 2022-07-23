@@ -85,7 +85,7 @@ public class StoreController {
                 .uuid(storeEditDTO.getUuid())
                 .filePath(mainPath.toString())
                 .description(storeEditDTO.getDescription())
-                .impossibleDate(storeEditDTO.getImpossibleDate())
+//                .impossibleDate(storeEditDTO.getImpossibleDate())
                 .build();
         storeService.save(storeDTO);
 
