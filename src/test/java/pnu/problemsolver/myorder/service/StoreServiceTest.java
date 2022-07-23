@@ -8,8 +8,12 @@ import org.springframework.transaction.annotation.Transactional;
 import pnu.problemsolver.myorder.domain.Customer;
 import pnu.problemsolver.myorder.domain.Store;
 import pnu.problemsolver.myorder.dto.StoreDTO;
+import pnu.problemsolver.myorder.dto.StoreDTOForListPreflight;
 
+import java.util.List;
 import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 @SpringBootTest
@@ -62,5 +66,16 @@ class StoreServiceTest {
         newDTO.setEmail("changed!!");//null이 아닌 부분만 알아서 update된다.
         storeService.save(newDTO);
     }
+
+    @Test
+    public void getAllPreflightsTest() {
+        for (int i = 0; i < 10; ++i) {
+            storeService.save(new StoreDTO());
+        }
+        List<StoreDTOForListPreflight> li = storeService.getAllPreflights();
+        assertEquals(li.size(), 10);
+
+    }
+
 
 }

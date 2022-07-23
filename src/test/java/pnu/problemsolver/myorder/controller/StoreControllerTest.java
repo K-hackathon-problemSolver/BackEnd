@@ -2,6 +2,7 @@ package pnu.problemsolver.myorder.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +11,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import pnu.problemsolver.myorder.domain.Store;
 import pnu.problemsolver.myorder.dto.CakeEditDTO;
 import pnu.problemsolver.myorder.dto.StoreDTO;
+import pnu.problemsolver.myorder.dto.StoreDTOForList;
 import pnu.problemsolver.myorder.dto.StoreEditDTO;
 import pnu.problemsolver.myorder.security.JwtTokenProvider;
 import pnu.problemsolver.myorder.service.CakeService;
@@ -30,6 +33,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -152,9 +157,12 @@ class StoreControllerTest {
         System.out.println(map1.getClass());
     }
 
-    @AllArgsConstructor
-    class Tmp {
-        public String start;
-        public String end;
-    }
+
+
+}
+
+@AllArgsConstructor
+class Tmp {
+    public String start;
+    public String end;
 }

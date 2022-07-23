@@ -1,17 +1,11 @@
 package pnu.problemsolver.myorder.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
-import pnu.problemsolver.myorder.domain.Store;
 import pnu.problemsolver.myorder.dto.*;
 import pnu.problemsolver.myorder.service.CakeService;
 import pnu.problemsolver.myorder.service.StoreService;
-import pnu.problemsolver.myorder.util.Mapper;
 
 import java.io.File;
 import java.io.IOException;
@@ -117,11 +111,12 @@ public class StoreController {
     public List<StoreDTOForListPreflight> listPreflights() {
         List<StoreDTOForListPreflight> li = storeService.getAllPreflights();
         return li;
-
     }
 
     @PostMapping("/list")
-    public List<StoreDTOForList> list() {
+    public List<StoreDTOForList> list(@RequestBody ArrayList<UUID> li) {
+        List<StoreDTOForList> resList = storeService.findAllInUUIDList(li);
+        return resList;
 
     }
 

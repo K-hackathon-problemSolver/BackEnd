@@ -6,8 +6,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import pnu.problemsolver.myorder.domain.Store;
 import pnu.problemsolver.myorder.dto.StoreDTO;
+import pnu.problemsolver.myorder.dto.StoreDTOForList;
 import pnu.problemsolver.myorder.dto.StoreDTOForListPreflight;
-import pnu.problemsolver.myorder.dto.StoreEditDTO;
 import pnu.problemsolver.myorder.repository.StoreRepository;
 
 import javax.transaction.Transactional;
@@ -57,6 +57,15 @@ public class StoreService {
             liDTO.add(StoreDTOForListPreflight.toDTO(i));
         }
         return liDTO;
+    }
+
+    public List<StoreDTOForList> findAllInUUIDList(List<UUID> param) {
+        List<Store> li = storeRepository.findAllInUUIDList(param);
+        List<StoreDTOForList> resList = new ArrayList<>();
+        for (Store i : li) {
+            resList.add(StoreDTOForList.toDTO(i)); //filePath->encodeing->byte[]로 만든다.
+        }
+        return resList;
     }
 
     //성공하면 email반환. 실패하면 null반환.

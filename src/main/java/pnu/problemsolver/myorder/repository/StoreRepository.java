@@ -1,7 +1,8 @@
 package pnu.problemsolver.myorder.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import pnu.problemsolver.myorder.domain.Store;
 
 import java.util.List;
@@ -22,5 +23,10 @@ public interface StoreRepository extends JpaRepository<Store, UUID> {//extends J
 
     //쿼리메소드에서는 Id가 PK의 id가 아니라 필드변수명을 뜻한다.
     void deleteStoreByEmailLessThan(String id);
+
+    @Query("select s from Store s where s.uuid in :list")//TODO : 쿼리메소드 반환형 설정 규칙?
+    List<Store> findAllInUUIDList(@Param("list") List<UUID> list);//개쉽네.. 그냥 하면 되네...
+
+    List<Store> findByName(String name);
 
 }
