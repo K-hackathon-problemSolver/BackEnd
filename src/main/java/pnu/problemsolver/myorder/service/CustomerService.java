@@ -1,7 +1,6 @@
 package pnu.problemsolver.myorder.service;
 
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import pnu.problemsolver.myorder.domain.Customer;
 import pnu.problemsolver.myorder.domain.Store;
@@ -17,7 +16,6 @@ import java.util.Optional;
 @Transactional
 public class CustomerService {
     private final CustomerRepository customerRepository;
-    private final ModelMapper modelMapper;
 
     /**
      * 매개변수로 DTO보다는 email처럼 핵심만 전달하는 것이 좋은 것 같다.
@@ -28,8 +26,9 @@ public class CustomerService {
 
         Optional<Customer> customerOptional = customerRepository.findById(customerDTO.getUuid());
         if (customerOptional.isPresent()) {
-            CustomerDTO resDTO = modelMapper.map(customerOptional, CustomerDTO.class);
-            return resDTO;
+            //TODO : 수정
+//            CustomerDTO resDTO = modelMapper.map(customerOptional, CustomerDTO.class);
+//            return resDTO;
         }
 
         return null;

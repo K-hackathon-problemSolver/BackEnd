@@ -28,7 +28,6 @@ public class NaverOAuthDTO {
             Map.Entry entry = (Map.Entry) i;
             newMap.put((String) entry.getKey(), (String) entry.getValue());
         }
-
         id = newMap.get("id");
         ageRange = newMap.get("age");
         gender = newMap.get("gener");

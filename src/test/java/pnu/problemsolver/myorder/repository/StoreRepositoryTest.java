@@ -7,12 +7,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.test.annotation.Commit;
 import pnu.problemsolver.myorder.domain.Store;
+import pnu.problemsolver.myorder.service.StoreService;
 
-import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class StoreRepositoryTest {
     @Autowired//final못 붙인다.
     public StoreRepository storeRepository;
+
 
     @BeforeEach//static이어야한다.
     public void testinsertDummies(){
@@ -38,38 +39,19 @@ class StoreRepositoryTest {
         });
     }
 
-//    @Test
-//    public void DI확인() {
-//        System.out.println(storeRepository.getClass().getName());
-//    }
-
-
-//    @Test
-//    public void NotNUll테스트(){//entity에는 null이 들어갈 수 있다. @NotNull을 사용해도 마찬가지였음.
-//            Store store = Store.builder()
-//                    .email("id")
-//                    .pw("pw")
-//                    .name(null)
-//                    .location(null)
-//                    .description("부산대")
-//                    .store_phone_num("051341342")
-//                    .owner_phone_num("01033916486")
-//                    .build();
-//    }
-
-//    @Test
-//    public void updateTest() {
-//        Store store = Store.builder()
-//                .email("id5")
-//                .pw("update")
-//                .name("update")
-//                .description("update")
-//                .location("update")
-//                .store_phone_num("update")
-//                .owner_phone_num("update")
-//                .build();
-//        assertEquals(storeRepository.save(store).getEmail(), "id5");//저장한 엔티티를 반환한다.
-//    }
+    @Test
+    public void updateTest() {
+        Store store = Store.builder()
+                .email("id5")
+                .pw("update")
+                .name("update")
+                .description("update")
+                .location("update")
+                .store_phone_num("update")
+                .owner_phone_num("update")
+                .build();
+        assertEquals(storeRepository.save(store).getEmail(), "id5");//저장한 엔티티를 반환한다.
+    }
 
     @Test
     public void findById테스트() {//key로 찾는다.
@@ -99,5 +81,20 @@ class StoreRepositoryTest {
             System.out.println(store);
         });
     }
+
+    @Test
+    public void findAllInListTest() {
+        List<Store> list = storeRepository.findByName("신민건");
+        List<UUID> uuidList = new ArrayList<>();
+        for(Store i : list){
+            uuidList.add(i.getUuid());
+        }
+
+        List<Store> resList = storeRepository.findAllInUUIDList(uuidList);
+        System.out.println(resList);
+        System.out.println(resList.size());
+
+    }
+
 
 }

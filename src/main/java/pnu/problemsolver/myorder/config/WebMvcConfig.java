@@ -2,7 +2,6 @@ package pnu.problemsolver.myorder.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -27,15 +26,7 @@ public class WebMvcConfig implements WebMvcConfigurer {//converter등록을 위�
 
     private final ApplicationContext applicationContext;
 
-    @Bean
-    public ModelMapper modelMapper() {
-        return new ModelMapper();
-    }
 
-    @Bean
-    public ObjectMapper objectMapper() {
-        return new ObjectMapper();
-    }
 
 //    @Bean
 //    public RestTemplate restTemplate() {
