@@ -3,6 +3,8 @@ package pnu.problemsolver.myorder.domain;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.transform.AliasedTupleSubsetResultTransformer;
+import pnu.problemsolver.myorder.dto.CustomerDTO;
+import pnu.problemsolver.myorder.dto.NaverOAuthDTO;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,6 +35,26 @@ public class Customer extends BaseTimeEntitiy{
     private String name;
 
     private String phone_num;
+    private SNSType snsType;
+    private String snsIdentifyKey; //고유식별자.
 
-    private String sns;
+    private int age;//age같은 것은 아무래도 통계에서 잘 사용되기 때문에 가지고 있는 것이 좋다.
+
+
+    public static Customer toEntity(CustomerDTO c) {
+        Customer customer = Customer.builder()
+                .uuid(c.getUuid())
+                .email(c.getEmail())
+                .pw(c.getPw())
+                .name(c.getName())
+                .phone_num(c.getPhone_num())
+                .snsType(c.getSnsType())
+                .snsIdentifyKey(c.getSnsIdentifyKey())
+                .age(c.getAge())
+                .build();
+        return customer;
+
+    }
+
+
 }

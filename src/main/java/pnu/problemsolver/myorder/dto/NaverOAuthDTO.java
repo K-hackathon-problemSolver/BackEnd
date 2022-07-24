@@ -3,6 +3,8 @@ package pnu.problemsolver.myorder.dto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,6 +21,9 @@ public class NaverOAuthDTO {
     String name;
     String birthday;
     int birthyear;
+
+    int age;
+
 
     //{id=51ICfhCQb2yZ5P8B2zR1XrACj-O8aLaUSxljfFZ52g4, age=20-29, gender=M, email=zhdhfhd33@gmail.com, mobile=010-3391-6486
 // , mobile_e164=+821033916486, name=신민건, birthday=10-15, birthyear=1999}
@@ -37,6 +42,10 @@ public class NaverOAuthDTO {
         name = newMap.get("name");
         birthday = newMap.get("birthday");
         birthyear = Integer.parseInt(newMap.get("birthyear"));
+
+        LocalDate now = LocalDate.now(ZoneId.of("Asia/Tokyo"));
+
+        age = now.getYear() - birthyear;
     }
 
 }

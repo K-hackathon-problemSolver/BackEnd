@@ -7,7 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-import pnu.problemsolver.myorder.domain.Customer;
+import pnu.problemsolver.myorder.dto.CustomerDTO;
+import pnu.problemsolver.myorder.dto.LoginResponseDTO;
 import pnu.problemsolver.myorder.dto.NaverOAuthDTO;
 import pnu.problemsolver.myorder.dto.StoreDTO;
 import pnu.problemsolver.myorder.security.JwtTokenProvider;
@@ -21,6 +22,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 //@Controller
 @RestController//restController안에 @controller, @ResponseBody있다.
@@ -28,7 +30,7 @@ import java.util.Map;
 @Slf4j
 public class LoginController {
 
-    private final JwtTokenProvider tokenProvider;
+    private final JwtTokenProvider jwtTokenProvider;
     private final StoreService storeService;
     private final CustomerService customerService;
 
@@ -44,7 +46,7 @@ public class LoginController {
     @Autowired
     public LoginController(Environment environment, JwtTokenProvider tokenProvider, StoreService storeService, CustomerService customerService) {
 //        this.restTemplate = restTemplate;
-        this.tokenProvider = tokenProvider;
+        this.jwtTokenProvider = tokenProvider;
         this.storeService = storeService;
         this.customerService = customerService;
 
@@ -76,14 +78,19 @@ public class LoginController {
             log.error("/login에서 url encode 에러!");
         }
         urlMap.put("naver", "https://nid.naver.com/oauth2.0/authorize?client_id=i6vA823oE3F_9QtAonj6&response_type=code&redirect_uri="
-                + encodedRedirectURL + "&state=" + stateToken);
+                + encodedRedirectURL + "&state=" + stateToken);//TODO : 나중에 네이버 뿐만 아니라 카카오 등 다른 플랫폼도 지원할 수 있기 때문에 Map으로 구현해 놓았다.
 //        System.out.println(urlMap.get("naver"));
 
         return urlMap;
     }
 
-    @GetMapping("/login/naver")    //redirectURL
-    public String loginNaver(HttpServletRequest httpServletRequest) {
+    /**
+     * redirect URL
+     * @param httpServletRequest
+     * @return
+     */
+    @GetMapping("/login/naver")
+    public LoginResponseDTO loginNaver(HttpServletRequest httpServletRequest) {
         System.out.println(httpServletRequest.getQueryString());
 
         String url = naverTokenURL + "?client_id="
@@ -126,16 +133,44 @@ public class LoginController {
 //        log.info(map.getBody().keySet().toString());
         log.info(map.getBody().get("response").getClass().toString());//map에서 그대로 사용하면 나중에 또 문자열 출력해서 확인해야한다. 무조건 객체 만드는 것이 이득임. 관리, 유지보수가 편하다.
         Map memberInfoMap = (Map) map.getBody().get("response");
-//        NaverOAuthDTO naverOAuthDTO = new NaverOAuthDTO(memberInfoMap);
         NaverOAuthDTO naverOAuthDTO = new NaverOAuthDTO(memberInfoMap);//맵퍼로 동작안하면 생성자로 만들어주면 됨.
         log.info(naverOAuthDTO.toString());
+        //일단 전부 손님의 자격으로 넣고 사장님만 추후 변경할 수 있게 한다.
+        //DB저장.
+        //소셜로그인은 이미 있는지 확인하고 save해야한다.!
+        UUID uuid = naverLogin(naverOAuthDTO);
+        //jwt 만들기.
+        String jwt = jwtTokenProvider.createToken();
+        LoginResponseDTO res = LoginResponseDTO.builder()
+                .jwt(jwt)
+                .uuid(uuid)
+                .build();
+        return res;
+    }
 
-        //exchange에 Member정보가 들어있음.
-        return "success";
+    /**
+     *
+     * @param naverOAuthDTO
+     * @return uuid반환.
+     */
+    private UUID naverLogin(NaverOAuthDTO naverOAuthDTO) {
+        CustomerDTO customerDTO = CustomerDTO.NaverOAuthDTOToDTO(naverOAuthDTO);
+        CustomerDTO res = customerService.findBySnsTypeAndSnsIdentifyKey(customerDTO);
+        if (res == null) {//이미 회원임.
+            CustomerDTO savedDTO = customerService.save(customerDTO);//PK가 uuid이기 때문에 기존 회원이더라도 새로 save해버림. 그래서 이렇게 따로 함수를 만든다.
+            return savedDTO.getUuid();
+        }
+        return res.getUuid();
+    }
+
+    @GetMapping("login/kakao")
+    public void kakaoLogin() {
+//TODO : 카카오 로그인.
     }
 
     @GetMapping("/test")
     public void tmp() {
+
         StoreDTO storeDTO = StoreDTO.builder()
                 .email("test")
                 .pw("testpw")

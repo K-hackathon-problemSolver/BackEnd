@@ -31,7 +31,7 @@ public class JwtTokenProvider {
     @Autowired
     public JwtTokenProvider(Environment environment) {
         this.environment = environment;
-        this.SECRET_KEY = environment.getProperty("jwt.secret");
+        this.SECRET_KEY = Objects.requireNonNull(environment.getProperty("jwt.secret"));//properties파일에서 가져오는 변수는 requireNonNull사용하자!!
         this.JWT_TOKEN_VALIDITY = Long.parseLong(Objects.requireNonNull(environment.getProperty("jwt.validity.time"), "application.properties jwt.validity.time 로드 실패"));//string으로 읽어오기 때문
     }
 
