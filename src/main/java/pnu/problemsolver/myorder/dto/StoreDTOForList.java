@@ -22,7 +22,7 @@ import java.util.UUID;
 public class StoreDTOForList {
     private UUID uuid;
     private String name;//가게이름.
-    private byte[] mainImg;
+    private byte[] mainImg;//base64 인코딩 된 상태.
 //    private int minPrice;
 
     public static StoreDTOForList toDTO(Store s) {

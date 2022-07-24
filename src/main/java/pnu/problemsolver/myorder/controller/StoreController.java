@@ -116,6 +116,11 @@ public class StoreController {
     @PostMapping("/list")
     public List<StoreDTOForList> list(@RequestBody ArrayList<UUID> li) {
         List<StoreDTOForList> resList = storeService.findAllInUUIDList(li);
+        //encoding
+        for (StoreDTOForList i : resList) {
+            byte[] encodedImg = Base64.getEncoder().encode(i.getMainImg());
+            i.setMainImg(encodedImg);
+        }
         return resList;
 
     }

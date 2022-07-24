@@ -51,8 +51,8 @@ public class JwtTokenProvider {
                 .setIssuedAt(new Date())
                 .setExpiration(date);//하루 뒤로 설정
 
-        // TODO : 정의, 추가
-        claims.put("key", "value");//임의로 내가 넣으면 된다.
+        // TODO : 정의, 추가..딱히 넣을게 없겠는데??..
+//        claims.put("key", "value");//임의로 내가 넣으면 된다.
 
         String jwt = Jwts.builder()
                 .setHeader(headers)
