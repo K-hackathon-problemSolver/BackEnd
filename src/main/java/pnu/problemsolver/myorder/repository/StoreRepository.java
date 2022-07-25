@@ -24,7 +24,7 @@ public interface StoreRepository extends JpaRepository<Store, UUID> {//extends J
     //쿼리메소드에서는 Id가 PK의 id가 아니라 필드변수명을 뜻한다.
     void deleteStoreByEmailLessThan(String id);
 
-    @Query("select s from Store s where s.uuid in :list")//TODO : 쿼리메소드 반환형 설정 규칙?
+    @Query("select s from Store s where s.uuid in :list")
     List<Store> findAllInUUIDList(@Param("list") List<UUID> list);//개쉽네.. 그냥 하면 되네...
 
     List<Store> findByName(String name);

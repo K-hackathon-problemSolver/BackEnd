@@ -78,7 +78,7 @@ public class LoginController {
             log.error("/login에서 url encode 에러!");
         }
         urlMap.put("naver", "https://nid.naver.com/oauth2.0/authorize?client_id=i6vA823oE3F_9QtAonj6&response_type=code&redirect_uri="
-                + encodedRedirectURL + "&state=" + stateToken);//TODO : 나중에 네이버 뿐만 아니라 카카오 등 다른 플랫폼도 지원할 수 있기 때문에 Map으로 구현해 놓았다.
+                + encodedRedirectURL + "&state=" + stateToken);//나중에 네이버 뿐만 아니라 카카오 등 다른 플랫폼도 지원할 수 있기 때문에 Map으로 구현해 놓았다.
 //        System.out.println(urlMap.get("naver"));
 
         return urlMap;

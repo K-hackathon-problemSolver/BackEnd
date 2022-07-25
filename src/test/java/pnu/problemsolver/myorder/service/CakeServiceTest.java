@@ -37,7 +37,7 @@ class CakeServiceTest {
 
         CakeDTO cakeDTO = CakeDTO.builder()
                 .uuid(UUID.randomUUID())
-                .storeUUID(storeDTO.getUuid())//없으면 자꾸 안되더라. TODO 영속성 ~ 때문에 안되는 거였음. JPA책 사서 보자.
+                .storeUUID(storeDTO.getUuid())//없으면 자꾸 안되더라.
 //                .demandUUID("UUID.randomUUID()")
                 .filePath("path!")
                 .option("{\"plate\":\"1\"}")
