@@ -1,5 +1,5 @@
 package pnu.problemsolver.myorder.domain;
 
-public enum Role {
-    GUEST, MEMBER
+public enum GENDER {
+    MAN, WOMAN
 }

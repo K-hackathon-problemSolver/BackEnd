@@ -28,7 +28,6 @@ class StoreRepositoryTest {
         IntStream.rangeClosed(1, 20).forEach(i->{
             Store store = Store.builder()
                     .email("id" + i)
-                    .pw("pw" + i)
                     .name("신민건")
                     .description("부산대" + i)
                     .location("부산대긱사")
@@ -43,7 +42,6 @@ class StoreRepositoryTest {
     public void updateTest() {
         Store store = Store.builder()
                 .email("id5")
-                .pw("update")
                 .name("update")
                 .description("update")
                 .location("update")

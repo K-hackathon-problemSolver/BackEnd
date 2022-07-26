@@ -30,8 +30,8 @@ public class Store extends BaseTimeEntitiy {
     @Column(columnDefinition = "VARCHAR(30)") //db에 check로 값이 설정되지는 않는다. enail이 낫겠는데?
     private String email;
 
-    @Column(columnDefinition = "VARCHAR(20)")
-    private String pw;
+//    @Column(columnDefinition = "VARCHAR(20)")
+//    private String pw;
 
     @Column(columnDefinition = "VARCHAR(30)")
     private String name;
@@ -59,20 +59,20 @@ public class Store extends BaseTimeEntitiy {
 
     private String filePath;
 
-    private String account;
-    @Column(columnDefinition = "varchar(30)")
-    private String bank;
+    //bank랑 account는 못받는다.!
+//    private String account;
+//    @Column(columnDefinition = "varchar(30)")
+//    private String bank;
 
 //    @Enumerated(EnumType.STRING) //이게 없으면 숫자로 들어간다. 그리고 이건 성능이 안좋다고 함.
-    private SNSType snsType;
+    private SNSType snsType; //enum바로 사용 가능!
     private String snsIdentifyKey; //고유식별자.
 
-    private int age;
+    private int birthYear;
 
     public static Store toEntity(StoreDTO storeDTO) {
         Store store = Store.builder()
                 .email(storeDTO.getEmail())
-                .pw(storeDTO.getPw())
                 .name(storeDTO.getName())
                 .description(storeDTO.getDescription())
                 .location(storeDTO.getLocation())

@@ -30,7 +30,6 @@ class StoreServiceTest {
         StoreDTO storeDto = StoreDTO.builder()
 //                .uuid(UUID.randomUUID())
                 .email("sdf")
-                .pw("testPW")
                 .name("아름다운가게")
                 .description("이건설명")
                 .location("dkv")

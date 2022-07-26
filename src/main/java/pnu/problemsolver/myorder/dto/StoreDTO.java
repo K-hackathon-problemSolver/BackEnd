@@ -1,7 +1,9 @@
 package pnu.problemsolver.myorder.dto;
 
 import lombok.*;
+import org.springframework.http.server.reactive.AbstractListenerReadPublisher;
 import pnu.problemsolver.myorder.domain.Customer;
+import pnu.problemsolver.myorder.domain.SNSType;
 import pnu.problemsolver.myorder.domain.Store;
 
 import javax.persistence.Column;
@@ -17,7 +19,7 @@ public class StoreDTO {
 
     private String email;
 
-    private String pw;
+//    private String pw;
 
     private String name;
 
@@ -42,11 +44,15 @@ public class StoreDTO {
     //여기서는 String이다. SaveDTO에서는 byte[]임.
     private String filePath;
 
+    private SNSType snsType;
+    private String snsIdentifyKey;
+    private int birthYear;
+
+
     public static StoreDTO toDTO(Store s) {
         StoreDTO storeDTO = StoreDTO.builder()
                 .uuid(s.getUuid())
                 .email(s.getEmail())
-                .pw(s.getPw())
                 .name(s.getName())
                 .description(s.getDescription())
                 .location(s.getLocation())
@@ -58,6 +64,18 @@ public class StoreDTO {
 //                .filePath(s.getFilePath())
                 .build();
         return storeDTO;
+    }
+
+    public static StoreDTO GeneralOAuthDTOtoDTO(GeneralOAuthDTO d) {
+        return StoreDTO.builder()
+                .email(d.getEmail())
+                .name(d.getName())
+                .owner_phone_num(d.getPhone_num())
+                .snsType(d.getSnsType())
+                .snsIdentifyKey(d.getSnsIdentifyKey())
+                .birthYear(d.getBirthyear())
+                .build();
+
     }
 }
 

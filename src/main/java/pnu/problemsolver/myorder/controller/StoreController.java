@@ -126,8 +126,8 @@ public class StoreController {
     }
 
     public boolean isFileExtensionOk(String extension) {
-
-        return Arrays.asList("jpg", "jpeg", "png", "bmp", "pdf", "jfif").contains(extension);
+//pdf는 빼기로 했다.
+        return Arrays.asList("jpg", "jpeg", "png", "bmp", "jfif").contains(extension);
     }
 
     public String makeCakePath(String storeDirPath, CakeEditDTO cakeEditDTO) {

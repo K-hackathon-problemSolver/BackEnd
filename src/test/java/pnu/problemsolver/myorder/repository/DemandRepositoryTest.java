@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
+import pnu.problemsolver.myorder.domain.Cake;
 import pnu.problemsolver.myorder.domain.Customer;
 import pnu.problemsolver.myorder.domain.Demand;
 import pnu.problemsolver.myorder.domain.Store;
@@ -23,19 +24,23 @@ class DemandRepositoryTest {
     @Autowired
     DemandRepository demandRepository;
 
+    @Autowired
+    CakeRepositroy cakeRepositroy;
+
     @Test
     public void save생성_수정_시간차이확인() {
         Customer customer = Customer.builder().build();
 //        System.out.println("유유아이디"+customer.getUuid());
         customerRepository.save(customer);
 
-        Store store = Store.builder().build();
-        storeRepository.save(store);
+
+        Cake cake = Cake.builder().build();
+        cakeRepositroy.save(cake);
 
 
         Demand demand = Demand.builder()
                 .customer(customer)
-                .store(store)
+                .cake(cake)
                 .build();
 
         demandRepository.save(demand);

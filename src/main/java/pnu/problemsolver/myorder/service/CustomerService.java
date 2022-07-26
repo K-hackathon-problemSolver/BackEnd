@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import pnu.problemsolver.myorder.domain.Customer;
 import pnu.problemsolver.myorder.domain.Store;
 import pnu.problemsolver.myorder.dto.CustomerDTO;
+import pnu.problemsolver.myorder.dto.GeneralOAuthDTO;
 import pnu.problemsolver.myorder.dto.StoreDTO;
 import pnu.problemsolver.myorder.repository.CustomerRepository;
 
@@ -59,6 +60,10 @@ public class CustomerService {
 
         throw new RuntimeException("snsType and snsIdentifyKey 중복!");
     }
+
+
+
+
 
 
 

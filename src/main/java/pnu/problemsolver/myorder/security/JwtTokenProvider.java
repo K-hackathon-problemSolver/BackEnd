@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
+import pnu.problemsolver.myorder.domain.MemberType;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -35,7 +36,7 @@ public class JwtTokenProvider {
         this.JWT_TOKEN_VALIDITY = Long.parseLong(Objects.requireNonNull(environment.getProperty("jwt.validity.time"), "application.properties jwt.validity.time 로드 실패"));//string으로 읽어오기 때문
     }
 
-    public String createToken() {
+    public String createToken(MemberType memberType) {
 
 //헤더생성
         Map<String, Object> headers = new HashMap<>();
@@ -51,6 +52,7 @@ public class JwtTokenProvider {
                 .setIssuedAt(new Date())
                 .setExpiration(date);//하루 뒤로 설정
 
+        claims.put("memberType", memberType.toString());
 //        claims.put("key", "value");//임의로 내가 넣으면 된다.
 
         String jwt = Jwts.builder()

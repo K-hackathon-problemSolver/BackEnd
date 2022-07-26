@@ -3,6 +3,8 @@ package pnu.problemsolver.myorder.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import pnu.problemsolver.myorder.domain.Customer;
+import pnu.problemsolver.myorder.domain.SNSType;
 import pnu.problemsolver.myorder.domain.Store;
 
 import java.util.List;
@@ -28,5 +30,8 @@ public interface StoreRepository extends JpaRepository<Store, UUID> {//extends J
     List<Store> findAllInUUIDList(@Param("list") List<UUID> list);//개쉽네.. 그냥 하면 되네...
 
     List<Store> findByName(String name);
+
+    public List<Store> findBySnsTypeAndSnsIdentifyKey(SNSType type, String key);
+
 
 }

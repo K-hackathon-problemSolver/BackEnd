@@ -25,7 +25,7 @@ public class CustomerDTO {
     private String name;
 
     private String phone_num;
-    private int age;//age같은 것은 아무래도 통계에서 잘 사용되기 때문에 가지고 있는 것이 좋다.
+    private int birthYear;//age같은 것은 아무래도 통계에서 잘 사용되기 때문에 가지고 있는 것이 좋다.
     private SNSType snsType;
     private String snsIdentifyKey; //고유식별자.
 
@@ -34,28 +34,40 @@ public class CustomerDTO {
         CustomerDTO dto = CustomerDTO.builder()
                 .uuid(c.getUuid())
                 .email(c.getEmail())
-                .pw(c.getPw())
                 .name(c.getName())
                 .phone_num(c.getPhone_num())
                 .snsType(c.getSnsType())
                 .snsIdentifyKey(c.getSnsIdentifyKey())
-                .age(c.getAge())
+                .birthYear(c.getBirthYear())
                 .build();
         return dto;
 
     }
 
-    public static CustomerDTO NaverOAuthDTOToDTO(NaverOAuthDTO c) {
-         CustomerDTO customerDTO= CustomerDTO.builder()
-                .email(c.getEmail())
-                .name(c.getName())
-                .phone_num(c.getMobile())
-                .snsType(SNSType.NAVER)
-                .snsIdentifyKey(c.getId())
-                .age(c.getAge())
-                .build();
+//    public static CustomerDTO NaverOAuthDTOToDTO(NaverOAuthDTO c) {
+//         CustomerDTO customerDTO= CustomerDTO.builder()
+//                .email(c.getEmail())
+//                .name(c.getName())
+//                .phone_num(c.getMobile())
+//                .snsType(SNSType.NAVER)
+//                .snsIdentifyKey(c.getId())
+//                .age(c.getAge())
+//                .build();
+//
+//        return customerDTO;
+//
+//    }
 
-        return customerDTO;
+
+    public static CustomerDTO GeneralOAuthDTOtoDTO(GeneralOAuthDTO d) {
+        return CustomerDTO.builder()
+                .email(d.getEmail())
+                .name(d.getName())
+                .phone_num(d.getPhone_num())
+                .birthYear(d.getBirthyear())
+                .snsType(d.getSnsType())
+                .snsIdentifyKey(d.getSnsIdentifyKey())
+                .build();
 
     }
 }

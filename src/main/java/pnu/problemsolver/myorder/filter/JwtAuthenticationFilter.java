@@ -3,11 +3,8 @@ package pnu.problemsolver.myorder.filter;
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import pnu.problemsolver.myorder.domain.Role;
-import pnu.problemsolver.myorder.repository.CustomerRepository;
-import pnu.problemsolver.myorder.repository.StoreRepository;
+import pnu.problemsolver.myorder.domain.MemberType;
 import pnu.problemsolver.myorder.security.JwtTokenProvider;
 import pnu.problemsolver.myorder.service.CustomerService;
 import pnu.problemsolver.myorder.service.StoreService;
@@ -48,8 +45,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 Claims claims = tokenProvider.getClaims(jwt);
                 if (claims.keySet().contains("email")) {
                     String email = (String) claims.get("email");
+                    //TODO : store, customer service에서 검사.!
                     //여기오면 로그인 된 상황임.
-                    request.setAttribute("role", Role.MEMBER);
+//                    request.setAttribute("role", Role.MEMBER);
                 } else {
                     log.info("email을 찾지 못했습니다.");
                 }
@@ -59,7 +57,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         } else {
             log.info("헤더에 jwt가 없습니다!");
         }
-        request.setAttribute("role", Role.GUEST);//JWT가 있어도 올바르지 않다면 GUEST권한을 부여함.
+        request.setAttribute("role", MemberType.GUEST);//JWT가 있어도 올바르지 않다면 GUEST권한을 부여함.
         filterChain.doFilter(request, response); //다음 필터로 넘겨줘야함.
     }
     //헤더에서 bearer값만 가져온다. jwt는 헤더에 있는 값임. body에 없으니 안심!

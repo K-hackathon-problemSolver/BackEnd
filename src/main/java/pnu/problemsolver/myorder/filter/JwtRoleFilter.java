@@ -18,7 +18,7 @@ public class JwtRoleFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        //TODO 구현
+        //TODO : 로그인이 있어야 접근할 수 있는 URL은 다 걸러내야함.
         filterChain.doFilter(request, response); //다음 필터로 넘겨줘야함.
     }
 }

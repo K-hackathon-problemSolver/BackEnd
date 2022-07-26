@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import pnu.problemsolver.myorder.domain.Customer;
 import pnu.problemsolver.myorder.domain.Store;
+import pnu.problemsolver.myorder.dto.CustomerDTO;
 import pnu.problemsolver.myorder.dto.StoreDTO;
 import pnu.problemsolver.myorder.dto.StoreDTOForList;
 import pnu.problemsolver.myorder.dto.StoreDTOForListPreflight;
@@ -86,4 +88,14 @@ public class StoreService {
 //        return email;
 //
 //    }
+    public StoreDTO findBySnsTypeAndSnsIdentifyKey(StoreDTO storeDTO) {
+        List<Store> resList = storeRepository.findBySnsTypeAndSnsIdentifyKey(storeDTO.getSnsType(), storeDTO.getSnsIdentifyKey());
+        if (resList.size() == 1) {
+            return StoreDTO.toDTO(resList.get(0));
+        } else if (resList.isEmpty()) {
+            return null;
+        }
+
+        throw new RuntimeException("snsType and snsIdentifyKey 중복!");
+    }
 }
