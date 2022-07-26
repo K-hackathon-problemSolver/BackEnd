@@ -107,14 +107,14 @@ public class StoreService {
         }
         return resList;
     }
-    public List<StoreDTOForList> findAll() {
-
-        List<Store> li = storeRepository.findAll();
-        List<StoreDTOForList> resList = new ArrayList<>();
-        for (Store i : li) {
-            resList.add(StoreDTOForList.toDTO(i));
-        }
-        return resList;
-    }
+//    public List<StoreDTOForList> findAll() {
+//
+//        List<Store> li = storeRepository.findAll();
+//        List<StoreDTOForList> resList = new ArrayList<>();
+//        for (Store i : li) {
+//            resList.add(StoreDTOForList.toDTO(i));
+//        }
+//        return resList;
+//    }
 
 }

@@ -117,7 +117,7 @@ public class StoreController {
 
     @GetMapping("/list")
     public List<StoreDTOForList> list() {
-        List<StoreDTOForList> all = storeService.findAll();
+        List<StoreDTOForList> all = storeService.findAll(a->StoreDTOForList.toDTO(a)); //store->T로 변환 함수만 넣어주면 된다.!
         System.out.println(all);
         return all;
     }
