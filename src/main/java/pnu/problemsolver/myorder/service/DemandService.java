@@ -7,20 +7,13 @@ import org.springframework.transaction.annotation.Transactional;
 import pnu.problemsolver.myorder.domain.Cake;
 import pnu.problemsolver.myorder.dto.CakeDTO;
 import pnu.problemsolver.myorder.repository.CakeRepositroy;
+import pnu.problemsolver.myorder.repository.DemandRepository;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 @Transactional
-public class CakeService {
-    private final CakeRepositroy cakeRepositroy;
-
-
-    public CakeDTO save(CakeDTO cakeDTO) {
-        Cake cake = Cake.toEntity(cakeDTO);
-        cake = cakeRepositroy.save(cake);
-        return CakeDTO.toDTO(cake);
-    }
-
+public class DemandService {
+    private final DemandRepository demandRepository;
 
 }

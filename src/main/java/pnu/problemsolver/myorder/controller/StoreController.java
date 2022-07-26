@@ -3,6 +3,7 @@ package pnu.problemsolver.myorder.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.*;
+import pnu.problemsolver.myorder.domain.Store;
 import pnu.problemsolver.myorder.dto.*;
 import pnu.problemsolver.myorder.service.CakeService;
 import pnu.problemsolver.myorder.service.StoreService;
@@ -13,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.function.Function;
 
 @RestController
 @RequestMapping("/store")
@@ -107,14 +109,22 @@ public class StoreController {
 
     }
 
-    @GetMapping("/list")//GET으로 오면 preflight만 준다.
-    public List<StoreDTOForListPreflight> listPreflights() {
-        List<StoreDTOForListPreflight> li = storeService.getAllPreflights();
-        return li;
+//    @GetMapping("/list")//GET으로 오면 preflight만 준다.
+//    public List<StoreDTOForListPreflight> listPreflights() {
+//        List<StoreDTOForListPreflight> li = storeService.getAllPreflights();
+//        return li;
+//    }
+
+    @GetMapping("/list")
+    public List<StoreDTOForList> list() {
+        List<StoreDTOForList> all = storeService.findAll();
+        System.out.println(all);
+        return all;
     }
 
     @PostMapping("/list")
     public List<StoreDTOForList> list(@RequestBody ArrayList<UUID> li) {
+
         List<StoreDTOForList> resList = storeService.findAllInUUIDList(li);
         //encoding
         for (StoreDTOForList i : resList) {

@@ -72,6 +72,7 @@ public class Store extends BaseTimeEntitiy {
 
     public static Store toEntity(StoreDTO storeDTO) {
         Store store = Store.builder()
+                .uuid(storeDTO.getUuid())
                 .email(storeDTO.getEmail())
                 .name(storeDTO.getName())
                 .description(storeDTO.getDescription())
@@ -79,7 +80,12 @@ public class Store extends BaseTimeEntitiy {
                 .store_phone_num(storeDTO.getStore_phone_num())
                 .owner_phone_num(storeDTO.getOwner_phone_num())
                 .impossibleDate(storeDTO.getImpossibleDate())
-                .uuid(storeDTO.getUuid())
+                .latitude(storeDTO.getLatitude())
+                .longitude(storeDTO.getLongitude())
+                .filePath(storeDTO.getFilePath())
+                .snsType(storeDTO.getSnsType())
+                .snsIdentifyKey(storeDTO.getSnsIdentifyKey())
+                .birthYear(storeDTO.getBirthYear())
                 .build();
 
         return store;

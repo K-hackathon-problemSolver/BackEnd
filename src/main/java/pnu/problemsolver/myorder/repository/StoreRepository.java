@@ -34,4 +34,5 @@ public interface StoreRepository extends JpaRepository<Store, UUID> {//extends J
     public List<Store> findBySnsTypeAndSnsIdentifyKey(SNSType type, String key);
 
 
+
 }

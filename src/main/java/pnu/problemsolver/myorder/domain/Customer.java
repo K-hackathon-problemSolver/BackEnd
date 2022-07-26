@@ -38,7 +38,7 @@ public class Customer extends BaseTimeEntitiy{
     private String snsIdentifyKey; //고유식별자.
 
     private int birthYear;//age같은 것은 아무래도 통계에서 잘 사용되기 때문에 가지고 있는 것이 좋다.
-    private int gender; //1 : 남자. 0 : 여자.
+    private GENDER gender; //1 : 남자. 0 : 여자.
 
 
     public static Customer toEntity(CustomerDTO c) {

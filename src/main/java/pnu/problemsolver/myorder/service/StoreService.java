@@ -4,9 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import pnu.problemsolver.myorder.domain.Customer;
 import pnu.problemsolver.myorder.domain.Store;
-import pnu.problemsolver.myorder.dto.CustomerDTO;
 import pnu.problemsolver.myorder.dto.StoreDTO;
 import pnu.problemsolver.myorder.dto.StoreDTOForList;
 import pnu.problemsolver.myorder.dto.StoreDTOForListPreflight;
@@ -17,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Function;
 
 @RequiredArgsConstructor
 @Service
@@ -98,4 +97,24 @@ public class StoreService {
 
         throw new RuntimeException("snsType and snsIdentifyKey 중복!");
     }
+
+    public <T> List<T> findAll(Function<Store, T> function) {
+
+        List<Store> li = storeRepository.findAll();
+        List<T> resList = new ArrayList<>();
+        for (Store i : li) {
+            resList.add(function.apply(i));
+        }
+        return resList;
+    }
+    public List<StoreDTOForList> findAll() {
+
+        List<Store> li = storeRepository.findAll();
+        List<StoreDTOForList> resList = new ArrayList<>();
+        for (Store i : li) {
+            resList.add(StoreDTOForList.toDTO(i));
+        }
+        return resList;
+    }
+
 }

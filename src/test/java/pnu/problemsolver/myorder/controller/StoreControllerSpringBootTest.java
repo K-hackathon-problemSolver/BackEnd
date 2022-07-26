@@ -4,10 +4,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 import pnu.problemsolver.myorder.domain.Store;
 import pnu.problemsolver.myorder.dto.StoreDTO;
 import pnu.problemsolver.myorder.service.StoreService;
+
+import java.io.File;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -15,6 +19,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Commit
+@Transactional
 public class StoreControllerSpringBootTest {
 
     @Autowired
@@ -25,10 +31,7 @@ public class StoreControllerSpringBootTest {
 
     @Test
     public void listTest() throws Exception {
-        for (int i = 0; i < 10; ++i) {
-            storeService.save(new StoreDTO());
-        }
-
+        mvc.perform(get("/"));
         mvc.perform(get("/store/list"))
                 .andExpect(status().isOk())
                 .andDo(print());
