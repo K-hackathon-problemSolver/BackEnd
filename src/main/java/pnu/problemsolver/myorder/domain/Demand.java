@@ -28,7 +28,7 @@ public class Demand extends BaseTimeEntitiy {
     private Customer customer;
 
     @ManyToOne
-    private Store store;
+    private Cake cake;
 
     @Column(nullable = false) //0 : 주문대기, 1 : 승락, 2 : 완료, -1 : 거절
     private int status;
@@ -42,7 +42,7 @@ public class Demand extends BaseTimeEntitiy {
 //    private String description;
 
     @Column(nullable = false)
-    private int min_price;
+    private int price;
 
     private String fillPath;
 
