@@ -59,14 +59,26 @@ public class Cake {
     }
 
     public void setOnlyNotNull(CakeEditDTO d, Path filePath) {
-        uuid = d.getUuid();
-        name = d.getName();
-        description = d.getDescription();
-        minPrice = d.getMinPrice();
-        option = d.getOption();
+        UUID tmpUUID = d.getUuid();
+        uuid = tmpUUID == null ? uuid : tmpUUID;
 
-        this.filePath = filePath.toString();
-        //filePath
+
+        String tmpName = d.getName();
+        name = tmpName == null ? name : tmpName;
+
+
+        String tmpDesc = d.getDescription();
+        description = tmpDesc == null ? description : tmpDesc;
+
+        int tmpMinPrice = d.getMinPrice();
+        minPrice = tmpMinPrice == 0 ? minPrice : tmpMinPrice;
+
+        String tmpOption = d.getOption();
+        option = tmpOption == null ? option : tmpOption;
+
+        String tmpPath =filePath.toString();
+
+        this.filePath = tmpPath == null ? this.filePath : tmpPath;
     }
 
 }

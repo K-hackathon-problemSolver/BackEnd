@@ -91,10 +91,16 @@ public class Store extends BaseTimeEntitiy {
     }
 
     public void setOnlyNotNull(StoreEditDTO d, Path filePath) {
-        uuid = d.getUuid();
-        this.filePath = filePath.toString();
-        name = d.getName();
-        description = d.getDescription();
+        UUID tmpUUID = d.getUuid();
+        uuid = tmpUUID == null ? uuid : tmpUUID;
 
+        String tmpPath = filePath.toString();
+        this.filePath = tmpPath == null ? this.filePath : tmpPath;
+
+        String tmpName = d.getName();
+        name = tmpName == null ? name : tmpName;
+
+        String tmpDesc = d.getDescription();
+        description = tmpDesc == null ? description : tmpDesc;
     }
 }

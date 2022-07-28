@@ -115,7 +115,7 @@ public class StoreControllerSpringBootTest {
 
         StoreEditDTO storeEditDTO = StoreEditDTO.builder()
                 .uuid(savedStoreDTO.getUuid())
-                .name("가게1")
+//                .name("가게1")
                 .description("맛있다!")
                 .cakeList(cakeList)
                 .mainImg(mainImg)
@@ -138,6 +138,11 @@ public class StoreControllerSpringBootTest {
         File f2 = new File(storeDir + cake2.getName() + "." + cake2.getExtension());
         assertEquals(f1.exists(), true);
         assertEquals(f2.exists(), true);
+
+        //다시 가져왔을 때 null이 안되어 있고 null이 아닌 것만 바뀜.!
+        StoreDTO byId = storeService.findById(savedStoreDTO.getUuid());
+        assertEquals(byId.getName().equals("초기화"), true);
+        assertEquals(byId.getDescription().equals("맛있다!"), true);
 
     }
 }
