@@ -42,7 +42,7 @@ class CakeServiceTest {
                 .filePath("path!")
                 .option("{\"plate\":\"1\"}")
                 .name("신민건")
-                .min_price(123)
+                .minPrice(123)
                 .description("설명")
                 .build();
 

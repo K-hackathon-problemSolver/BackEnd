@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import pnu.problemsolver.myorder.domain.Store;
 import pnu.problemsolver.myorder.dto.StoreDTO;
 import pnu.problemsolver.myorder.dto.StoreDTOForList;
-import pnu.problemsolver.myorder.dto.StoreDTOForListPreflight;
 import pnu.problemsolver.myorder.repository.StoreRepository;
 
 import javax.transaction.Transactional;
@@ -51,14 +50,14 @@ public class StoreService {
         return StoreDTO.toDTO(store);
     }
 
-    public List<StoreDTOForListPreflight> getAllPreflights() {
-        List<Store> li = storeRepository.findAll();
-        List<StoreDTOForListPreflight> liDTO = new ArrayList<>();
-        for (Store i : li) {
-            liDTO.add(StoreDTOForListPreflight.toDTO(i));
-        }
-        return liDTO;
-    }
+//    public List<StoreDTOForListPreflight> getAllPreflights() {
+//        List<Store> li = storeRepository.findAll();
+//        List<StoreDTOForListPreflight> liDTO = new ArrayList<>();
+//        for (Store i : li) {
+//            liDTO.add(StoreDTOForListPreflight.toDTO(i));
+//        }
+//        return liDTO;
+//    }
 
     public List<StoreDTOForList> findAllInUUIDList(List<UUID> param) {
         List<Store> li = storeRepository.findAllInUUIDList(param);

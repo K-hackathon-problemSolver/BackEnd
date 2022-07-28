@@ -5,10 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import pnu.problemsolver.myorder.domain.Customer;
-import pnu.problemsolver.myorder.domain.GENDER;
+import pnu.problemsolver.myorder.domain.Gender;
 import pnu.problemsolver.myorder.domain.SNSType;
 
-import javax.persistence.Column;
 import java.util.UUID;
 
 @Data
@@ -28,7 +27,7 @@ public class CustomerDTO {
     private SNSType snsType;
     private String snsIdentifyKey; //고유식별자.
     private int birthYear;//age같은 것은 아무래도 통계에서 잘 사용되기 때문에 가지고 있는 것이 좋다.
-    private GENDER gender; //1 : 남자. 0 : 여자.
+    private Gender gender; //1 : 남자. 0 : 여자.
 
 
     public static CustomerDTO toDTO(Customer c) {

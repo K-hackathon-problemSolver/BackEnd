@@ -4,12 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pnu.problemsolver.myorder.domain.Cake;
-import pnu.problemsolver.myorder.domain.Customer;
-import pnu.problemsolver.myorder.domain.GENDER;
+import pnu.problemsolver.myorder.domain.DemandStatus;
+import pnu.problemsolver.myorder.domain.Gender;
 import pnu.problemsolver.myorder.domain.SNSType;
 import pnu.problemsolver.myorder.dto.CakeDTO;
 import pnu.problemsolver.myorder.dto.CustomerDTO;
+import pnu.problemsolver.myorder.dto.DemandDTO;
 import pnu.problemsolver.myorder.dto.StoreDTO;
 import pnu.problemsolver.myorder.service.CakeService;
 import pnu.problemsolver.myorder.service.CustomerService;
@@ -18,6 +18,7 @@ import pnu.problemsolver.myorder.service.StoreService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 @Controller
 @RestController
@@ -35,18 +36,29 @@ public class MainController {
     public void setting() {
         //TODO : 더미데이터 넣기!
         //store, customer는 연관관계 없어서 먼저 넣을 수 있다
-        List<StoreDTO> storeDTOList= insertStore();
+        List<StoreDTO> storeDTOList = insertStore();
         List<CustomerDTO> customerDTOList = insertCustomer();
 
         //cake에는 store가 필요함.
         List<CakeDTO> cakeDTOList = insertCake(storeDTOList);
+        insertDemand(cakeDTOList, customerDTOList);
+
     }
 
     //demand는 customer, cake 2개가 필요하다.
     private void insertDemand(List<CakeDTO> cakeDTOList, List<CustomerDTO> customerDTOList) {
-        for (int i = 0; i < 20; ++i) {
+        IntStream.rangeClosed(0, 20).forEach((i) -> {
+            int idx = (int) (Math.random() * cakeDTOList.size());
+            DemandDTO demandDTO = DemandDTO.builder()
+                    .cakeUUID(cakeDTOList.get(idx).getUuid())
+                    .customerUUID(customerDTOList.get(idx).getUuid())
+                    .status(DemandStatus.WAITING)
+                    .build();
+            demandService.save(demandDTO);
+        });
 
-        }
+
+
     }
 
     private List<CustomerDTO> insertCustomer() {
@@ -54,13 +66,13 @@ public class MainController {
         List<CustomerDTO> li = new ArrayList<>();
         for (int i = 0; i < 3; ++i) {
             CustomerDTO cus = CustomerDTO.builder()
-                    .email("email"+i)
-                    .name("custmer"+i)
+                    .email("email" + i)
+                    .name("custmer" + i)
                     .phone_num("010-1234-7890")
-                    .birthYear(1999+i)
+                    .birthYear(1999 + i)
                     .snsIdentifyKey("snsid~")
                     .snsType(SNSType.NAVER)
-                    .gender(GENDER.MAN)
+                    .gender(Gender.MAN)
                     .build();
 
             CustomerDTO saved = customerService.save(cus);
@@ -69,13 +81,13 @@ public class MainController {
 
         for (int i = 0; i < 3; ++i) {
             CustomerDTO cus = CustomerDTO.builder()
-                    .email("email"+i)
-                    .name("custmer"+i)
+                    .email("email" + i)
+                    .name("custmer" + i)
                     .phone_num("010-1234-7890")
-                    .birthYear(1999+i)
+                    .birthYear(1999 + i)
                     .snsIdentifyKey("snsid~")
                     .snsType(SNSType.KAKAO)
-                    .gender(GENDER.MAN)
+                    .gender(Gender.MAN)
                     .build();
 
             CustomerDTO saved = customerService.save(cus);
@@ -108,9 +120,9 @@ public class MainController {
 
     public List<CakeDTO> insertCake(List<StoreDTO> list) {//cake는 연관관계가 있어서 store를 필요로 한다.
         List<CakeDTO> li = new ArrayList<>();
-        for (int i=0; i< list.size(); ++i) {//lise.size() = 11
+        for (int i = 0; i < list.size(); ++i) {//lise.size() = 11
             CakeDTO cakeDTO = CakeDTO.builder()
-                    .min_price(3000 * i)
+                    .minPrice(3000 * i)
                     .name("케이크" + i)
                     .option("{\"color\" : [\"red\", \"blue\", \"green\"], \"size\" : [\"1\", \"2\", \"3\"]}")
                     .storeUUID(list.get(i).getUuid()) //연관관계

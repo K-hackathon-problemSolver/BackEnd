@@ -35,7 +35,7 @@ public class CakeDTO {
 
     private String description;//desc로 예약어는 사용못함.
 
-    private int min_price;
+    private int minPrice;
 
     public static CakeDTO toDTO(Cake cake) {
         CakeDTO cakeDTO = CakeDTO.builder()
@@ -46,7 +46,7 @@ public class CakeDTO {
                 .option(cake.getOption())
                 .name(cake.getName())
                 .description(cake.getDescription())
-                .min_price(cake.getMin_price())
+                .minPrice(cake.getMinPrice())
                 .build();
         return cakeDTO;
     }

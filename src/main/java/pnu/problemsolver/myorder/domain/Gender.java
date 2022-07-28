@@ -1,5 +1,5 @@
 package pnu.problemsolver.myorder.domain;
 
-public enum GENDER {
+public enum Gender {
     MAN, WOMAN
 }

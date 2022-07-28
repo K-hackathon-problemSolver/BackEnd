@@ -43,7 +43,7 @@ public class StoreController {
     //자동으로 StoreSaveDTO로 맵핑된다!
     public String editStoreMenu(@RequestBody StoreEditDTO storeEditDTO) throws IOException {
         if (!isFileExtensionOk(storeEditDTO.getExtension())) {
-            return "\"jpg\", \"jpeg\", \"png\", \"bmp\", \"pdf\", \"jfif\"확장자만 가능합니다.";
+            return "\"jpg\", \"jpeg\", \"png\", \"bmp\", \"jfif\"확장자만 가능합니다."; //pdf는 지움.
         }
         //경로 만들기.
         Path storeDirPath = Paths.get(uploadPath + File.separator + storeEditDTO.getUuid());
@@ -62,7 +62,6 @@ public class StoreController {
         Files.write(mainPath, encodedBytes);
         //mainImg끝.
 
-
         List<CakeEditDTO> cakeDTOList = storeEditDTO.getCakeList();
         List<String> cakePathList = new ArrayList<>();//나중에 쓰기위함.
         //cake사진 저장.
@@ -79,8 +78,10 @@ public class StoreController {
                 .uuid(storeEditDTO.getUuid())
                 .filePath(mainPath.toString())
                 .description(storeEditDTO.getDescription())
+                .name(storeEditDTO.getName())
 //                .impossibleDate(storeEditDTO.getImpossibleDate())
                 .build();
+
         storeService.save(storeDTO);
 
         //cake update.
@@ -90,7 +91,8 @@ public class StoreController {
             CakeDTO cakeDTO = CakeDTO.builder()
                     .filePath(cakePathList.get(i))
                     .option(cakeDTOList.get(i).getOption())
-                    .min_price(cakeDTOList.get(i).getMinPrice())
+                    .name(cakeDTOList.get(i).getName())
+                    .minPrice(cakeDTOList.get(i).getMinPrice())
                     .build();
             cakeService.save(cakeDTO);
 

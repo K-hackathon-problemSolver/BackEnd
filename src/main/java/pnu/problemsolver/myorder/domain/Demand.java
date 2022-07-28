@@ -3,6 +3,7 @@ package pnu.problemsolver.myorder.domain;
 
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+import pnu.problemsolver.myorder.dto.DemandDTO;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -24,18 +25,20 @@ public class Demand extends BaseTimeEntitiy {
     @Column(columnDefinition = "BINARY(16)")
     private UUID uuid;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Customer customer;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Cake cake;
 
-    @Column(nullable = false) //0 : 주문대기, 1 : 승락, 2 : 완료, -1 : 거절
-    private int status;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private DemandStatus status;
+
 
     @Column(columnDefinition = "JSON")
     private String option;
-//
+
 //    @Column(nullable = false)
 //    private String name; //케이크이름
 //
@@ -44,23 +47,28 @@ public class Demand extends BaseTimeEntitiy {
     @Column(nullable = false)
     private int price;
 
-    private String fillPath;
+    private String filePath;
 
     public void acceptDemand() {
-        if (status == 0) {
-            this.status = 1;
+        if (status == DemandStatus.WAITING) {
+            status = DemandStatus.ACCEPTED;
         }
 
     }
-    public void rejectDemand() {
-        if (status == 0) {
-        this.status = -1;
-        }
-    }
-    public void completeDemand() {
-        if (status == 1) {
-        this.status = 2;
-        }
+
+    public static Demand toEntity(DemandDTO dto) {
+        Demand demand = Demand.builder()
+                .uuid(dto.getUuid())
+                .cake(Cake.builder().uuid(dto.getCakeUUID()).build())
+                .customer(Customer.builder().uuid(dto.getCustomerUUID()).build())
+
+                .status(dto.getStatus())
+                .option(dto.getOption())
+
+                .price(dto.getPrice())
+                .filePath(dto.getFilePath())
+                .build();
+        return demand;
     }
 
 

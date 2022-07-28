@@ -2,14 +2,9 @@ package pnu.problemsolver.myorder.domain;
 
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.transform.AliasedTupleSubsetResultTransformer;
 import pnu.problemsolver.myorder.dto.CustomerDTO;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
+import javax.persistence.*;
 import java.util.UUID;
 
 @ToString
@@ -38,7 +33,9 @@ public class Customer extends BaseTimeEntitiy{
     private String snsIdentifyKey; //고유식별자.
 
     private int birthYear;//age같은 것은 아무래도 통계에서 잘 사용되기 때문에 가지고 있는 것이 좋다.
-    private GENDER gender; //1 : 남자. 0 : 여자.
+
+    @Enumerated(EnumType.STRING)
+    private Gender gender; //1 : 남자. 0 : 여자.
 
 
     public static Customer toEntity(CustomerDTO c) {

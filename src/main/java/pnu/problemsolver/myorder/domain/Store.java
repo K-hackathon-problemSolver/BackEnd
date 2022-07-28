@@ -2,13 +2,9 @@ package pnu.problemsolver.myorder.domain;
 
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
-import org.mariadb.jdbc.internal.com.read.resultset.ColumnDefinition;
 import pnu.problemsolver.myorder.dto.StoreDTO;
 
 import javax.persistence.*;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.UUID;
 
 @ToString
@@ -69,6 +65,8 @@ public class Store extends BaseTimeEntitiy {
     private String snsIdentifyKey; //고유식별자.
 
     private int birthYear;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
     public static Store toEntity(StoreDTO storeDTO) {
         Store store = Store.builder()

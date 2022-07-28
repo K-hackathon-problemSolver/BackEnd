@@ -84,57 +84,7 @@ class StoreControllerTest {
 
     }
 
-    @Test
-    public void editStoreMenuTest() throws Exception {
-        File mainImgFile = new File("src/main/resources/static/testPicture.jpg");
-        byte[] mainImg = Files.readAllBytes(mainImgFile.toPath());
-        mainImg = Base64.getEncoder().encode(mainImg);
 
-        List<CakeEditDTO> cakeList = new ArrayList<>();
-        CakeEditDTO cake1 = new CakeEditDTO();
-        cake1.setName("cake1");
-        cake1.setMinPrice(200);
-        cake1.setOption("{\"plate\":\"1\"}");
-        cake1.setImg(mainImg);
-        cake1.setExtension("jpg");
-
-        CakeEditDTO cake2 = new CakeEditDTO();
-        cake2.setName("cake2");
-        cake2.setMinPrice(300);
-        cake2.setOption("{\"plate\":\"2\"}");
-        cake2.setImg(mainImg);
-        cake2.setExtension("jpg");
-
-        cakeList.add(cake1);
-        cakeList.add(cake2);
-
-        UUID tmpUUID = UUID.randomUUID();
-        StoreEditDTO storeEditDTO = StoreEditDTO.builder()
-                .uuid(tmpUUID)
-                .name("가게1")
-                .description("맛있다!")
-                .cakeList(cakeList)
-                .mainImg(mainImg)
-                .extension("jpg")
-//                .impossibleDate("[{start:2022-07-02, end:2022-07-06}, {start:2022-07-08, end:2022-07-10}]")
-                .build();
-
-        String json = Mapper.objectMapper.writeValueAsString(storeEditDTO);
-
-        mvc.perform(post("/store/editMenu")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
-                .andDo(print());
-
-        String storeDir = "upload" + File.separator + tmpUUID + File.separator;
-        File file = new File(storeDir + "mainImg.jpg");
-        assertThat(file.exists()).isEqualTo(true);
-        File f1 = new File(storeDir + cake1.getName() + "." + cake1.getExtension());
-        File f2 = new File(storeDir + cake2.getName() + "." + cake2.getExtension());
-        assertEquals(f1.exists(), true);
-        assertEquals(f2.exists(), true);
-
-    }
 
     @Test
     public void editImpossibleDateTest() throws JsonProcessingException {

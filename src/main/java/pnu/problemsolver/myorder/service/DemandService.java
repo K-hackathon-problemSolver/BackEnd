@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pnu.problemsolver.myorder.domain.Cake;
+import pnu.problemsolver.myorder.domain.Demand;
 import pnu.problemsolver.myorder.dto.CakeDTO;
 import pnu.problemsolver.myorder.dto.DemandDTO;
 import pnu.problemsolver.myorder.repository.CakeRepositroy;
@@ -17,9 +18,10 @@ import pnu.problemsolver.myorder.repository.DemandRepository;
 public class DemandService {
     private final DemandRepository demandRepository;
 
-    public DemandDTO save(DemandDTO dto) {
-
-        demandRepository.save(dto)
+    //TODO : 구현
+    public void save(DemandDTO dto) {
+        Demand demand = Demand.toEntity(dto);
+        demandRepository.save(demand);
     }
 
 }
