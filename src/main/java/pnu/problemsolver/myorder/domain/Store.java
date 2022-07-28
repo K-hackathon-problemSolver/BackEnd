@@ -3,8 +3,10 @@ package pnu.problemsolver.myorder.domain;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import pnu.problemsolver.myorder.dto.StoreDTO;
+import pnu.problemsolver.myorder.dto.StoreEditDTO;
 
 import javax.persistence.*;
+import java.nio.file.Path;
 import java.util.UUID;
 
 @ToString
@@ -85,7 +87,14 @@ public class Store extends BaseTimeEntitiy {
                 .snsIdentifyKey(storeDTO.getSnsIdentifyKey())
                 .birthYear(storeDTO.getBirthYear())
                 .build();
-
         return store;
+    }
+
+    public void setOnlyNotNull(StoreEditDTO d, Path filePath) {
+        uuid = d.getUuid();
+        this.filePath = filePath.toString();
+        name = d.getName();
+        description = d.getDescription();
+
     }
 }

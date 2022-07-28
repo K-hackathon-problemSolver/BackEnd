@@ -20,7 +20,6 @@ import java.util.UUID;
 public class StoreEditDTO {
     private UUID uuid;
     private byte[] mainImg; //base64인코딩 된 상태.
-
     private String extension; //byte파일의 확장자.
 
     private String name;//가게이름.

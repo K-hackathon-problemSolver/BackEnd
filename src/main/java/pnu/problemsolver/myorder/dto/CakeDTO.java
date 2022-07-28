@@ -50,4 +50,18 @@ public class CakeDTO {
                 .build();
         return cakeDTO;
     }
+
+    public static CakeDTO toDTO(CakeEditDTO d, String filePath, UUID storeUUID) {
+
+        CakeDTO cakeDTO = CakeDTO.builder()
+                .uuid(d.getUuid())
+                .storeUUID(storeUUID)
+                .filePath(filePath)
+                .option(d.getOption())
+                .name(d.getName())
+                .description(d.getDescription())
+                .minPrice(d.getMinPrice())
+                .build();
+        return cakeDTO;
+    }
 }

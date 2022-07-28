@@ -1,9 +1,10 @@
 package pnu.problemsolver.myorder.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.env.Environment;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
-import pnu.problemsolver.myorder.domain.Store;
 import pnu.problemsolver.myorder.dto.*;
 import pnu.problemsolver.myorder.service.CakeService;
 import pnu.problemsolver.myorder.service.StoreService;
@@ -14,7 +15,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.function.Function;
 
 @RestController
 @RequestMapping("/store")
@@ -39,65 +39,78 @@ public class StoreController {
         return resDTO;
     }
 
+    /**
+     *
+     * @param storeEditDTO
+     * @return 유효하지 않은 uuid를 가지고 있으면 null반환. 성공하면 success
+     * @throws IOException
+     */
     @PostMapping("/editMenu")
-    //자동으로 StoreSaveDTO로 맵핑된다!
+    //자동으로 StoreEditDTO로 맵핑된다!
     public String editStoreMenu(@RequestBody StoreEditDTO storeEditDTO) throws IOException {
         if (!isFileExtensionOk(storeEditDTO.getExtension())) {
             return "\"jpg\", \"jpeg\", \"png\", \"bmp\", \"jfif\"확장자만 가능합니다."; //pdf는 지움.
         }
-        //경로 만들기.
-        Path storeDirPath = Paths.get(uploadPath + File.separator + storeEditDTO.getUuid());
-        System.out.println(storeDirPath.toString());
-        System.out.println(storeDirPath.toAbsolutePath());
+        //store dir 만들기.
+        Path storeDirPath = makeStorePath(storeEditDTO);
+        Path mainImgPath = Paths.get(storeDirPath + File.separator + "mainImg." + storeEditDTO.getExtension());
 
+
+        //디코딩, 파일 생성.
+        byte[] encodedBytes = Base64.getDecoder().decode(storeEditDTO.getMainImg());
+        //mainImg 저장
+        Files.write(mainImgPath, encodedBytes);
+
+        List<CakeEditDTO> cakeEditDTOList = storeEditDTO.getCakeList();
+
+        //cake사진 저장.
+        List<Path> cakePathList=saveCakeImg(storeDirPath, cakeEditDTOList);
+
+        //store update
+        boolean a = storeService.saveOnlyNotNUll(storeEditDTO, mainImgPath);
+        if (!a) {
+            return null;
+        }
+//        StoreDTO storeDTOById = storeService.findById(storeEditDTO.getUuid());
+//        StoreDTO storeDTO = StoreDTO.toDTO(storeEditDTO, mainImgPath.toString());
+//        storeService.save(storeDTO);
+
+        //cake update.
+        //TODO 시간 남으면 sql하나로 만들기. 아래처럼 하면 성능 bad.
+        for (int i = 0; i < cakeEditDTOList.size(); ++i) {
+//            CakeDTO cakeDTO = CakeDTO.toDTO(cakeDTOList.get(i), cakePathList.get(i).toString(), storeEditDTO.getUuid());
+//            cakeService.save(cakeDTO);
+            boolean b = cakeService.saveOnlyNotNUll(cakeEditDTOList.get(i), cakePathList.get(i));
+            if (!b) {
+                return null;
+            }
+        }
+        return "success";
+    }
+
+    //반환하는게 경로라면 string이지만 Path객체를 사용하자. Path 객체를 사용하지 않더라도 그게 더 직관적이다.!
+    private List<Path> saveCakeImg(Path storeDirPath, List<CakeEditDTO> cakeDTOList) throws IOException {
+        List<Path> cakePathList = new ArrayList<>();
+        for (CakeEditDTO i : cakeDTOList) {
+            Path path = Paths.get(makeCakePath(storeDirPath.toString(), i));
+            cakePathList.add(path);
+            File cakeFile = path.toFile();
+            byte[] decoded = Base64.getDecoder().decode(i.getImg());
+            Files.write(cakeFile.toPath(), decoded);
+        }
+        return cakePathList;
+    }
+
+    private Path makeStorePath(StoreEditDTO storeEditDTO) {
+        Path storeDirPath = Paths.get(uploadPath + File.separator + storeEditDTO.getUuid());
+//        System.out.println(storeDirPath.toString());
+//        System.out.println(storeDirPath.toAbsolutePath());
         File mainFile = storeDirPath.toFile();
         if (!mainFile.exists()) {
             log.warn("파일이 없습니다.");
             mainFile.mkdirs();//전부 파일로 만들어버림.
         }
-
-        Path mainPath = Paths.get(storeDirPath + File.separator + "mainImg." + storeEditDTO.getExtension());
-        //디코딩, 파일 생성.
-        byte[] encodedBytes = Base64.getDecoder().decode(storeEditDTO.getMainImg());
-        Files.write(mainPath, encodedBytes);
-        //mainImg끝.
-
-        List<CakeEditDTO> cakeDTOList = storeEditDTO.getCakeList();
-        List<String> cakePathList = new ArrayList<>();//나중에 쓰기위함.
-        //cake사진 저장.
-        for (CakeEditDTO i : cakeDTOList) {
-            String path = makeCakePath(storeDirPath.toString(), i);
-            cakePathList.add(path);
-            File cakeFile = new File(path);
-            byte[] decoded = Base64.getDecoder().decode(i.getImg());
-            Files.write(cakeFile.toPath(), decoded);
-        }
-
-        //store update
-        StoreDTO storeDTO = StoreDTO.builder()
-                .uuid(storeEditDTO.getUuid())
-                .filePath(mainPath.toString())
-                .description(storeEditDTO.getDescription())
-                .name(storeEditDTO.getName())
-//                .impossibleDate(storeEditDTO.getImpossibleDate())
-                .build();
-
-        storeService.save(storeDTO);
-
-        //cake update.
-        //TODO 시간 남으면 sql하나로 만들기. 아래처럼 하면 성능 bad.
-        for (int i = 0; i < cakeDTOList.size(); ++i) {
-
-            CakeDTO cakeDTO = CakeDTO.builder()
-                    .filePath(cakePathList.get(i))
-                    .option(cakeDTOList.get(i).getOption())
-                    .name(cakeDTOList.get(i).getName())
-                    .minPrice(cakeDTOList.get(i).getMinPrice())
-                    .build();
-            cakeService.save(cakeDTO);
-
-        }
-        return "success";
+        return storeDirPath;
     }
 
     @PostMapping("/editImpossibleDate")
@@ -144,6 +157,5 @@ public class StoreController {
 
     public String makeCakePath(String storeDirPath, CakeEditDTO cakeEditDTO) {
         return storeDirPath + File.separator + cakeEditDTO.getName() + "." + cakeEditDTO.getExtension();
-
     }
 }

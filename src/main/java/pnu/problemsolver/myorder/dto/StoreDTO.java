@@ -77,6 +77,16 @@ public class StoreDTO {
                 .build();
 
     }
+
+    public static StoreDTO toDTO(StoreEditDTO d, String filePath) {
+        return StoreDTO.builder()
+                .uuid(d.getUuid())
+                .name(d.getName())
+                .description(d.getDescription())
+                .filePath(filePath)
+                .build();
+
+    }
 }
 
 

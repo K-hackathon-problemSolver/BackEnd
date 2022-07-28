@@ -84,11 +84,10 @@ public class StoreControllerSpringBootTest {
                 .name("케이크2")
                 .minPrice(2000)
 //                .storeUUID(savedStoreDTO.getUuid())
-
                 .build();
         CakeDTO saved2 = cakeService.save(cakeDTO2);
 
-
+//
         File mainImgFile = new File("src/main/resources/static/testPicture.jpg");
         byte[] mainImg = Files.readAllBytes(mainImgFile.toPath());
         mainImg = Base64.getEncoder().encode(mainImg);
@@ -116,8 +115,8 @@ public class StoreControllerSpringBootTest {
 
         StoreEditDTO storeEditDTO = StoreEditDTO.builder()
                 .uuid(savedStoreDTO.getUuid())
-//                .name("가게1")
-//                .description("맛있다!")
+                .name("가게1")
+                .description("맛있다!")
                 .cakeList(cakeList)
                 .mainImg(mainImg)
                 .extension("jpg")

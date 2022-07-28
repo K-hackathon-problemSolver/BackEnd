@@ -94,8 +94,6 @@ public class MainController {
             li.add(saved);
         }
         return li;
-
-
     }
 
     public List<StoreDTO> insertStore() {
