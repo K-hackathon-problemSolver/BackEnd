@@ -39,7 +39,7 @@ public class Demand extends BaseTimeEntitiy {
 //    @Column(nullable = false)
 //    private String name; //케이크이름
 //
-//    private String description;
+//    private String description; //json에 포함된다.
 
     @Column(nullable = false)
     private int price;

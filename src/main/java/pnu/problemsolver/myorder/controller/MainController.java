@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pnu.problemsolver.myorder.domain.Cake;
+import pnu.problemsolver.myorder.domain.Customer;
 import pnu.problemsolver.myorder.domain.GENDER;
 import pnu.problemsolver.myorder.domain.SNSType;
 import pnu.problemsolver.myorder.dto.CakeDTO;
@@ -14,6 +15,9 @@ import pnu.problemsolver.myorder.service.CakeService;
 import pnu.problemsolver.myorder.service.CustomerService;
 import pnu.problemsolver.myorder.service.DemandService;
 import pnu.problemsolver.myorder.service.StoreService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RestController
@@ -30,17 +34,24 @@ public class MainController {
     @GetMapping("/")
     public void setting() {
         //TODO : 더미데이터 넣기!
+        //store, customer는 연관관계 없어서 먼저 넣을 수 있다
+        List<StoreDTO> storeDTOList= insertStore();
+        List<CustomerDTO> customerDTOList = insertCustomer();
 
-        insertStoreNCake();
-        insertCustomer();
-//        insertDemand();
+        //cake에는 store가 필요함.
+        List<CakeDTO> cakeDTOList = insertCake(storeDTOList);
     }
 
-    private void insertDemand() {
+    //demand는 customer, cake 2개가 필요하다.
+    private void insertDemand(List<CakeDTO> cakeDTOList, List<CustomerDTO> customerDTOList) {
+        for (int i = 0; i < 20; ++i) {
 
+        }
     }
 
-    private void insertCustomer() {
+    private List<CustomerDTO> insertCustomer() {
+
+        List<CustomerDTO> li = new ArrayList<>();
         for (int i = 0; i < 3; ++i) {
             CustomerDTO cus = CustomerDTO.builder()
                     .email("email"+i)
@@ -53,7 +64,9 @@ public class MainController {
                     .build();
 
             CustomerDTO saved = customerService.save(cus);
+            li.add(saved);
         }
+
         for (int i = 0; i < 3; ++i) {
             CustomerDTO cus = CustomerDTO.builder()
                     .email("email"+i)
@@ -66,14 +79,16 @@ public class MainController {
                     .build();
 
             CustomerDTO saved = customerService.save(cus);
+            li.add(saved);
         }
-
+        return li;
 
 
     }
 
-    public void insertStoreNCake() {
-        for (int i = 1; i <= 11; ++i) {
+    public List<StoreDTO> insertStore() {
+        List<StoreDTO> li = new ArrayList<>();
+        for (int i = 1; i <= 11; ++i) { //사진이 11개라서 11개만 해야함.
             StoreDTO st = StoreDTO.builder()
                     .snsIdentifyKey("snskey")
                     .birthYear(1999)
@@ -85,19 +100,28 @@ public class MainController {
                     .filePath("src/main/resources/static/" + i + ".jpg")
                     .build();
             StoreDTO savedStore = storeService.save(st);
+            li.add(savedStore);
+        }
+        return li;
+    }
 
+
+    public List<CakeDTO> insertCake(List<StoreDTO> list) {//cake는 연관관계가 있어서 store를 필요로 한다.
+        List<CakeDTO> li = new ArrayList<>();
+        for (int i=0; i< list.size(); ++i) {//lise.size() = 11
             CakeDTO cakeDTO = CakeDTO.builder()
                     .min_price(3000 * i)
                     .name("케이크" + i)
                     .option("{\"color\" : [\"red\", \"blue\", \"green\"], \"size\" : [\"1\", \"2\", \"3\"]}")
-                    .storeUUID(savedStore.getUuid()) //연관관계
+                    .storeUUID(list.get(i).getUuid()) //연관관계
                     .description("생일 선물로 딱맞음!!")
-                    .filePath("src/main/resources/static/" + i +".jpg")
+                    .filePath("src/main/resources/static/" + i + ".jpg")
                     .build();
-            cakeService.save(cakeDTO);
-
-            //
-
+            CakeDTO saved = cakeService.save(cakeDTO);
+            li.add(saved);
         }
+        return li;
+
     }
+
 }
