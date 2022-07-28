@@ -67,10 +67,7 @@ public class StoreController {
         List<Path> cakePathList=saveCakeImg(storeDirPath, cakeEditDTOList);
 
         //store update
-        boolean a = storeService.saveOnlyNotNUll(storeEditDTO, mainImgPath);
-        if (!a) {
-            return null;
-        }
+        storeService.saveOnlyNotNUll(storeEditDTO, mainImgPath);
 //        StoreDTO storeDTOById = storeService.findById(storeEditDTO.getUuid());
 //        StoreDTO storeDTO = StoreDTO.toDTO(storeEditDTO, mainImgPath.toString());
 //        storeService.save(storeDTO);
@@ -80,10 +77,7 @@ public class StoreController {
         for (int i = 0; i < cakeEditDTOList.size(); ++i) {
 //            CakeDTO cakeDTO = CakeDTO.toDTO(cakeDTOList.get(i), cakePathList.get(i).toString(), storeEditDTO.getUuid());
 //            cakeService.save(cakeDTO);
-            boolean b = cakeService.saveOnlyNotNUll(cakeEditDTOList.get(i), cakePathList.get(i));
-            if (!b) {
-                return null;
-            }
+     cakeService.saveOnlyNotNUll(cakeEditDTOList.get(i), cakePathList.get(i));
         }
         return "success";
     }

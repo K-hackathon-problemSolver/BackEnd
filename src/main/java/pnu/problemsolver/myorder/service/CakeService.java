@@ -27,14 +27,13 @@ public class CakeService {
         return CakeDTO.toDTO(cake);
     }
 
-    public boolean saveOnlyNotNUll(CakeEditDTO cakeEditDTO, Path cakeImgPath) {
+    public void saveOnlyNotNUll(CakeEditDTO cakeEditDTO, Path cakeImgPath) {
         Optional<Cake> cakeOptional = cakeRepositroy.findById(cakeEditDTO.getUuid());
         if (!cakeOptional.isPresent()) {
-            return false;
+            throw new NullPointerException("findById() got null");
         }
         Cake cake = cakeOptional.get();
         cake.setOnlyNotNull(cakeEditDTO, cakeImgPath);
-        return true;
     }
 
 

@@ -46,15 +46,13 @@ public class StoreService {
         return storeDTO;
     }
 
-    public boolean saveOnlyNotNUll(StoreEditDTO storeEditDTO, Path storeMainImg) {
+    public void saveOnlyNotNUll(StoreEditDTO storeEditDTO, Path storeMainImg) {
         Optional<Store> storeOptional = storeRepository.findById(storeEditDTO.getUuid());
         if (!storeOptional.isPresent()) {
-            log.warn("saveOnlyNotNUll() : findById() fail!");
-            return false;
+            throw new NullPointerException("findById() got null");
         }
         Store store = storeOptional.get();
         store.setOnlyNotNull(storeEditDTO, storeMainImg);
-        return true;
     }
 
     public StoreDTO save(StoreDTO storeDTO) {
