@@ -52,7 +52,7 @@ public class StoreService {
             throw new NullPointerException("findById() got null");
         }
         Store store = storeOptional.get();
-        store.setOnlyNotNull(storeEditDTO, storeMainImg);
+        store.setOnlyNotNull(storeEditDTO, storeMainImg);//여기서 다시 save호출할 필요 없다.
     }
 
     public StoreDTO save(StoreDTO storeDTO) {
