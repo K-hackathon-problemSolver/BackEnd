@@ -19,7 +19,7 @@ import java.util.stream.IntStream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
-@Commit
+//@Commit//commit없어도 DB반영 되는데?
 class StoreRepositoryTest {
     @Autowired//final못 붙인다.
     public StoreRepository storeRepository;
