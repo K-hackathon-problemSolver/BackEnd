@@ -1,9 +1,7 @@
 package pnu.problemsolver.myorder.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.env.Environment;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import pnu.problemsolver.myorder.dto.*;
 import pnu.problemsolver.myorder.service.CakeService;
@@ -122,15 +120,15 @@ public class StoreController {
 //        List<StoreDTOForListPreflight> li = storeService.getAllPreflights();
 //        return li;
 //    }
-
+    
     @GetMapping("/list")
-    public List<StoreDTOForList> list() {
+    public List<StoreListResponseDTO> list(StoreListRequestDTO d) {
         //TODO : 위치기반 보여주기
-        List<StoreDTOForList> all = storeService.findAll(a->StoreDTOForList.toDTO(a)); //store->T로 변환 함수만 넣어주면 된다.!
-        System.out.println(all);
-        return all;
+        List<StoreListResponseDTO> byLocation = storeService.findByLocation(a -> StoreListResponseDTO.toDTO(a), d.getLocation(), d.getLimit(), d.getOffset());
+//        List<StoreDTOForList> all = storeService.findAll(a -> StoreDTOForList.toDTO(a)); //store->T로 변환 함수만 넣어주면 된다.!
+        return byLocation;
     }
-
+    
     //유용한데 안쓴다.
 //    @PostMapping("/list")
 //    public List<StoreDTOForList> list(@RequestBody ArrayList<UUID> li) {

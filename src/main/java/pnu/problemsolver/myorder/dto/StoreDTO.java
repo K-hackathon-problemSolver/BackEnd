@@ -52,7 +52,7 @@ public class StoreDTO {
 	@JsonFormat(pattern = "HH:mm")
 	
 	private LocalTime openTime;//jackson은 LocalTime은 처리못해준다.
-	@JsonFormat(pattern = "HH:mm")
+	@JsonFormat(pattern = "HH:mm")//jackson에서 제공하는 어노테이션
 	
 	private LocalTime closeTime;
 	

@@ -2,9 +2,6 @@ package pnu.problemsolver.myorder.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.AllArgsConstructor;
-import lombok.SneakyThrows;
-import net.bytebuddy.asm.Advice;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -12,11 +9,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import pnu.problemsolver.myorder.domain.Store;
-import pnu.problemsolver.myorder.dto.CakeEditDTO;
 import pnu.problemsolver.myorder.dto.StoreDTO;
-import pnu.problemsolver.myorder.dto.StoreDTOForList;
-import pnu.problemsolver.myorder.dto.StoreEditDTO;
 import pnu.problemsolver.myorder.security.JwtTokenProvider;
 import pnu.problemsolver.myorder.service.CakeService;
 import pnu.problemsolver.myorder.service.CustomerService;
@@ -24,20 +17,11 @@ import pnu.problemsolver.myorder.service.DemandService;
 import pnu.problemsolver.myorder.service.StoreService;
 import pnu.problemsolver.myorder.util.Mapper;
 
-import java.io.File;
-import java.nio.file.Files;
-import java.sql.Time;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
 
-import static java.util.Collections.copy;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.shouldHaveThrown;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 

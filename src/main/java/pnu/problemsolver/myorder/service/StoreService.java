@@ -2,12 +2,11 @@ package pnu.problemsolver.myorder.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import pnu.problemsolver.myorder.domain.Store;
+import pnu.problemsolver.myorder.domain.constant.PusanLocation;
 import pnu.problemsolver.myorder.dto.StoreDTO;
-import pnu.problemsolver.myorder.dto.StoreDTOForList;
+import pnu.problemsolver.myorder.dto.StoreListResponseDTO;
 import pnu.problemsolver.myorder.dto.StoreEditDTO;
 import pnu.problemsolver.myorder.repository.StoreRepository;
 
@@ -78,33 +77,14 @@ public class StoreService {
 //        return liDTO;
 //    }
 
-    public List<StoreDTOForList> findAllInUUIDList(List<UUID> param) {
+    public List<StoreListResponseDTO> findAllInUUIDList(List<UUID> param) {
         List<Store> li = storeRepository.findAllInUUIDList(param);
-        List<StoreDTOForList> resList = new ArrayList<>();
+        List<StoreListResponseDTO> resList = new ArrayList<>();
         for (Store i : li) {
-            resList.add(StoreDTOForList.toDTO(i)); //filePath->encodeing->byte[]로 만든다.
+            resList.add(StoreListResponseDTO.toDTO(i)); //filePath->encodeing->byte[]로 만든다.
         }
         return resList;
     }
-
-    //성공하면 email반환. 실패하면 null반환.
-//    public String login(StoreDTO storeDto) {
-//        Optional<Store> store = storeRepository.findById(storeDto.getUuid());
-//        String email = null;
-//
-//        if (store.isPresent()) {
-//            if (store.get().getPw().equals(storeDto.getPw())) {
-//                email = storeDto.getEmail();
-//            } else {
-//                log.error("PW 불일치!");
-//            }
-//        }
-//        else{
-//            log.error("email이 없습니다!");
-//        }
-//        return email;
-//
-//    }
     public StoreDTO findBySnsTypeAndSnsIdentifyKey(StoreDTO storeDTO) {
         List<Store> resList = storeRepository.findBySnsTypeAndSnsIdentifyKey(storeDTO.getSnsType(), storeDTO.getSnsIdentifyKey());
         if (resList.size() == 1) {
@@ -116,7 +96,7 @@ public class StoreService {
         throw new RuntimeException("snsType and snsIdentifyKey 중복!");
     }
 
-    public <T> List<T> findAll(Function<Store, T> function) {
+    public <T> List<T> findAll(Function<Store, T> function) {//첫 함수형 프로그래밍.
 
         List<Store> li = storeRepository.findAll();
         List<T> resList = new ArrayList<>();
@@ -125,14 +105,18 @@ public class StoreService {
         }
         return resList;
     }
-//    public List<StoreDTOForList> findAll() {
-//
-//        List<Store> li = storeRepository.findAll();
-//        List<StoreDTOForList> resList = new ArrayList<>();
-//        for (Store i : li) {
-//            resList.add(StoreDTOForList.toDTO(i));
-//        }
-//        return resList;
-//    }
+    
+    public <T> List<T> findByLocation(Function<Store, T> function, PusanLocation loc, int limit, int offset) {//내위치,limit, offset,
+        List<Store> li = storeRepository.findByLocation(loc.latitude, loc.longitude, limit, offset);
+        List<T> res = new ArrayList<>();
+        for (Store i : li) {
+            res.add(function.apply(i));
+        }
+        return res;
+    }
+    
+    
+    
+    
 
 }
