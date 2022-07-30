@@ -105,6 +105,8 @@ public class MainController {
                     .location("부산시 금정구 부산대학로~")
                     .email("zhdhfhd33@zsdf")
                     .snsType(SNSType.KAKAO)
+                    .latitude(i)
+                    .longitude(i)
                     .owner_phone_num("010-3391-6486")
                     .filePath("src/main/resources/static/" + i + ".jpg")
                     .build();
