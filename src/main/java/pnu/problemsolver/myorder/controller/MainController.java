@@ -101,6 +101,7 @@ public class MainController {
             StoreDTO st = StoreDTO.builder()
                     .snsIdentifyKey("snskey")
                     .birthYear(1999)
+                    .name("store" + i)
                     .description("맛있는 가게!")
                     .location("부산시 금정구 부산대학로~")
                     .email("zhdhfhd33@zsdf")

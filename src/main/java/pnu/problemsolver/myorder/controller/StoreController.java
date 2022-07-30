@@ -13,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/store")
@@ -121,12 +122,19 @@ public class StoreController {
 //        return li;
 //    }
     
-    @GetMapping("/list")
+    @PostMapping("/list")
     public List<StoreListResponseDTO> list(StoreListRequestDTO d) {
         //TODO : 위치기반 보여주기
         List<StoreListResponseDTO> byLocation = storeService.findByLocation(a -> StoreListResponseDTO.toDTO(a), d.getLocation(), d.getLimit(), d.getOffset());
 //        List<StoreDTOForList> all = storeService.findAll(a -> StoreDTOForList.toDTO(a)); //store->T로 변환 함수만 넣어주면 된다.!
         return byLocation;
+    }
+    
+    @GetMapping("/list")
+    public List<String> list() {
+                List<StoreListResponseDTO> all = storeService.findAll(a -> StoreListResponseDTO.toDTO(a)); //store->T로 변환 함수만 넣어주면 된다.!
+        List<String> res = all.stream().map(i -> i.getName()).collect(Collectors.toList());
+        return res;
     }
     
     //유용한데 안쓴다.
