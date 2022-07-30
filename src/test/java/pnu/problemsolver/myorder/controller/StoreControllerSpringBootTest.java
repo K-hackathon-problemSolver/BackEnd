@@ -35,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Commit
-@Transactional
+//@Transactional
 public class StoreControllerSpringBootTest {
 
     @Autowired
@@ -62,22 +62,16 @@ public class StoreControllerSpringBootTest {
 //
 //    }
 
-
-    //TODO : 고치기
     @Test
     public void editStoreMenuTest() throws Exception {
-
-        StoreDTO storeDTO = StoreDTO.builder()
-                .name("초기화")
-                .description("초기화")
-                .build();
-        StoreDTO savedStoreDTO = storeService.save(storeDTO);
 
         CakeDTO cakeDTO1 = CakeDTO.builder()
                 .name("케이크1")
                 .minPrice(1000)
-//                .storeUUID(savedStoreDTO.getUuid())
+//                .storeUUID(savedStoreDTO.getUuid()) //TODO : 왜 store를 설정하지 않으면 에러날까?
                 .build();
+        System.out.println(cakeDTO1);
+
         CakeDTO saved1 = cakeService.save(cakeDTO1);
 
         CakeDTO cakeDTO2 = CakeDTO.builder()
@@ -87,6 +81,11 @@ public class StoreControllerSpringBootTest {
                 .build();
         CakeDTO saved2 = cakeService.save(cakeDTO2);
 
+        StoreDTO storeDTO = StoreDTO.builder()
+                .name("초기화")
+                .description("초기화")
+                .build();
+        StoreDTO savedStoreDTO = storeService.save(storeDTO);
 //
         File mainImgFile = new File("src/main/resources/static/testPicture.jpg");
         byte[] mainImg = Files.readAllBytes(mainImgFile.toPath());
@@ -143,6 +142,7 @@ public class StoreControllerSpringBootTest {
         StoreDTO byId = storeService.findById(savedStoreDTO.getUuid());
         assertEquals(byId.getName().equals("초기화"), true);
         assertEquals(byId.getDescription().equals("맛있다!"), true);
+        
 
     }
 }
