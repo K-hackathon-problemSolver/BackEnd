@@ -37,7 +37,7 @@ public class StoreListResponseDTO {
 
         } catch (IOException e) {
             e.printStackTrace();
-            log.error("no file exists()!!");
+            log.error("no file exists()!!" + file.toPath().toAbsolutePath());
         }
         dto.setMainImg(mainImg);
         return dto;
