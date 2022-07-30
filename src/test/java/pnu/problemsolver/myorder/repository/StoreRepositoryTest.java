@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.test.annotation.Commit;
 import pnu.problemsolver.myorder.domain.Store;
 import pnu.problemsolver.myorder.service.StoreService;
 
@@ -18,6 +19,7 @@ import java.util.stream.IntStream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
+@Commit
 class StoreRepositoryTest {
     @Autowired//final못 붙인다.
     public StoreRepository storeRepository;
@@ -105,8 +107,8 @@ class StoreRepositoryTest {
                     .longitude(i)
                     .build();
             storeRepository.save(s);
-            
         }
+        
         List<Store> res = storeRepository.findByLocation(0, 0, 6, 0);
         for (Store i : res) {
             System.out.println(i);
@@ -114,7 +116,6 @@ class StoreRepositoryTest {
         assertEquals(res.size(), 6);
         assertEquals(res.get(0).getLatitude(), 0);
         assertEquals(res.get(0).getLongitude(), 0);
-        
     }
 
 
