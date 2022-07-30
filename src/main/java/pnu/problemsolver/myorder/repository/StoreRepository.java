@@ -1,6 +1,7 @@
 package pnu.problemsolver.myorder.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import pnu.problemsolver.myorder.domain.constant.SNSType;
@@ -18,6 +19,7 @@ public interface StoreRepository extends JpaRepository<Store, UUID> {//extends J
     
     
     //페이징 필요
+    @Modifying
     @Query(nativeQuery = true, value = "select * from Store order by (latitude-:lati) + (longitude-:longi) limit :limit offset :offset")
     List<Store> findByLocation(@Param("lati") double lati, @Param("longi")double longi, @Param("limit")int limit, @Param("offset")int offset);
     
