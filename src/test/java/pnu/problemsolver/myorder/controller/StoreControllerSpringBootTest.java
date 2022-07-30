@@ -58,28 +58,28 @@ public class StoreControllerSpringBootTest {
 
     @Test
     public void editStoreMenuTest() throws Exception {
-
-        CakeDTO cakeDTO1 = CakeDTO.builder()
-                .name("케이크1")
-                .minPrice(1000)
-//                .storeUUID(savedStoreDTO.getUuid())
-                .build();
-        System.out.println(cakeDTO1);
-
-        cakeService.save(cakeDTO1);
-
-        CakeDTO cakeDTO2 = CakeDTO.builder()
-                .name("케이크2")
-                .minPrice(2000)
-//                .storeUUID(savedStoreDTO.getUuid())
-                .build();
-         cakeService.save(cakeDTO2);
-
+    
         StoreDTO storeDTO = StoreDTO.builder()
                 .name("초기화")
                 .description("초기화")
                 .build();
         storeService.save(storeDTO);
+    
+        CakeDTO cakeDTO1 = CakeDTO.builder()
+                .name("케이크1")
+                .minPrice(1000)
+                .storeUUID(storeDTO.getUuid())
+                .build();
+        System.out.println(cakeDTO1);
+    
+        cakeService.save(cakeDTO1);
+    
+        CakeDTO cakeDTO2 = CakeDTO.builder()
+                .name("케이크2")
+                .minPrice(2000)
+                .storeUUID(storeDTO.getUuid())
+                .build();
+        cakeService.save(cakeDTO2);
 //
         File mainImgFile = new File("src/main/resources/static/testPicture.jpg");
         byte[] mainImg = Files.readAllBytes(mainImgFile.toPath());
