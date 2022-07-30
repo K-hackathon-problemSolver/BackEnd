@@ -44,7 +44,17 @@ public class StoreService {
         }
         return storeDTO;
     }
-
+    
+    //id로 찾아서 원하는 형태로 반환한다. service에서는 이런 형태가 편함.!
+    public <T> T findById(Function<Store, T> func, UUID uuid) {
+        Optional<Store> store = storeRepository.findById(uuid);//없으면 null
+        T res = null;
+        if (store.isPresent()) {
+            res = func.apply(store.get());
+        }
+        return res;
+    }
+    
     public void saveOnlyNotNUll(StoreEditDTO storeEditDTO, Path storeMainImg) {
         Optional<Store> storeOptional = storeRepository.findById(storeEditDTO.getUuid());
         if (!storeOptional.isPresent()) {

@@ -30,6 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -46,6 +47,9 @@ public class StoreControllerSpringBootTest {
 
     @Autowired
     CakeService cakeService;
+    
+    @Autowired
+    MainController mainController;
 
 //    @Test
 //    public void listTest() throws Exception {
@@ -138,5 +142,17 @@ public class StoreControllerSpringBootTest {
         assertEquals(byId.getDescription().equals("맛있다!"), true);
         
 
+    }
+    
+    @Test
+    public void oneStore() throws Exception {
+        List<StoreDTO> storeDTOList = mainController.insertStore();//dummy객체 넣을 때 사용했던 함수.
+        mainController.insertCake(storeDTOList);
+        StoreDTO storeDTO = storeDTOList.get(0);
+        mvc.perform(get("/store").param("id", storeDTO.getUuid().toString()))
+                .andExpect(jsonPath("$.mainImg").exists())
+                .andExpect(jsonPath("$.cakeList[0].img").exists())
+                .andDo(print());
+        
     }
 }

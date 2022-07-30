@@ -45,7 +45,7 @@ public class MainController {
     }
 
     //demand는 customer, cake 2개가 필요하다.
-    private void insertDemand(List<CakeDTO> cakeDTOList, List<CustomerDTO> customerDTOList) {
+    public void insertDemand(List<CakeDTO> cakeDTOList, List<CustomerDTO> customerDTOList) {
         IntStream.rangeClosed(0, 20).forEach((i) -> {
             int idx = (int) (Math.random() * cakeDTOList.size());
             DemandDTO demandDTO = DemandDTO.builder()
@@ -60,7 +60,7 @@ public class MainController {
 
     }
 
-    private List<CustomerDTO> insertCustomer() {
+    public List<CustomerDTO> insertCustomer() {
 
         List<CustomerDTO> li = new ArrayList<>();
         for (int i = 0; i < 5; ++i) {
@@ -127,7 +127,7 @@ public class MainController {
                     .option("{\"color\" : [\"red\", \"blue\", \"green\"], \"size\" : [\"1\", \"2\", \"3\"]}")
                     .storeUUID(list.get(i).getUuid()) //연관관계
                     .description("생일 선물로 딱맞음!!")
-                    .filePath("src/main/resources/static/" + i + ".jpg")
+                    .filePath("src/main/resources/static/" + (i+1) + ".jpg")
                     .build();
              cakeService.save(cakeDTO);
             li.add(cakeDTO);

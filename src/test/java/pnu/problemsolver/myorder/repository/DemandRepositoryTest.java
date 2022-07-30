@@ -44,7 +44,7 @@ class DemandRepositoryTest {
 				.description("설명")
 				.build();
 		cakeRepositroy.save(cake);
-		cake.setMinPrice(2);
+//		cake.setMinPrice(2);
 		
 		Cake newCake = Cake.builder()
 				.uuid(cake.getUuid())

@@ -12,7 +12,7 @@ import java.util.UUID;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter
+//@Setter
 @Getter
 @Builder
 @Entity

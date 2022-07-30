@@ -11,7 +11,11 @@ import pnu.problemsolver.myorder.dto.CakeEditDTO;
 import pnu.problemsolver.myorder.repository.CakeRepositroy;
 
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -36,6 +40,14 @@ public class CakeService {
         Cake cake = cakeOptional.get();
         cake.setOnlyNotNull(cakeEditDTO, cakeImgPath);
     }
-
+    
+    public <T> List<T> findByStoreUUID(Function<Cake, T> func, UUID storeID) {
+        Store s = Store.builder()
+                .uuid(storeID)
+                .build();
+        List<Cake> byStore = cakeRepositroy.findByStore(s);
+        return byStore.stream().map(i -> func.apply(i)).collect(Collectors.toList());
+    }
+    
 
 }
