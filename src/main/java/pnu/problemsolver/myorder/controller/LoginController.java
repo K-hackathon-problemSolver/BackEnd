@@ -154,9 +154,10 @@ public class LoginController {
         CustomerDTO customerDTO = CustomerDTO.GeneralOAuthDTOtoDTO(dto);
         CustomerDTO res = customerService.findBySnsTypeAndSnsIdentifyKey(customerDTO);
         if (res == null) {//회원 아님. 저장.
-            CustomerDTO savedDTO = customerService.save(customerDTO);//PK가 uuid이기 때문에 기존 회원이더라도 새로 save해버림. 그래서 이렇게 따로 함수를 만든다.
-            return savedDTO.getUuid();
+            customerService.save(customerDTO);//PK가 uuid이기 때문에 기존 회원이더라도 새로 save해버림. 그래서 이렇게 따로 함수를 만든다.
+            return customerDTO.getUuid();
         }
+        
         return res.getUuid();
     }
 
@@ -166,8 +167,8 @@ public class LoginController {
 
         StoreDTO res = storeService.findBySnsTypeAndSnsIdentifyKey(storeDTO);
         if (res == null) {//회원이 아닐 때!
-            StoreDTO savedDTO = storeService.save(storeDTO);//PK가 uuid이기 때문에 기존 회원이더라도 새로 save해버림. 그래서 이렇게 따로 함수를 만든다.
-            return savedDTO.getUuid();
+            storeService.save(storeDTO);//PK가 uuid이기 때문에 기존 회원이더라도 새로 save해버림. 그래서 이렇게 따로 함수를 만든다.
+            return storeDTO.getUuid();
         }
         return res.getUuid();
     }

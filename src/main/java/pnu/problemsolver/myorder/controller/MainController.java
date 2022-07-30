@@ -34,7 +34,6 @@ public class MainController {
 
     @GetMapping("/")
     public void setting() {
-        //TODO : 더미데이터 넣기!
         //store, customer는 연관관계 없어서 먼저 넣을 수 있다
         List<StoreDTO> storeDTOList = insertStore();
         List<CustomerDTO> customerDTOList = insertCustomer();
@@ -64,7 +63,7 @@ public class MainController {
     private List<CustomerDTO> insertCustomer() {
 
         List<CustomerDTO> li = new ArrayList<>();
-        for (int i = 0; i < 3; ++i) {
+        for (int i = 0; i < 5; ++i) {
             CustomerDTO cus = CustomerDTO.builder()
                     .email("email" + i)
                     .name("custmer" + i)
@@ -75,11 +74,11 @@ public class MainController {
                     .gender(Gender.MAN)
                     .build();
 
-            CustomerDTO saved = customerService.save(cus);
-            li.add(saved);
+            customerService.save(cus);
+            li.add(cus);
         }
 
-        for (int i = 0; i < 3; ++i) {
+        for (int i = 0; i < 6; ++i) {
             CustomerDTO cus = CustomerDTO.builder()
                     .email("email" + i)
                     .name("custmer" + i)
@@ -90,8 +89,8 @@ public class MainController {
                     .gender(Gender.MAN)
                     .build();
 
-            CustomerDTO saved = customerService.save(cus);
-            li.add(saved);
+             customerService.save(cus);
+            li.add(cus);
         }
         return li;
     }
@@ -109,8 +108,8 @@ public class MainController {
                     .owner_phone_num("010-3391-6486")
                     .filePath("src/main/resources/static/" + i + ".jpg")
                     .build();
-            StoreDTO savedStore = storeService.save(st);
-            li.add(savedStore);
+            storeService.save(st);
+            li.add(st);
         }
         return li;
     }
@@ -127,8 +126,8 @@ public class MainController {
                     .description("생일 선물로 딱맞음!!")
                     .filePath("src/main/resources/static/" + i + ".jpg")
                     .build();
-            CakeDTO saved = cakeService.save(cakeDTO);
-            li.add(saved);
+             cakeService.save(cakeDTO);
+            li.add(cakeDTO);
         }
         return li;
 

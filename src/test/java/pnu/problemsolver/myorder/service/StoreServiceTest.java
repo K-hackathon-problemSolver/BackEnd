@@ -57,12 +57,11 @@ class StoreServiceTest {
                 .store_phone_num("000")
                 .owner_phone_num("123")
                 .build();
+         storeService.save(storeDto);
+        System.out.println("테스트"+storeDto.getUuid());
 
-        StoreDTO newDTO = storeService.save(storeDto);
-        System.out.println("테스트"+newDTO.getUuid());
-
-        newDTO.setEmail("changed!!");//null이 아닌 부분만 알아서 update된다.
-        storeService.save(newDTO);
+        storeDto.setEmail("changed!!");//null이 아닌 부분만 알아서 update된다.
+        storeService.save(storeDto);
     }
 
 //    @Test

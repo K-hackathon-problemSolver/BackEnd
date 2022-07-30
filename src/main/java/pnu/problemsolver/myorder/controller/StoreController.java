@@ -35,8 +35,8 @@ public class StoreController {
     @PostMapping("/save")
     public StoreDTO saveStore(@RequestBody StoreDTO storeDTO)  {
 //        log.info(Mapper.objectMapper.writeValueAsString(storeDTO));
-        StoreDTO resDTO = storeService.save(storeDTO); //없으면 저장하고 있다면 null아닌 것만 자동으로 덮어써진다.!
-        return resDTO;
+        storeService.save(storeDTO); //없으면 저장하고 있다면 null아닌 것만 자동으로 덮어써진다.!
+        return storeDTO;
     }
 
     /**

@@ -55,10 +55,10 @@ public class StoreService {
         store.setOnlyNotNull(storeEditDTO, storeMainImg);//여기서 다시 save호출할 필요 없다.
     }
 
-    public StoreDTO save(StoreDTO storeDTO) {
+    public void save(StoreDTO storeDTO) {
         Store store = Store.toEntity(storeDTO);
-        store = storeRepository.save(store);
-        return StoreDTO.toDTO(store);
+        storeRepository.save(store);
+        storeDTO.setUuid(store.getUuid());//저장하기전에는 uuid가 없다.
     }
 
 //    public List<StoreDTOForListPreflight> getAllPreflights() {

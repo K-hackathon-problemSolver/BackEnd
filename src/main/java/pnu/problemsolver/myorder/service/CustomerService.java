@@ -39,11 +39,10 @@ public class CustomerService {
      * @param customerDTO
      * @return
      */
-    public CustomerDTO save(CustomerDTO customerDTO) {
+    public void save(CustomerDTO customerDTO) {
         Customer customer = Customer.toEntity(customerDTO);
-        CustomerDTO resDTO = CustomerDTO.toDTO(customerRepository.save(customer));
-        return resDTO;
-
+        customerRepository.save(customer);
+        customerDTO.setUuid(customer.getUuid());
     }
 
     /**

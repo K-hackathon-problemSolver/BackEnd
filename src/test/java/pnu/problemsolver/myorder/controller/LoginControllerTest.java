@@ -34,12 +34,6 @@ class LoginControllerTest {
 //    @Autowired
 //    JwtTokenProvider tokenProvider;
 
-    @Test
-    void index() throws Exception {
-        mvc.perform(get("/"))
-                .andExpect(content().string("index"));
-
-    }
 
 //    @Test
 //    void login() throws Exception {

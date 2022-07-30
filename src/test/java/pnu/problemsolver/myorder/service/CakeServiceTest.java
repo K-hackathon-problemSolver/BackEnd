@@ -33,7 +33,7 @@ class CakeServiceTest {
                 .name("store!!")
                 .build();
 
-        storeDTO=storeService.save(storeDTO);
+        storeService.save(storeDTO);
 
         CakeDTO cakeDTO = CakeDTO.builder()
                 .uuid(UUID.randomUUID())
@@ -48,7 +48,7 @@ class CakeServiceTest {
 
         log.info(cakeDTO.toString());
 
-        cakeDTO=cakeService.save(cakeDTO);
+        cakeService.save(cakeDTO);
         log.info(cakeDTO.toString());
 
 

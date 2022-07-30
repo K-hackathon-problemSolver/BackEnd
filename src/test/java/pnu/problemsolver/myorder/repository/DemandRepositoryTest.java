@@ -5,10 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
-import pnu.problemsolver.myorder.domain.Cake;
-import pnu.problemsolver.myorder.domain.Customer;
-import pnu.problemsolver.myorder.domain.Demand;
-import pnu.problemsolver.myorder.domain.Store;
+import pnu.problemsolver.myorder.domain.*;
 
 @SpringBootTest
 @Transactional
@@ -56,6 +53,7 @@ class DemandRepositoryTest {
         Demand demand = Demand.builder()
                 .customer(customer)
                 .cake(cake)
+                .status(DemandStatus.WAITING)
                 .build();
 
         demandRepository.save(demand);

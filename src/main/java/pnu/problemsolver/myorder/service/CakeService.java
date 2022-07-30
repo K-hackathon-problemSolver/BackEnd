@@ -21,10 +21,11 @@ public class CakeService {
     private final CakeRepositroy cakeRepositroy;
 
 
-    public CakeDTO save(CakeDTO cakeDTO) {
+    public void save(CakeDTO cakeDTO) {
         Cake cake = Cake.toEntity(cakeDTO);
-        cake = cakeRepositroy.save(cake);
-        return CakeDTO.toDTO(cake);
+        cakeRepositroy.save(cake);
+        cakeDTO.setUuid(cake.getUuid());
+        
     }
 
     public void saveOnlyNotNUll(CakeEditDTO cakeEditDTO, Path cakeImgPath) {

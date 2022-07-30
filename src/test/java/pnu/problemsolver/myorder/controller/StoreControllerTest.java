@@ -19,6 +19,7 @@ import pnu.problemsolver.myorder.dto.StoreEditDTO;
 import pnu.problemsolver.myorder.security.JwtTokenProvider;
 import pnu.problemsolver.myorder.service.CakeService;
 import pnu.problemsolver.myorder.service.CustomerService;
+import pnu.problemsolver.myorder.service.DemandService;
 import pnu.problemsolver.myorder.service.StoreService;
 import pnu.problemsolver.myorder.util.Mapper;
 
@@ -58,6 +59,9 @@ class StoreControllerTest {
 
     @MockBean
     CakeService cakeService;
+    
+    @MockBean
+    DemandService demandService;
 
     @Test
     public void saveTest() throws Exception {
@@ -67,18 +71,17 @@ class StoreControllerTest {
                 .location("loc")
                 .store_phone_num("324")
                 .build();
-
-
-        given(storeService.save(storeDTO)).willReturn(storeDTO);
+    
+//        given(storeService.save(storeDTO)).willReturn(storeDTO);
         String json = Mapper.objectMapper.writeValueAsString(storeDTO);
         mvc.perform(post("/store/save")
                         .content(json)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.email", "zhdf@").exists())
-                .andExpect(jsonPath("$.name", "na").exists())
-                .andExpect(jsonPath("$.location", "loc").exists())
-                .andExpect(jsonPath("$.store_phone_num", "324").exists())
+                .andExpect(jsonPath("$.email" ).value("zhdf@"))
+                .andExpect(jsonPath("$.name" ).value("na"))
+                .andExpect(jsonPath("$.location" ).value("loc"))
+                .andExpect(jsonPath("$.store_phone_num").value("324"))
                 .andDo(print());
 //                .andExpect(jsonPath("$.uuid").exists());//webmvcTest라서 동작안함.
 

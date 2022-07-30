@@ -47,20 +47,14 @@ public class StoreControllerSpringBootTest {
     @Autowired
     CakeService cakeService;
 
-    @Test
-    public void listTest() throws Exception {
-        mvc.perform(get("/"));
-        mvc.perform(get("/store/list"))
-                .andExpect(status().isOk())
-                .andDo(print());
-    }
-
-    //TODO : 생각보다 test코드 짜기가 힘들다...ㅠ
 //    @Test
-//    public void StoreDTOForList_doDTOtest() {
-//        StoreDTO dto = storeService.save(new StoreDTO());
-//
+//    public void listTest() throws Exception {
+//        mvc.perform(get("/"));
+//        mvc.perform(get("/store/list"))
+//                .andExpect(status().isOk())
+//                .andDo(print());
 //    }
+
 
     @Test
     public void editStoreMenuTest() throws Exception {
@@ -68,24 +62,24 @@ public class StoreControllerSpringBootTest {
         CakeDTO cakeDTO1 = CakeDTO.builder()
                 .name("케이크1")
                 .minPrice(1000)
-//                .storeUUID(savedStoreDTO.getUuid()) //TODO : 왜 store를 설정하지 않으면 에러날까?
+//                .storeUUID(savedStoreDTO.getUuid())
                 .build();
         System.out.println(cakeDTO1);
 
-        CakeDTO saved1 = cakeService.save(cakeDTO1);
+        cakeService.save(cakeDTO1);
 
         CakeDTO cakeDTO2 = CakeDTO.builder()
                 .name("케이크2")
                 .minPrice(2000)
 //                .storeUUID(savedStoreDTO.getUuid())
                 .build();
-        CakeDTO saved2 = cakeService.save(cakeDTO2);
+         cakeService.save(cakeDTO2);
 
         StoreDTO storeDTO = StoreDTO.builder()
                 .name("초기화")
                 .description("초기화")
                 .build();
-        StoreDTO savedStoreDTO = storeService.save(storeDTO);
+        storeService.save(storeDTO);
 //
         File mainImgFile = new File("src/main/resources/static/testPicture.jpg");
         byte[] mainImg = Files.readAllBytes(mainImgFile.toPath());
@@ -98,7 +92,7 @@ public class StoreControllerSpringBootTest {
         cake1.setOption("{\"plate\":\"1\"}");
         cake1.setImg(mainImg);
         cake1.setExtension("jpg");
-        cake1.setUuid(saved1.getUuid());
+        cake1.setUuid(cakeDTO1.getUuid());
 
         CakeEditDTO cake2 = new CakeEditDTO();
         cake2.setName("cake2");
@@ -106,14 +100,14 @@ public class StoreControllerSpringBootTest {
         cake2.setOption("{\"plate\":\"2\"}");
         cake2.setImg(mainImg);
         cake2.setExtension("jpg");
-        cake2.setUuid(saved2.getUuid());
+        cake2.setUuid(cakeDTO2.getUuid());
 
 
         cakeList.add(cake1);
         cakeList.add(cake2);
 
         StoreEditDTO storeEditDTO = StoreEditDTO.builder()
-                .uuid(savedStoreDTO.getUuid())
+                .uuid(storeDTO.getUuid())
 //                .name("가게1")
                 .description("맛있다!")
                 .cakeList(cakeList)
@@ -129,7 +123,7 @@ public class StoreControllerSpringBootTest {
                         .content(json))
                 .andDo(print());
 
-        String storeDir = "upload" + File.separator + savedStoreDTO.getUuid() + File.separator;
+        String storeDir = "upload" + File.separator + storeDTO.getUuid() + File.separator;
 
         File file = new File(storeDir + "mainImg.jpg");
         assertThat(file.exists()).isEqualTo(true);
@@ -139,7 +133,7 @@ public class StoreControllerSpringBootTest {
         assertEquals(f2.exists(), true);
 
         //다시 가져왔을 때 null이 안되어 있고 null이 아닌 것만 바뀜.!
-        StoreDTO byId = storeService.findById(savedStoreDTO.getUuid());
+        StoreDTO byId = storeService.findById(storeDTO.getUuid());
         assertEquals(byId.getName().equals("초기화"), true);
         assertEquals(byId.getDescription().equals("맛있다!"), true);
         

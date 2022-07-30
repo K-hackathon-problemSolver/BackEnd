@@ -17,8 +17,6 @@ import pnu.problemsolver.myorder.repository.DemandRepository;
 @Transactional
 public class DemandService {
     private final DemandRepository demandRepository;
-
-    //TODO : 구현
     public void save(DemandDTO dto) {
         Demand demand = Demand.toEntity(dto);
         demandRepository.save(demand);
