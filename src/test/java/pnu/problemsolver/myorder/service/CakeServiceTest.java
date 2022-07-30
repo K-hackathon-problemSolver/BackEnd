@@ -33,22 +33,22 @@ class CakeServiceTest {
                 .name("store!!")
                 .build();
 
-        storeDTO=storeService.save(storeDTO);
+        storeService.save(storeDTO);
 
         CakeDTO cakeDTO = CakeDTO.builder()
                 .uuid(UUID.randomUUID())
-                .storeUUID(storeDTO.getUuid())//없으면 자꾸 안되더라. TODO 영속성 ~ 때문에 안되는 거였음. JPA책 사서 보자.
+                .storeUUID(storeDTO.getUuid())//없으면 자꾸 안되더라.
 //                .demandUUID("UUID.randomUUID()")
                 .filePath("path!")
                 .option("{\"plate\":\"1\"}")
                 .name("신민건")
-                .min_price(123)
+                .minPrice(123)
                 .description("설명")
                 .build();
 
         log.info(cakeDTO.toString());
 
-        cakeDTO=cakeService.save(cakeDTO);
+        cakeService.save(cakeDTO);
         log.info(cakeDTO.toString());
 
 

@@ -5,9 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
-import pnu.problemsolver.myorder.domain.Customer;
-import pnu.problemsolver.myorder.domain.Demand;
-import pnu.problemsolver.myorder.domain.Store;
+import pnu.problemsolver.myorder.domain.*;
+import pnu.problemsolver.myorder.domain.constant.DemandStatus;
 
 @SpringBootTest
 @Transactional
@@ -23,19 +22,39 @@ class DemandRepositoryTest {
     @Autowired
     DemandRepository demandRepository;
 
+    @Autowired
+    CakeRepositroy cakeRepositroy;
+
     @Test
     public void save생성_수정_시간차이확인() {
         Customer customer = Customer.builder().build();
 //        System.out.println("유유아이디"+customer.getUuid());
         customerRepository.save(customer);
+        System.out.println(customer);
 
-        Store store = Store.builder().build();
-        storeRepository.save(store);
+        Cake cake = Cake.builder()
+                .name("cakeName")
+                .minPrice(10000)
+                .description("설명")
+                .build();
+        cakeRepositroy.save(cake);
+        cake.setMinPrice(2);
+
+        Cake newCake = Cake.builder()
+                .uuid(cake.getUuid())
+                .minPrice(3)
+                .name("새로만듦")
+                .build();
+
+        cakeRepositroy.save(newCake);
+
+        System.out.println(cake);
 
 
         Demand demand = Demand.builder()
                 .customer(customer)
-                .store(store)
+                .cake(cake)
+                .status(DemandStatus.WAITING)
                 .build();
 
         demandRepository.save(demand);
@@ -47,6 +66,8 @@ class DemandRepositoryTest {
         demand.acceptDemand();//주문수락
         demandRepository.save(demand);
     }
+
+
 
 
 }

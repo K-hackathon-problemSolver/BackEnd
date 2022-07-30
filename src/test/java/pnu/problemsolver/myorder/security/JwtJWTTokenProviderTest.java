@@ -7,10 +7,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.env.Environment;
+import pnu.problemsolver.myorder.domain.constant.MemberType;
 
 import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 
 @SpringBootTest
@@ -25,11 +24,6 @@ class JwtJWTTokenProviderTest {
     public final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 
-    @Test
-    public void 토큰생성() {
-        System.out.println(tokenProvider.createToken());
-
-    }
 
     @Test
     public void 스프링properties값_가져오기() {
@@ -39,7 +33,8 @@ class JwtJWTTokenProviderTest {
 
     @Test
     public void 검증() {
-        String jwt = tokenProvider.createToken();
+        String jwt = tokenProvider.createToken(MemberType.STORE);
+
         if (tokenProvider.isValidate(jwt)) {
             Claims claims = tokenProvider.getClaims(jwt);
             Set<String> keySet = claims.keySet();

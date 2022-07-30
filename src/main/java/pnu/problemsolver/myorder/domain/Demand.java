@@ -3,6 +3,8 @@ package pnu.problemsolver.myorder.domain;
 
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+import pnu.problemsolver.myorder.domain.constant.DemandStatus;
+import pnu.problemsolver.myorder.dto.DemandDTO;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -24,43 +26,50 @@ public class Demand extends BaseTimeEntitiy {
     @Column(columnDefinition = "BINARY(16)")
     private UUID uuid;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false) //일단 기본으로 lazy설정해놓고 서비스 운영하면서 성능 최적화 하면 된다.!
     private Customer customer;
 
-    @ManyToOne
-    private Store store;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    private Cake cake;
 
-    @Column(nullable = false) //0 : 주문대기, 1 : 승락, 2 : 완료, -1 : 거절
-    private int status;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private DemandStatus status;
+
 
     @Column(columnDefinition = "JSON")
     private String option;
-//
+
 //    @Column(nullable = false)
 //    private String name; //케이크이름
 //
-//    private String description;
+//    private String description; //json에 포함된다.
 
     @Column(nullable = false)
-    private int min_price;
+    private int price;
 
-    private String fillPath;
+    private String filePath;
 
     public void acceptDemand() {
-        if (status == 0) {
-            this.status = 1;
+        if (status == DemandStatus.WAITING) {
+            status = DemandStatus.ACCEPTED;
         }
 
     }
-    public void rejectDemand() {
-        if (status == 0) {
-        this.status = -1;
-        }
-    }
-    public void completeDemand() {
-        if (status == 1) {
-        this.status = 2;
-        }
+
+    public static Demand toEntity(DemandDTO dto) {
+        Demand demand = Demand.builder()
+                .uuid(dto.getUuid())
+                .cake(Cake.builder().uuid(dto.getCakeUUID()).build())
+                .customer(Customer.builder().uuid(dto.getCustomerUUID()).build())
+
+                .status(dto.getStatus())
+                .option(dto.getOption())
+
+                .price(dto.getPrice())
+                .filePath(dto.getFilePath())
+                .build();
+        return demand;
     }
 
 

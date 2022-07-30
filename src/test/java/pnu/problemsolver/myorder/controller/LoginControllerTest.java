@@ -1,23 +1,24 @@
 package pnu.problemsolver.myorder.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import pnu.problemsolver.myorder.domain.Store;
+import pnu.problemsolver.myorder.domain.constant.Gender;
+import pnu.problemsolver.myorder.domain.constant.MemberType;
+import pnu.problemsolver.myorder.domain.constant.SNSType;
+import pnu.problemsolver.myorder.dto.GeneralOAuthDTO;
 import pnu.problemsolver.myorder.repository.StoreRepository;
 import pnu.problemsolver.myorder.util.Mapper;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 //@WebMvcTest
 @SpringBootTest
@@ -33,12 +34,6 @@ class LoginControllerTest {
 //    @Autowired
 //    JwtTokenProvider tokenProvider;
 
-    @Test
-    void index() throws Exception {
-        mvc.perform(get("/"))
-                .andExpect(content().string("index"));
-
-    }
 
 //    @Test
 //    void login() throws Exception {
@@ -84,6 +79,34 @@ class LoginControllerTest {
         }
         System.out.println(map.get("response").getClass());
         System.out.println(map.get("response"));
+
+    }
+
+    @Test
+    public void loginTest() throws Exception {
+
+        GeneralOAuthDTO dto = GeneralOAuthDTO.builder()
+                .snsIdentifyKey("sns key")
+                .snsType(SNSType.NAVER)
+                .memberType(MemberType.CUSTOMER)
+                .gender(Gender.MAN)
+                .email("zhdhfhd33@")
+                .phone_num("010-4232-2323")
+                .name("신민건")
+                .birthday("12-12")
+                .birthyear(1999)
+                .build();
+        String json = Mapper.objectMapper.writeValueAsString(dto);
+        System.out.println(json);
+//
+//        GeneralOAuthDTO res = Mapper.objectMapper.readValue(json, GeneralOAuthDTO.class);
+//        System.out.println(res);
+        mvc.perform(post("/login").contentType(MediaType.APPLICATION_JSON).
+                content(json))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.jwt").exists())
+                .andExpect(jsonPath("$.uuid").exists());
+
 
     }
 }

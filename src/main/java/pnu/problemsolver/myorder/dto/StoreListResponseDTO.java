@@ -19,14 +19,14 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Slf4j
-public class StoreDTOForList {
+public class StoreListResponseDTO {
     private UUID uuid;
     private String name;//가게이름.
-    private byte[] mainImg;
+    private byte[] mainImg;//base64 인코딩 된 상태.
 //    private int minPrice;
 
-    public static StoreDTOForList toDTO(Store s) {
-        StoreDTOForList dto = StoreDTOForList.builder()
+    public static StoreListResponseDTO toDTO(Store s) {
+        StoreListResponseDTO dto = StoreListResponseDTO.builder()
                 .uuid(s.getUuid())
                 .name(s.getName())
                 .build();

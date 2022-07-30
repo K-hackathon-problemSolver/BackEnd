@@ -28,12 +28,13 @@ class StoreRepositoryTest {
         IntStream.rangeClosed(1, 20).forEach(i->{
             Store store = Store.builder()
                     .email("id" + i)
-                    .pw("pw" + i)
                     .name("신민건")
                     .description("부산대" + i)
                     .location("부산대긱사")
                     .store_phone_num("051341342")
                     .owner_phone_num("01033916486")
+                    .latitude(i)
+                    .longitude(i)
                     .build();
             storeRepository.save(store);
         });
@@ -43,7 +44,6 @@ class StoreRepositoryTest {
     public void updateTest() {
         Store store = Store.builder()
                 .email("id5")
-                .pw("update")
                 .name("update")
                 .description("update")
                 .location("update")
@@ -94,6 +94,27 @@ class StoreRepositoryTest {
         System.out.println(resList);
         System.out.println(resList.size());
 
+    }
+    
+    @Test
+    public void findByLocation() {
+        for (int i = 0; i < 20; ++i) {
+            Store s = Store.builder()
+                    .name("가게" + i)
+                    .latitude(i)
+                    .longitude(i)
+                    .build();
+            storeRepository.save(s);
+            
+        }
+        List<Store> res = storeRepository.findByLocation(0, 0, 6, 0);
+        for (Store i : res) {
+            System.out.println(i);
+        }
+        assertEquals(res.size(), 6);
+        assertEquals(res.get(0).getLatitude(), 0);
+        assertEquals(res.get(0).getLongitude(), 0);
+        
     }
 
 

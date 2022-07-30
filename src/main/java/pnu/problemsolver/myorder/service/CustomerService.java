@@ -5,10 +5,12 @@ import org.springframework.stereotype.Service;
 import pnu.problemsolver.myorder.domain.Customer;
 import pnu.problemsolver.myorder.domain.Store;
 import pnu.problemsolver.myorder.dto.CustomerDTO;
+import pnu.problemsolver.myorder.dto.GeneralOAuthDTO;
 import pnu.problemsolver.myorder.dto.StoreDTO;
 import pnu.problemsolver.myorder.repository.CustomerRepository;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -26,12 +28,42 @@ public class CustomerService {
 
         Optional<Customer> customerOptional = customerRepository.findById(customerDTO.getUuid());
         if (customerOptional.isPresent()) {
-            //TODO : 수정
-//            CustomerDTO resDTO = modelMapper.map(customerOptional, CustomerDTO.class);
-//            return resDTO;
+            CustomerDTO resDTO = CustomerDTO.toDTO(customerOptional.get());
+            return resDTO;
         }
-
         return null;
     }
+
+    /**
+     * service는 controller에서 사용되기 때문에 DTO를 입력, 출력 으로 받아야 한다.
+     * @param customerDTO
+     * @return
+     */
+    public void save(CustomerDTO customerDTO) {
+        Customer customer = Customer.toEntity(customerDTO);
+        customerRepository.save(customer);
+        customerDTO.setUuid(customer.getUuid());
+    }
+
+    /**
+     * @param customerDTO
+     * @return DB에 sns 고유 ID가 중복되면 예외발생. 없으면 null.
+     */
+    public CustomerDTO findBySnsTypeAndSnsIdentifyKey(CustomerDTO customerDTO) {
+        List<Customer> resList = customerRepository.findBySnsTypeAndSnsIdentifyKey(customerDTO.getSnsType(), customerDTO.getSnsIdentifyKey());
+        if (resList.size() == 1) {
+            return CustomerDTO.toDTO(resList.get(0));
+        } else if (resList.isEmpty()) {
+            return null;
+        }
+
+        throw new RuntimeException("snsType and snsIdentifyKey 중복!");
+    }
+
+
+
+
+
+
 
 }
