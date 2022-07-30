@@ -25,7 +25,7 @@ public class Cake {
     private UUID uuid;
 
     //    @Column(/*columnDefinition = "VARCHAR(20)", nullable = false*/) //db에 check로 값이 설정되지는 않는다.
-    @ManyToOne(fetch = FetchType.LAZY)//LAZY붙이면 메소드에 @Transactional붙여야한다!
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)//LAZY붙이면 메소드에 @Transactional붙여야한다!
     private Store store;
 
 

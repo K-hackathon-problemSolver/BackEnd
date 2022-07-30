@@ -60,6 +60,14 @@ public class StoreService {
         storeRepository.save(store);
         storeDTO.setUuid(store.getUuid());//저장하기전에는 uuid가 없다.
     }
+    
+//    public StoreDTO save(StoreDTO storeDTO) {
+//        Store store = Store.toEntity(storeDTO);
+//        Store save = storeRepository.save(store);
+//        return StoreDTO.toDTO(save);
+//    }
+//
+//
 
 //    public List<StoreDTOForListPreflight> getAllPreflights() {
 //        List<Store> li = storeRepository.findAll();

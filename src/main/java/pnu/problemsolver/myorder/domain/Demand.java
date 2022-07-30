@@ -25,10 +25,10 @@ public class Demand extends BaseTimeEntitiy {
     @Column(columnDefinition = "BINARY(16)")
     private UUID uuid;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false) //일단 기본으로 lazy설정해놓고 서비스 운영하면서 성능 최적화 하면 된다.!
     private Customer customer;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Cake cake;
 
     @Column(nullable = false)

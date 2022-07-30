@@ -62,7 +62,7 @@ public class Store extends BaseTimeEntitiy {
 //    @Column(columnDefinition = "varchar(30)")
 //    private String bank;
 
-//    @Enumerated(EnumType.STRING) //이게 없으면 숫자로 들어간다. 그리고 이건 성능이 안좋다고 함.
+    @Enumerated(EnumType.STRING) //이게 없으면 숫자로 들어간다. 그리고 이건 성능이 안좋다고 함. 그래도 써야한다.
     private SNSType snsType; //enum바로 사용 가능!
     private String snsIdentifyKey; //고유식별자.
 
