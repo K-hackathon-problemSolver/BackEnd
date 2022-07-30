@@ -3,6 +3,7 @@ package pnu.problemsolver.myorder.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
+import net.bytebuddy.asm.Advice;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,10 @@ import pnu.problemsolver.myorder.util.Mapper;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 
 import static java.util.Collections.copy;
@@ -65,15 +70,20 @@ class StoreControllerTest {
 
     @Test
     public void saveTest() throws Exception {
+        LocalTime open = LocalTime.parse("09:00");
+        LocalTime close = LocalTime.parse("21:00");
+    
         StoreDTO storeDTO = StoreDTO.builder()
                 .email("zhdf@")
                 .name("na")
                 .location("loc")
                 .store_phone_num("324")
+                .openTime(open)
+                .closeTime(close)
                 .build();
     
-//        given(storeService.save(storeDTO)).willReturn(storeDTO);
         String json = Mapper.objectMapper.writeValueAsString(storeDTO);
+        System.out.println(json);
         mvc.perform(post("/store/save")
                         .content(json)
                         .contentType(MediaType.APPLICATION_JSON))

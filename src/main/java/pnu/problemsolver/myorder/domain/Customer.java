@@ -2,6 +2,8 @@ package pnu.problemsolver.myorder.domain;
 
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+import pnu.problemsolver.myorder.domain.constant.Gender;
+import pnu.problemsolver.myorder.domain.constant.SNSType;
 import pnu.problemsolver.myorder.dto.CustomerDTO;
 
 import javax.persistence.*;

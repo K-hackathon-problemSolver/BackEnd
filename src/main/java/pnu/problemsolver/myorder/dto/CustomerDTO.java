@@ -5,8 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import pnu.problemsolver.myorder.domain.Customer;
-import pnu.problemsolver.myorder.domain.Gender;
-import pnu.problemsolver.myorder.domain.SNSType;
+import pnu.problemsolver.myorder.domain.constant.Gender;
+import pnu.problemsolver.myorder.domain.constant.SNSType;
 
 import java.util.UUID;
 

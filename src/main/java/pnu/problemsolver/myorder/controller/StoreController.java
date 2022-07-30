@@ -34,7 +34,6 @@ public class StoreController {
 
     @PostMapping("/save")
     public StoreDTO saveStore(@RequestBody StoreDTO storeDTO)  {
-//        log.info(Mapper.objectMapper.writeValueAsString(storeDTO));
         storeService.save(storeDTO); //없으면 저장하고 있다면 null아닌 것만 자동으로 덮어써진다.!
         return storeDTO;
     }
@@ -126,23 +125,24 @@ public class StoreController {
 
     @GetMapping("/list")
     public List<StoreDTOForList> list() {
+        //TODO : 위치기반 보여주기
         List<StoreDTOForList> all = storeService.findAll(a->StoreDTOForList.toDTO(a)); //store->T로 변환 함수만 넣어주면 된다.!
         System.out.println(all);
         return all;
     }
 
-    @PostMapping("/list")
-    public List<StoreDTOForList> list(@RequestBody ArrayList<UUID> li) {
-
-        List<StoreDTOForList> resList = storeService.findAllInUUIDList(li);
-        //encoding
-        for (StoreDTOForList i : resList) {
-            byte[] encodedImg = Base64.getEncoder().encode(i.getMainImg());
-            i.setMainImg(encodedImg);
-        }
-        return resList;
-
-    }
+    //유용한데 안쓴다.
+//    @PostMapping("/list")
+//    public List<StoreDTOForList> list(@RequestBody ArrayList<UUID> li) {
+//
+//        List<StoreDTOForList> resList = storeService.findAllInUUIDList(li);
+//        //encoding
+//        for (StoreDTOForList i : resList) {
+//            byte[] encodedImg = Base64.getEncoder().encode(i.getMainImg());
+//            i.setMainImg(encodedImg);
+//        }
+//        return resList;
+//    }
 
     public boolean isFileExtensionOk(String extension) {
 //pdf는 빼기로 했다.

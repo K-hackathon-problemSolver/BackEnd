@@ -7,9 +7,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import pnu.problemsolver.myorder.domain.Gender;
-import pnu.problemsolver.myorder.domain.MemberType;
-import pnu.problemsolver.myorder.domain.SNSType;
+import pnu.problemsolver.myorder.domain.constant.Gender;
+import pnu.problemsolver.myorder.domain.constant.MemberType;
+import pnu.problemsolver.myorder.domain.constant.SNSType;
 import pnu.problemsolver.myorder.dto.GeneralOAuthDTO;
 import pnu.problemsolver.myorder.repository.StoreRepository;
 import pnu.problemsolver.myorder.util.Mapper;

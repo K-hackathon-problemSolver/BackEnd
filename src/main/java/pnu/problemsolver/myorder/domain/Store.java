@@ -1,12 +1,17 @@
 package pnu.problemsolver.myorder.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+import pnu.problemsolver.myorder.domain.constant.Gender;
+import pnu.problemsolver.myorder.domain.constant.SNSType;
 import pnu.problemsolver.myorder.dto.StoreDTO;
 import pnu.problemsolver.myorder.dto.StoreEditDTO;
 
 import javax.persistence.*;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.UUID;
 
 @ToString
@@ -69,6 +74,12 @@ public class Store extends BaseTimeEntitiy {
     private int birthYear;
     @Enumerated(EnumType.STRING)
     private Gender gender;
+    
+    @JsonFormat(pattern = "HH:mm")
+    private LocalTime openTime;
+        @JsonFormat(pattern = "HH:mm")
+
+    private LocalTime closeTime;
 
     public static Store toEntity(StoreDTO storeDTO) {
         Store store = Store.builder()
@@ -86,7 +97,11 @@ public class Store extends BaseTimeEntitiy {
                 .snsType(storeDTO.getSnsType())
                 .snsIdentifyKey(storeDTO.getSnsIdentifyKey())
                 .birthYear(storeDTO.getBirthYear())
+                .gender(storeDTO.getGender())
+                .openTime(storeDTO.getOpenTime())
+                .closeTime(storeDTO.getCloseTime())
                 .build();
+        
         return store;
     }
 

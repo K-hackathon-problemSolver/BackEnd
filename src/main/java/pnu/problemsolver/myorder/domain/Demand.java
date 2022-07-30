@@ -3,6 +3,7 @@ package pnu.problemsolver.myorder.domain;
 
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+import pnu.problemsolver.myorder.domain.constant.DemandStatus;
 import pnu.problemsolver.myorder.dto.DemandDTO;
 
 import javax.persistence.*;

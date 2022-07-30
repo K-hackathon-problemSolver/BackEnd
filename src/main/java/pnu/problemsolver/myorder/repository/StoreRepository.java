@@ -3,8 +3,7 @@ package pnu.problemsolver.myorder.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import pnu.problemsolver.myorder.domain.Customer;
-import pnu.problemsolver.myorder.domain.SNSType;
+import pnu.problemsolver.myorder.domain.constant.SNSType;
 import pnu.problemsolver.myorder.domain.Store;
 
 import java.util.List;

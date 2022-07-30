@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.*;
-import pnu.problemsolver.myorder.domain.MemberType;
+import pnu.problemsolver.myorder.domain.constant.MemberType;
 import pnu.problemsolver.myorder.dto.*;
 import pnu.problemsolver.myorder.security.JwtTokenProvider;
 import pnu.problemsolver.myorder.service.CustomerService;
@@ -164,7 +164,6 @@ public class LoginController {
     private UUID SNSgeneralStoreLogin(GeneralOAuthDTO dto) {
         //TODO : 여기서 추가적인 검증을 필요로 할 수도 있다!
         StoreDTO storeDTO = StoreDTO.GeneralOAuthDTOtoDTO(dto);
-
         StoreDTO res = storeService.findBySnsTypeAndSnsIdentifyKey(storeDTO);
         if (res == null) {//회원이 아닐 때!
             storeService.save(storeDTO);//PK가 uuid이기 때문에 기존 회원이더라도 새로 save해버림. 그래서 이렇게 따로 함수를 만든다.
@@ -189,14 +188,13 @@ public class LoginController {
     public LoginResponseDTO login(@RequestBody GeneralOAuthDTO dto) {
         UUID uuid = null;
         String jwt = null;
-        if (dto.getMemberType() == MemberType.STORE) {
+        if (dto.getMemberType() == MemberType.STORE) {//store일 때
             uuid = SNSgeneralStoreLogin(dto);
             jwt = jwtTokenProvider.createToken(MemberType.STORE); //payload추가!
 
-        } else if (dto.getMemberType() == MemberType.CUSTOMER) {
+        } else if (dto.getMemberType() == MemberType.CUSTOMER) {//customer일 때
             uuid = SNSgeneralCustomerLogin(dto);
             jwt = jwtTokenProvider.createToken(MemberType.CUSTOMER);
-
         } else {
             throw new RuntimeException("storeLogin()에서 memberType이 CUSTOMER, STORE 중에 없습니다!");
         }
@@ -212,16 +210,4 @@ public class LoginController {
     }
 
 
-    @GetMapping("/test")
-    public void tmp() {
-
-        StoreDTO storeDTO = StoreDTO.builder()
-                .email("test")
-                .name("신민건")
-                .owner_phone_num("123")
-                .location("부산")
-                .build();
-        storeService.save(storeDTO);
-        log.info("tmp()실행!");
-    }
 }

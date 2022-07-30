@@ -4,7 +4,7 @@ import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.filter.OncePerRequestFilter;
-import pnu.problemsolver.myorder.domain.MemberType;
+import pnu.problemsolver.myorder.domain.constant.MemberType;
 import pnu.problemsolver.myorder.security.JwtTokenProvider;
 import pnu.problemsolver.myorder.service.CustomerService;
 import pnu.problemsolver.myorder.service.StoreService;

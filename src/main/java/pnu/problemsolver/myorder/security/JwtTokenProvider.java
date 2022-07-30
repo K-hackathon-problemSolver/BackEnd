@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
-import pnu.problemsolver.myorder.domain.MemberType;
+import pnu.problemsolver.myorder.domain.constant.MemberType;
 
 import java.util.Date;
 import java.util.HashMap;

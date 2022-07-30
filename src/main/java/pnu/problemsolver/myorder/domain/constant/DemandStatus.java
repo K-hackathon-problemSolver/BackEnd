@@ -1,4 +1,4 @@
-package pnu.problemsolver.myorder.domain;
+package pnu.problemsolver.myorder.domain.constant;
 
 public enum DemandStatus {
     COMPLETED, ACCEPTED, REJECTED, WAITING

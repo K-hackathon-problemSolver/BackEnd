@@ -7,11 +7,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.env.Environment;
-import pnu.problemsolver.myorder.domain.MemberType;
+import pnu.problemsolver.myorder.domain.constant.MemberType;
 
 import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 
 @SpringBootTest

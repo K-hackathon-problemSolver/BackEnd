@@ -6,6 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 import pnu.problemsolver.myorder.domain.*;
+import pnu.problemsolver.myorder.domain.constant.DemandStatus;
 
 @SpringBootTest
 @Transactional
