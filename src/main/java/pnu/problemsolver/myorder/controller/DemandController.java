@@ -1,6 +1,5 @@
 package pnu.problemsolver.myorder.controller;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -9,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import pnu.problemsolver.myorder.domain.Demand;
 import pnu.problemsolver.myorder.domain.constant.DemandStatus;
 import pnu.problemsolver.myorder.domain.constant.MemberType;
-import pnu.problemsolver.myorder.dto.DemandDTO;
+import pnu.problemsolver.myorder.dto.DemandDetailResponseDTO;
 import pnu.problemsolver.myorder.dto.DemandListDTO;
 import pnu.problemsolver.myorder.dto.DemandSaveDTO;
 import pnu.problemsolver.myorder.service.DemandService;
@@ -58,8 +57,8 @@ public class DemandController {
 			e.printStackTrace();
 		}
 		
-		//DB에 저장
-		demandService.save(i -> Demand.toEntity(i, imgPath), d);
+		//DB에 저장. uuid를 반환하지만 사실 필요없다.
+		 demandService.saveWithFunction(i -> Demand.toEntity(i, imgPath), d);
 		return "success";
 		
 	}
@@ -79,8 +78,9 @@ public class DemandController {
 		return resList;
 	}
 	
-//	@PostMapping("/detailed")
-//	public byte[] detailed() {
-//
-//	}
+	@PostMapping("/detailed")
+	public DemandDetailResponseDTO detailed(@RequestBody UUID demandId) {
+		return demandService.findById(i -> DemandDetailResponseDTO.toDTO(i), demandId);
+	}
+	
 }

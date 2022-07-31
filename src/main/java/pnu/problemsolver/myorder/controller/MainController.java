@@ -17,6 +17,8 @@ import pnu.problemsolver.myorder.service.CustomerService;
 import pnu.problemsolver.myorder.service.DemandService;
 import pnu.problemsolver.myorder.service.StoreService;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -41,24 +43,33 @@ public class MainController {
 
         //cake에는 store가 필요함.
         List<CakeDTO> cakeDTOList = insertCake(storeDTOList);
-        insertDemand(cakeDTOList, customerDTOList);
+        insertDemand(cakeDTOList, customerDTOList, storeDTOList);
+        
         return "success";
     }
-
+    
     //demand는 customer, cake 2개가 필요하다.
-    public void insertDemand(List<CakeDTO> cakeDTOList, List<CustomerDTO> customerDTOList) {
+    public List<DemandDTO> insertDemand(List<CakeDTO> cakeDTOList, List<CustomerDTO> customerDTOList, List<StoreDTO> storeDTOList) {
+        List<DemandDTO> demandDTOList = new ArrayList<>();
+        Path p = Paths.get("src/main/resources/static/1.jpg");
         IntStream.rangeClosed(0, 20).forEach((i) -> {
-            int idx = (int) (Math.random() * cakeDTOList.size());
+            int idx = (int) (Math.random() * storeDTOList.size());
+            
             DemandDTO demandDTO = DemandDTO.builder()
+                    .filePath(p.toString())
                     .cakeUUID(cakeDTOList.get(idx).getUuid())
                     .customerUUID(customerDTOList.get(idx).getUuid())
+                    .storeUUID(storeDTOList.get(idx).getUuid())
                     .status(DemandStatus.WAITING)
                     .build();
-            demandService.save(Demand::toEntity, demandDTO);
+    
+            System.out.println("실험 : " + storeDTOList.get(idx).getUuid());
+            demandService.save(demandDTO);
+            demandDTOList.add(demandDTO);
         });
-
-
-
+        return demandDTOList;
+        
+        
     }
 
     public List<CustomerDTO> insertCustomer() {

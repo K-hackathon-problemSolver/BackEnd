@@ -73,14 +73,18 @@ public class Demand extends BaseTimeEntitiy {
     }
     
     public static Demand toEntity(DemandDTO dto) {
+        UUID storeUUID = dto.getStoreUUID();
+        UUID customerUUID = dto.getCustomerUUID();
+        UUID cakeUUID = dto.getCakeUUID();
+    
+    
         Demand demand = Demand.builder()
                 .uuid(dto.getUuid())
-                .cake(Cake.builder().uuid(dto.getCakeUUID()).build())
-                .customer(Customer.builder().uuid(dto.getCustomerUUID()).build())
-                
+                .cake(cakeUUID == null ? null : Cake.builder().uuid(cakeUUID).build())
+                .customer(customerUUID == null ? null : Customer.builder().uuid(customerUUID).build())
+                .store(storeUUID == null ? null : Store.builder().uuid(storeUUID).build())
                 .status(dto.getStatus())
                 .option(dto.getOption())
-                
                 .price(dto.getPrice())
                 .filePath(dto.getFilePath())
                 .build();

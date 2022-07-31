@@ -9,13 +9,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-import pnu.problemsolver.myorder.domain.Store;
-import pnu.problemsolver.myorder.dto.CakeDTO;
-import pnu.problemsolver.myorder.dto.CakeEditDTO;
-import pnu.problemsolver.myorder.dto.StoreDTO;
-import pnu.problemsolver.myorder.dto.StoreEditDTO;
-import pnu.problemsolver.myorder.repository.CakeRepositroy;
+import pnu.problemsolver.myorder.domain.Customer;
+import pnu.problemsolver.myorder.domain.Demand;
+import pnu.problemsolver.myorder.dto.*;
 import pnu.problemsolver.myorder.service.CakeService;
+import pnu.problemsolver.myorder.service.DemandService;
 import pnu.problemsolver.myorder.service.StoreService;
 import pnu.problemsolver.myorder.util.Mapper;
 
@@ -24,7 +22,6 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -32,12 +29,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-public class StoreControllerSpringBootTest {
+public class AllControllerSpringBootTest {
 
     @Autowired
     MockMvc mvc;
@@ -50,6 +46,9 @@ public class StoreControllerSpringBootTest {
     
     @Autowired
     MainController mainController;
+    
+    @Autowired
+    DemandService demandService;
     
     @Value("${myorder.upload.store}")
     public String uploadStorePath;
@@ -110,7 +109,6 @@ public class StoreControllerSpringBootTest {
         cake2.setExtension("jpg");
         cake2.setUuid(cakeDTO2.getUuid());
         
-        
         cakeList.add(cake1);
         cakeList.add(cake2);
         
@@ -149,7 +147,7 @@ public class StoreControllerSpringBootTest {
     }
     
     @Test
-    public void oneStore() throws Exception {
+    public void oneStoreTest() throws Exception {
         List<StoreDTO> storeDTOList = mainController.insertStore();//dummy객체 넣을 때 사용했던 함수.
         mainController.insertCake(storeDTOList);
         StoreDTO storeDTO = storeDTOList.get(0);
@@ -158,5 +156,28 @@ public class StoreControllerSpringBootTest {
                 .andExpect(jsonPath("$.cakeList[0].img").exists())
                 .andDo(print());
         
+    }
+    
+    @Test
+    @Commit//commit하지 않으면 uuid를 받지 못한다.
+    public void demandDetailedTest() {
+        //given
+        List<CustomerDTO> customerDTOS = mainController.insertCustomer();
+//        for (CustomerDTO i : customerDTOS) {
+//            System.out.println(i);
+//        }
+        List<StoreDTO> storeDTOList = mainController.insertStore();
+//        for (StoreDTO i : storeDTOList) {
+//            System.out.println(i);
+//        }
+        List<CakeDTO> cakeDTOS = mainController.insertCake(storeDTOList);
+        List<DemandDTO> demandDTOList = mainController.insertDemand(cakeDTOS, customerDTOS, storeDTOList);
+//        for (DemandDTO i : demandDTOList) {
+//            System.out.println(i);
+//        }
+        //when
+        DemandDetailResponseDTO res = demandService.findById(DemandDetailResponseDTO::toDTO, demandDTOList.get(0).getUuid());
+        //then
+        assertEquals(res.getImg() == null, false);
     }
 }

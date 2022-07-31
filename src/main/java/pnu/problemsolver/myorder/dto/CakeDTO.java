@@ -1,29 +1,24 @@
 package pnu.problemsolver.myorder.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import pnu.problemsolver.myorder.domain.Cake;
-import pnu.problemsolver.myorder.domain.Demand;
 import pnu.problemsolver.myorder.domain.Store;
 
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class CakeDTO {
 
-    private UUID uuid;
 
     //얘들을 남겨놓나?..일단 남겨둬 보자. 일단 Entity를 참조하는 것은 말이 안됨.
     
+    private UUID uuid;
     private UUID storeUUID;
 
 //    private UUID demandUUID;
