@@ -17,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @Transactional
-@Commit
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)//이게 있어야 BeforeAll가능. 기본값은 PER_METHOD라고 함!
 class DemandRepositoryTest {
 	
@@ -54,9 +53,12 @@ class DemandRepositoryTest {
 		
 		Demand demand = Demand.builder()
 				.customer(customer)
-				.status(DemandStatus.WAITING)
 				.cake(cake)
+				.store(s)
+				.price(20000)
+				.status(DemandStatus.WAITING)
 				.build();
+		
 		demandRepository.save(demand);
 		
 	}
@@ -84,16 +86,18 @@ class DemandRepositoryTest {
 		Demand demand = Demand.builder()
 				.customer(customer)
 				.cake(cake)
+				.store(s)
 				.status(DemandStatus.WAITING)
 				.build();
 		
 		demandRepository.save(demand);
 		try {
-			Thread.sleep(2000);
+			Thread.sleep(50);
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);
 		}
-		demand.acceptDemand();//주문수락
+		demand.acceptDemand();//주문수락.
+//		assertEquals(demand.getCreated().equals(demand.getModified()), false);//트랜잭션이 안일어나서 그런듯.
 //		demandRepository.save(demand); //저장하지 않고 set만 호출해도 된다. set만 호출해야 update됨.
 		Optional<Demand> d = demandRepository.findById(demand.getUuid());
 		assertEquals(d.isPresent(), true);
@@ -104,9 +108,24 @@ class DemandRepositoryTest {
 	public void findByCustomerTest() {
 		List<Customer> all = customerRepository.findAll();
 		Customer customer = all.get(0);
-		List<Demand> byCustomer = demandRepository.findByCustomer(customer);
-		System.out.println(byCustomer);
+		List<Demand> demandList = demandRepository.findByCustomerAndStatus(customer, DemandStatus.WAITING);
 		
+		for (Demand d : demandList) {
+			assertEquals(d.getCustomer().equals(customer), true);
+			
+		}
+	}
+	
+	@Test
+	public void findByStoreTest() {
+		List<Store> all = storeRepository.findAll();
+		Store  st = all.get(0);
+		List<Demand> demandList = demandRepository.findByStoreAndStatus(st, DemandStatus.WAITING);
+		
+		for (Demand d : demandList) {
+			assertEquals(d.getStore().equals(st), true);
+			
+		}
 	}
 	
 	

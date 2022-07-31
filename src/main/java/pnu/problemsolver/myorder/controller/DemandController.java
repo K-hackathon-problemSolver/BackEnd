@@ -2,6 +2,7 @@ package pnu.problemsolver.myorder.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +34,7 @@ public class DemandController {
 	
 	private final String demandUploadPath;
 	
+	@Autowired
 	public DemandController(DemandService demandService, Environment env) {
 		this.demandService = demandService;
 		this.demandUploadPath = Objects.requireNonNull(env.getProperty("myorder.upload.demand"), "application.properties 로드 실패");
@@ -66,9 +68,10 @@ public class DemandController {
 	public List<DemandListDTO> customerDemandList(@PathVariable("status") DemandStatus status, @RequestBody UUID id, @RequestHeader MemberType memberType) {//@RequestHeader도 있다!
 		List<DemandListDTO> resList = null;
 		if (memberType == MemberType.CUSTOMER) {
-			resList = demandService.findByCustomer(i -> DemandListDTO.toDTO(i), id);
+			resList = demandService.findByCustomer(i -> DemandListDTO.toDTO(i), id, status);//TODO : 한번에 넘겨줄지 아닐지..지금 이 함수는 한번에 다 가져오는 것임.
 		} else if (memberType == MemberType.STORE) {
-			resList = demandService.findByStore(i -> DemandListDTO.toDTO(i), id);
+			resList = demandService.findByStore(i -> DemandListDTO.toDTO(i), id, status);
+			
 		} else {
 			log.error("GUEST can't access to /demand/{status}");
 		}

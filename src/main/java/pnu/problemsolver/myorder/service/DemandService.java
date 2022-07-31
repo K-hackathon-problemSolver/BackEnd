@@ -8,6 +8,7 @@ import pnu.problemsolver.myorder.domain.Cake;
 import pnu.problemsolver.myorder.domain.Customer;
 import pnu.problemsolver.myorder.domain.Demand;
 import pnu.problemsolver.myorder.domain.Store;
+import pnu.problemsolver.myorder.domain.constant.DemandStatus;
 import pnu.problemsolver.myorder.dto.CakeDTO;
 import pnu.problemsolver.myorder.dto.DemandDTO;
 import pnu.problemsolver.myorder.repository.CakeRepositroy;
@@ -38,11 +39,11 @@ public class DemandService {
         demandRepository.save(demand);
     }
     
-    public <T> List<T> findByCustomer(Function<Demand, T> func, UUID uuid) {
+    public <T> List<T> findByCustomer(Function<Demand, T> func, UUID uuid, DemandStatus status) {//이정도는 Repository에서 테스트 했다면 검사 안해도 된다. TDD도 아니니까.
         Customer c = Customer.builder()
                 .uuid(uuid)
                 .build();
-        List<Demand> byCustomer = demandRepository.findByCustomer(c);
+        List<Demand> byCustomer = demandRepository.findByCustomerAndStatus(c, status);
         List<T> resList = new ArrayList<>();
         for (Demand i : byCustomer) {
             resList.add(func.apply(i));
@@ -50,11 +51,11 @@ public class DemandService {
         return resList;
     }
     
-    public <T> List<T> findByStore(Function<Demand, T> func, UUID uuid) {
-        Store s = Store.builder()
+    public <T> List<T> findByStore(Function<Demand, T> func, UUID uuid, DemandStatus status) {
+        Store s = Store.builder()//service에선 엔티티를 생서해서 다룰 수 있다. 그래서 편하고 좋다.
                 .uuid(uuid)
                 .build();
-        List<Demand> byCustomer = demandRepository.findByStore(s);
+        List<Demand> byCustomer = demandRepository.findByStoreAndStatus(s, status);
         List<T> resList = new ArrayList<>();
         for (Demand i : byCustomer) {
             resList.add(func.apply(i));

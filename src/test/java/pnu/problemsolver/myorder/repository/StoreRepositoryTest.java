@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Commit;
+import org.springframework.transaction.annotation.Transactional;
 import pnu.problemsolver.myorder.domain.Store;
 import pnu.problemsolver.myorder.service.StoreService;
 
@@ -19,6 +20,7 @@ import java.util.stream.IntStream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
+@Transactional
 //@Commit//commit없어도 DB반영 되는데?
 class StoreRepositoryTest {
     @Autowired//final못 붙인다.

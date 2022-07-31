@@ -15,8 +15,8 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@Commit
-//@Transactional
+//@Commit
+@Transactional
 @Slf4j
 class CakeServiceTest {
 

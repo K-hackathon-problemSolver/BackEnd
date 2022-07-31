@@ -2,6 +2,7 @@ package pnu.problemsolver.myorder.controller;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -35,8 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Commit
-//@Transactional
+@Transactional
 public class StoreControllerSpringBootTest {
 
     @Autowired
@@ -50,6 +50,10 @@ public class StoreControllerSpringBootTest {
     
     @Autowired
     MainController mainController;
+    
+    @Value("${myorder.upload.store}")
+    public String uploadStorePath;
+    
 
 //    @Test
 //    public void listTest() throws Exception {
@@ -58,37 +62,37 @@ public class StoreControllerSpringBootTest {
 //                .andExpect(status().isOk())
 //                .andDo(print());
 //    }
-
-
+    
+    
     @Test
     public void editStoreMenuTest() throws Exception {
-    
+        
         StoreDTO storeDTO = StoreDTO.builder()
                 .name("초기화")
                 .description("초기화")
                 .build();
         storeService.save(storeDTO);
-    
+        
         CakeDTO cakeDTO1 = CakeDTO.builder()
                 .name("케이크1")
                 .minPrice(1000)
                 .storeUUID(storeDTO.getUuid())
                 .build();
         System.out.println(cakeDTO1);
-    
+        
         cakeService.save(cakeDTO1);
-    
+        
         CakeDTO cakeDTO2 = CakeDTO.builder()
                 .name("케이크2")
                 .minPrice(2000)
                 .storeUUID(storeDTO.getUuid())
                 .build();
         cakeService.save(cakeDTO2);
-//
+        //파일 읽기
         File mainImgFile = new File("src/main/resources/static/testPicture.jpg");
         byte[] mainImg = Files.readAllBytes(mainImgFile.toPath());
         mainImg = Base64.getEncoder().encode(mainImg);
-
+        
         List<CakeEditDTO> cakeList = new ArrayList<>();
         CakeEditDTO cake1 = new CakeEditDTO();
         cake1.setName("cake1");
@@ -97,7 +101,7 @@ public class StoreControllerSpringBootTest {
         cake1.setImg(mainImg);
         cake1.setExtension("jpg");
         cake1.setUuid(cakeDTO1.getUuid());
-
+        
         CakeEditDTO cake2 = new CakeEditDTO();
         cake2.setName("cake2");
         cake2.setMinPrice(300);
@@ -105,11 +109,11 @@ public class StoreControllerSpringBootTest {
         cake2.setImg(mainImg);
         cake2.setExtension("jpg");
         cake2.setUuid(cakeDTO2.getUuid());
-
-
+        
+        
         cakeList.add(cake1);
         cakeList.add(cake2);
-
+        
         StoreEditDTO storeEditDTO = StoreEditDTO.builder()
                 .uuid(storeDTO.getUuid())
 //                .name("가게1")
@@ -119,29 +123,29 @@ public class StoreControllerSpringBootTest {
                 .extension("jpg")
 //                .impossibleDate("[{start:2022-07-02, end:2022-07-06}, {start:2022-07-08, end:2022-07-10}]")
                 .build();
-
+        
         String json = Mapper.objectMapper.writeValueAsString(storeEditDTO);
-
+        
         mvc.perform(post("/store/editMenu")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andDo(print());
-
-        String storeDir = "upload" + File.separator + storeDTO.getUuid() + File.separator;
-
+    
+        String storeDir = uploadStorePath + File.separator + storeDTO.getUuid() + File.separator;
+        
         File file = new File(storeDir + "mainImg.jpg");
         assertThat(file.exists()).isEqualTo(true);
         File f1 = new File(storeDir + cake1.getName() + "." + cake1.getExtension());
         File f2 = new File(storeDir + cake2.getName() + "." + cake2.getExtension());
         assertEquals(f1.exists(), true);
         assertEquals(f2.exists(), true);
-
+        
         //다시 가져왔을 때 null이 안되어 있고 null이 아닌 것만 바뀜.!
         StoreDTO byId = storeService.findById(storeDTO.getUuid());
         assertEquals(byId.getName().equals("초기화"), true);
         assertEquals(byId.getDescription().equals("맛있다!"), true);
         
-
+        
     }
     
     @Test

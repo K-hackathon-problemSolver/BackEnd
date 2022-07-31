@@ -35,6 +35,10 @@ public class Demand extends BaseTimeEntitiy {
     @ToString.Exclude
     private Cake cake;
     
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ToString.Exclude
+    private Store store;
+    
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private DemandStatus status;

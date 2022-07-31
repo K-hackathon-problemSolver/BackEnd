@@ -7,7 +7,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.Commit;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 import pnu.problemsolver.myorder.domain.constant.Gender;
 import pnu.problemsolver.myorder.domain.constant.MemberType;
 import pnu.problemsolver.myorder.domain.constant.SNSType;
@@ -25,6 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 //@WebMvcTest
 @SpringBootTest
 @AutoConfigureMockMvc//MVC와 통합테스트 같이하고 싶을 떄 사용.
+    @Transactional
 class LoginControllerTest {
 
     @Autowired
