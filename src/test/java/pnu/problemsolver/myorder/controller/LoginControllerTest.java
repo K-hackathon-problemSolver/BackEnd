@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import pnu.problemsolver.myorder.domain.constant.Gender;
@@ -12,6 +13,7 @@ import pnu.problemsolver.myorder.domain.constant.MemberType;
 import pnu.problemsolver.myorder.domain.constant.SNSType;
 import pnu.problemsolver.myorder.dto.GeneralOAuthDTO;
 import pnu.problemsolver.myorder.repository.StoreRepository;
+import pnu.problemsolver.myorder.security.JwtTokenProvider;
 import pnu.problemsolver.myorder.util.Mapper;
 
 import java.util.Map;
@@ -27,6 +29,8 @@ class LoginControllerTest {
 
     @Autowired
     MockMvc mvc;
+    
+   
 
     @Autowired
     StoreRepository storeRepository;

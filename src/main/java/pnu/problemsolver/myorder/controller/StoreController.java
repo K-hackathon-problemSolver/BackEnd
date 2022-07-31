@@ -25,9 +25,10 @@ public class StoreController {
 	
 	private final String uploadPath;
 	
+	//final 쓰기 위해 어쩔 수 없이 생성자 만들어야함.
 	public StoreController(Environment en, StoreService storeService, CakeService cakeService) {
 		this.storeService = storeService;
-		this.uploadPath = Objects.requireNonNull(en.getProperty("myorder.uploadPath"), "application.properties 로드 실패");
+		this.uploadPath = Objects.requireNonNull(en.getProperty("myorder.upload.store"), "application.properties 로드 실패");
 		this.cakeService = cakeService;
 	}
 	
@@ -51,8 +52,6 @@ public class StoreController {
 		//store dir 만들기.
 		Path storeDirPath = makeStorePath(storeEditDTO);
 		Path mainImgPath = Paths.get(storeDirPath + File.separator + "mainImg." + storeEditDTO.getExtension());
-		
-		
 		//디코딩, 파일 생성.
 		byte[] encodedBytes = Base64.getDecoder().decode(storeEditDTO.getMainImg());
 		//mainImg 저장
@@ -62,7 +61,6 @@ public class StoreController {
 		
 		//cake사진 저장.
 		List<Path> cakePathList = saveCakeImg(storeDirPath, cakeEditDTOList);
-		
 		//store update
 		storeService.saveOnlyNotNUll(storeEditDTO, mainImgPath);
 //        StoreDTO storeDTOById = storeService.findById(storeEditDTO.getUuid());

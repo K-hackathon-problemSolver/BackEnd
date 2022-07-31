@@ -5,8 +5,10 @@ import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import pnu.problemsolver.myorder.domain.constant.DemandStatus;
 import pnu.problemsolver.myorder.dto.DemandDTO;
+import pnu.problemsolver.myorder.dto.DemandSaveDTO;
 
 import javax.persistence.*;
+import java.nio.file.Path;
 import java.util.UUID;
 
 @ToString
@@ -70,6 +72,24 @@ public class Demand extends BaseTimeEntitiy {
                 .filePath(dto.getFilePath())
                 .build();
         return demand;
+    }
+
+    //저장까지 여기서 하면 안된다. 너무 많은 기능을 함. 하나의 함수 = 하나의 기능.
+    public static Demand toEntity(DemandSaveDTO d, Path filePath) {
+    
+        UUID customerUUID = d.getCustomerUUID();
+        UUID cakeUUID = d.getCakeUUID();
+    
+        Demand demand = Demand.builder()
+                .uuid(d.getUuid())
+                .customer(customerUUID == null ? null : Customer.builder().uuid(customerUUID).build())
+                .cake(cakeUUID == null ? null : Cake.builder().uuid(cakeUUID).build())
+                .option(d.getOption())
+                .price(d.getPrice())
+                .filePath(filePath.toString())
+                .build();
+        return demand;
+        
     }
 
 

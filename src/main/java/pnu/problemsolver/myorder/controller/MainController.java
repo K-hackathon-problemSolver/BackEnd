@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import pnu.problemsolver.myorder.domain.Demand;
 import pnu.problemsolver.myorder.domain.constant.DemandStatus;
 import pnu.problemsolver.myorder.domain.constant.Gender;
 import pnu.problemsolver.myorder.domain.constant.SNSType;
@@ -33,7 +34,7 @@ public class MainController {
 
 
     @GetMapping("/")
-    public void setting() {
+    public String setting() {
         //store, customer는 연관관계 없어서 먼저 넣을 수 있다
         List<StoreDTO> storeDTOList = insertStore();
         List<CustomerDTO> customerDTOList = insertCustomer();
@@ -41,7 +42,7 @@ public class MainController {
         //cake에는 store가 필요함.
         List<CakeDTO> cakeDTOList = insertCake(storeDTOList);
         insertDemand(cakeDTOList, customerDTOList);
-
+        return "success";
     }
 
     //demand는 customer, cake 2개가 필요하다.
@@ -53,7 +54,7 @@ public class MainController {
                     .customerUUID(customerDTOList.get(idx).getUuid())
                     .status(DemandStatus.WAITING)
                     .build();
-            demandService.save(demandDTO);
+            demandService.save(Demand::toEntity, demandDTO);
         });
 
 
