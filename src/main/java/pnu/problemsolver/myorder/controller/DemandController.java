@@ -6,7 +6,10 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import pnu.problemsolver.myorder.domain.Demand;
+import pnu.problemsolver.myorder.domain.constant.DemandStatus;
+import pnu.problemsolver.myorder.domain.constant.MemberType;
 import pnu.problemsolver.myorder.dto.DemandDTO;
+import pnu.problemsolver.myorder.dto.DemandListDTO;
 import pnu.problemsolver.myorder.dto.DemandSaveDTO;
 import pnu.problemsolver.myorder.service.DemandService;
 
@@ -16,7 +19,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Base64;
+import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Controller
 @RestController
@@ -53,8 +58,26 @@ public class DemandController {
 		
 		//DB에 저장
 		demandService.save(i -> Demand.toEntity(i, imgPath), d);
-		//TODO : 테스트코드 작성!
 		return "success";
 		
 	}
+	
+	@PostMapping("/{status}")
+	public List<DemandListDTO> customerDemandList(@PathVariable("status") DemandStatus status, @RequestBody UUID id, @RequestHeader MemberType memberType) {//@RequestHeader도 있다!
+		List<DemandListDTO> resList = null;
+		if (memberType == MemberType.CUSTOMER) {
+			resList = demandService.findByCustomer(i -> DemandListDTO.toDTO(i), id);
+		} else if (memberType == MemberType.STORE) {
+			resList = demandService.findByStore(i -> DemandListDTO.toDTO(i), id);
+		} else {
+			log.error("GUEST can't access to /demand/{status}");
+		}
+//		demandService
+		return resList;
+	}
+	
+//	@PostMapping("/detailed")
+//	public byte[] detailed() {
+//
+//	}
 }

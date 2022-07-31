@@ -53,13 +53,13 @@ public class Demand extends BaseTimeEntitiy {
     
     private String filePath;
     
-    public void setCake(Cake cake) {
-        this.cake = cake;
-    }
+//    public void setCake(Cake cake) {
+//        this.cake = cake;
+//    }
     
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
+//    public void setCustomer(Customer customer) {
+//        this.customer = customer;
+//    }
     
     public void acceptDemand() {
         if (status == DemandStatus.WAITING) {
