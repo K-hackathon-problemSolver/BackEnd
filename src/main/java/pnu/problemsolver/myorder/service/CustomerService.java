@@ -12,6 +12,8 @@ import pnu.problemsolver.myorder.repository.CustomerRepository;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -58,6 +60,12 @@ public class CustomerService {
         }
 
         throw new RuntimeException("snsType and snsIdentifyKey 중복!");
+    }
+    
+    public <T> List<T> findAll(Function<Customer, T> func) {
+        List<Customer> all = customerRepository.findAll();
+        List<T> list = all.stream().map(i -> func.apply(i)).collect(Collectors.toList());
+        return list;
     }
 
 

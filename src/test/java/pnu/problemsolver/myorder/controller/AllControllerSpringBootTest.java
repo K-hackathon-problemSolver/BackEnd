@@ -1,6 +1,7 @@
 package pnu.problemsolver.myorder.controller;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -11,8 +12,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import pnu.problemsolver.myorder.domain.Customer;
 import pnu.problemsolver.myorder.domain.Demand;
+import pnu.problemsolver.myorder.domain.constant.MemberType;
 import pnu.problemsolver.myorder.dto.*;
+import pnu.problemsolver.myorder.security.JwtTokenProvider;
 import pnu.problemsolver.myorder.service.CakeService;
+import pnu.problemsolver.myorder.service.CustomerService;
 import pnu.problemsolver.myorder.service.DemandService;
 import pnu.problemsolver.myorder.service.StoreService;
 import pnu.problemsolver.myorder.util.Mapper;
@@ -29,10 +33,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class AllControllerSpringBootTest {
 
     @Autowired
@@ -53,6 +59,12 @@ public class AllControllerSpringBootTest {
     @Value("${myorder.upload.store}")
     public String uploadStorePath;
     
+    @Autowired
+    CustomerService customerService;
+    
+    
+    @Autowired
+    JwtTokenProvider jwtTokenProvider;
 
 //    @Test
 //    public void listTest() throws Exception {
@@ -179,5 +191,52 @@ public class AllControllerSpringBootTest {
         DemandDetailResponseDTO res = demandService.findById(DemandDetailResponseDTO::toDTO, demandDTOList.get(0).getUuid());
         //then
         assertEquals(res.getImg() == null, false);
+    }
+    
+    @Test
+    public void DemandListTest() throws Exception {
+        //given
+        mainController.insertAll();
+        List<CustomerDTO> all = customerService.findAll(CustomerDTO::toDTO);
+        CustomerDTO customerDTO = all.get(0);
+    
+    
+        DemandListRequestDTO requestDTO = DemandListRequestDTO.builder()
+                .uuid(customerDTO.getUuid())
+                .page(0)
+                .size(5)
+                .build();
+    
+        String json = Mapper.objectMapper.writeValueAsString(requestDTO);
+    
+        String jwt = jwtTokenProvider.createToken(MemberType.CUSTOMER);
+        System.out.println(jwt);
+        jwt = "Bearer " + jwt;
+        
+        //when, then
+        mvc.perform(post("/demand/waiting").contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", jwt) //헤더 Authorization : Bearer {jwt}
+                        .content(json))
+                .andExpect(status().isOk())
+                .andDo(print());
+        
+        mvc.perform(post("/demand/completed").contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", jwt)
+                        .content(json))
+                .andExpect(status().isOk())
+                .andDo(print());
+        
+        mvc.perform(post("/demand/accepted").contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", jwt)
+                        .content(json))
+                .andExpect(status().isOk())
+                .andDo(print());
+        
+        mvc.perform(post("/demand/completed").contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", jwt)
+                        .content(json))
+                .andExpect(status().isOk())
+                .andDo(print());
+        
     }
 }

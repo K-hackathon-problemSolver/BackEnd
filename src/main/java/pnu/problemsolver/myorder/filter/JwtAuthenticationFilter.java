@@ -48,7 +48,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 					String memType = (String) claims.get(memTypeKey);//이까지 오면 로그인 된 상황.
 					try {
 						MemberType memberType = MemberType.valueOf(memType.toUpperCase());
-					request.setAttribute(role, memberType);//customer or store
+						request.setAttribute(role, memberType);//customer or store
+						log.info("jwt성공!");
 					} catch (IllegalArgumentException e) {
 						log.error("MemberType.valueOf() error!");
 						e.printStackTrace();

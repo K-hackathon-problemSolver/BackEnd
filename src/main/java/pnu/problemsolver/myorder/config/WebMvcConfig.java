@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import pnu.problemsolver.myorder.filter.EnumToUpperCaseFilter;
 import pnu.problemsolver.myorder.filter.JwtAuthenticationFilter;
 import pnu.problemsolver.myorder.filter.JwtRoleFilter;
 import pnu.problemsolver.myorder.security.JwtTokenProvider;
@@ -61,7 +62,19 @@ public class WebMvcConfig implements WebMvcConfigurer {//converter등록을 위�
     public FilterRegistrationBean<JwtRoleFilter> jwtRoleFilter() {
         FilterRegistrationBean<JwtRoleFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(new JwtRoleFilter());
-
+        registrationBean.addUrlPatterns("/*");//설정안해도 된다.
+         registrationBean.setOrder(2);
+        registrationBean.setName("JwtRoleFilter : Role에 따라 접근제한");
+        return registrationBean;
+    }
+    
+    @Bean
+    public FilterRegistrationBean<EnumToUpperCaseFilter> enumToUpperCaseFilter() {
+        FilterRegistrationBean<EnumToUpperCaseFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(new EnumToUpperCaseFilter());
+//        registrationBean.addUrlPatterns("/*"); //디폴트값
+        registrationBean.setOrder(3);
+        registrationBean.setName("EmumToUpperCaseFileter : enum사용을 위해 대문자로 변경");
         return registrationBean;
     }
 }

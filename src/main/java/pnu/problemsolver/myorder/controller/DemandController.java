@@ -68,22 +68,24 @@ public class DemandController {
 		
 	}
 	
-	@PostMapping("/{status}")//TODO : 테스트 필요
+	@PostMapping("/{status}")//TODO : 테스트 필요. 이제 JWT도 넣어야한다.
 	public List<DemandListResponseDTO> customerDemandList(@PathVariable("status") DemandStatus status, @RequestBody DemandListRequestDTO dto, HttpServletRequest request) {//@RequestHeader도 있다!
+		
+		System.out.println("함수 in");
 		List<DemandListResponseDTO> resList = null;
 		MemberType memberType = (MemberType) request.getAttribute("memberType");
 		
 		String sortStr = dto.getSort();
-		PageRequest pageRequest = PageRequest.of(dto.getSize(), dto.getPage(), Sort.by(sortStr == null ? "created" : sortStr).descending());//기본값은 최신순!
+		PageRequest pageRequest = PageRequest.of(dto.getPage(), dto.getSize(), Sort.by(sortStr == null ? "created" : sortStr).descending());//기본값은 최신순!
 		
-		if (memberType == MemberType.CUSTOMER) {
-			resList = demandService.findByCustomer(i -> DemandListResponseDTO.toDTO(i), dto.getUuid(), status, pageRequest);
-		} else if (memberType == MemberType.STORE) {
-			resList = demandService.findByStore(i -> DemandListResponseDTO.toDTO(i), dto.getUuid(), status, pageRequest);
-			
-		} else {
-			log.error("GUEST can't access to /demand/{status}");
-		}
+//		if (memberType == MemberType.CUSTOMER) {
+//			resList = demandService.findByCustomer(i -> DemandListResponseDTO.toDTO(i), dto.getUuid(), status, pageRequest);
+//		} else if (memberType == MemberType.STORE) {
+//			resList = demandService.findByStore(i -> DemandListResponseDTO.toDTO(i), dto.getUuid(), status, pageRequest);
+//
+//		} else {
+//			log.error("GUEST can't access to /demand/{status}");
+//		}
 //		demandService
 		return resList;
 	}
