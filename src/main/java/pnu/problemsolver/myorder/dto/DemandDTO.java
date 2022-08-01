@@ -42,6 +42,21 @@ public class DemandDTO {
                 .price(d.getPrice())
                 .filePath(filePath.toString())
                 .build();
+
+        return demandDTO;
+    }
+    
+    public static DemandDTO toDTO(Demand d) {
+        DemandDTO demandDTO = DemandDTO.builder()
+                .uuid(d.getUuid())
+                .customerUUID(d.getCustomer().getUuid())
+                .cakeUUID(d.getCake().getUuid())
+                .storeUUID(d.getStore().getUuid())
+                .status(d.getStatus())
+                .option(d.getOption())
+                .price(d.getPrice())
+                .filePath(d.getFilePath())
+                .build();
         
         return demandDTO;
     }

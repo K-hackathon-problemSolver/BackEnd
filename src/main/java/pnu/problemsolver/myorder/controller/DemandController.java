@@ -3,13 +3,16 @@ package pnu.problemsolver.myorder.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import pnu.problemsolver.myorder.domain.Demand;
 import pnu.problemsolver.myorder.domain.constant.DemandStatus;
 import pnu.problemsolver.myorder.domain.constant.MemberType;
 import pnu.problemsolver.myorder.dto.DemandDetailResponseDTO;
-import pnu.problemsolver.myorder.dto.DemandListDTO;
+import pnu.problemsolver.myorder.dto.DemandListResponseDTO;
+import pnu.problemsolver.myorder.dto.DemandListRequestDTO;
 import pnu.problemsolver.myorder.dto.DemandSaveDTO;
 import pnu.problemsolver.myorder.service.DemandService;
 
@@ -63,13 +66,16 @@ public class DemandController {
 		
 	}
 	
-	@PostMapping("/{status}")
-	public List<DemandListDTO> customerDemandList(@PathVariable("status") DemandStatus status, @RequestBody UUID id, @RequestHeader MemberType memberType) {//@RequestHeader도 있다!
-		List<DemandListDTO> resList = null;
+	@PostMapping("/{status}")//TODO : memberType이 header로 오는게 아닐텐데..알아보자.
+	public List<DemandListResponseDTO> customerDemandList(@PathVariable("status") DemandStatus status, @RequestBody DemandListRequestDTO dto, @RequestHeader MemberType memberType) {//@RequestHeader도 있다!
+		List<DemandListResponseDTO> resList = null;
+		String sortStr = dto.getSort();
+		PageRequest pageRequest = PageRequest.of(dto.getSize(), dto.getPage(), Sort.by(sortStr == null ? "created" : sortStr).descending());//기본값은 최신순!
+		
 		if (memberType == MemberType.CUSTOMER) {
-			resList = demandService.findByCustomer(i -> DemandListDTO.toDTO(i), id, status);//TODO : 한번에 넘겨줄지 아닐지..지금 이 함수는 한번에 다 가져오는 것임.
+			resList = demandService.findByCustomer(i -> DemandListResponseDTO.toDTO(i), dto.getUuid(), status, pageRequest);
 		} else if (memberType == MemberType.STORE) {
-			resList = demandService.findByStore(i -> DemandListDTO.toDTO(i), id, status);
+			resList = demandService.findByStore(i -> DemandListResponseDTO.toDTO(i), dto.getUuid(), status, pageRequest);
 			
 		} else {
 			log.error("GUEST can't access to /demand/{status}");

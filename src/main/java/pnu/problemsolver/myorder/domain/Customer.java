@@ -9,8 +9,7 @@ import pnu.problemsolver.myorder.dto.CustomerDTO;
 import javax.persistence.*;
 import java.util.UUID;
 
-@ToString
-
+@ToString(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

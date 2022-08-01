@@ -5,6 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageRequest;
 import pnu.problemsolver.myorder.domain.Cake;
 import pnu.problemsolver.myorder.domain.Customer;
 import pnu.problemsolver.myorder.domain.Demand;
@@ -53,10 +54,12 @@ class DemandServiceTest {
 		
 		List<Demand> li = new ArrayList<>();
 		li.add(d1);
-		given(demandRepository.findByCustomerAndStatus(any(), any(DemandStatus.class))).willReturn(li);//any(DemandStatus.class)
+		given(demandRepository.findByCustomerAndStatus(any(), any(DemandStatus.class), any())).willReturn(li);//any(DemandStatus.class)
 		
 		//when
-		List<Demand> byCustomer = demandService.findByCustomer(i -> i, customer1.getUuid(), DemandStatus.WAITING);
+		PageRequest of = PageRequest.of(0, 5);
+		List<Demand> byCustomer = demandService.findByCustomer(i -> i, customer1.getUuid(), DemandStatus.WAITING, of);
+		
 		//then
 		assertEquals(byCustomer.size(), 1);
 		assertEquals(byCustomer.get(0), d1);

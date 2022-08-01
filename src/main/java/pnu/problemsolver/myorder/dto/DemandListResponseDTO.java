@@ -1,19 +1,14 @@
 package pnu.problemsolver.myorder.dto;
 
 import lombok.*;
-import pnu.problemsolver.myorder.domain.Cake;
-import pnu.problemsolver.myorder.domain.Customer;
 import pnu.problemsolver.myorder.domain.Demand;
-import pnu.problemsolver.myorder.domain.constant.DemandStatus;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.UUID;
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DemandListDTO {
+public class DemandListResponseDTO {
 	private UUID uuid;
     
 //    private Customer customer;
@@ -34,8 +29,8 @@ public class DemandListDTO {
 //    private byte[] file;
 //	private String extension;
 	
-	public static DemandListDTO toDTO(Demand d) {
-		DemandListDTO dto = DemandListDTO.builder()
+	public static DemandListResponseDTO toDTO(Demand d) {
+		DemandListResponseDTO dto = DemandListResponseDTO.builder()
 				.uuid(d.getUuid())
 				.cakeName(d.getCake().getName())
 //				.status(d.getStatus())

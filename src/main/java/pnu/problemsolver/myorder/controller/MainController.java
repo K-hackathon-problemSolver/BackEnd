@@ -2,6 +2,7 @@ package pnu.problemsolver.myorder.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pnu.problemsolver.myorder.domain.Demand;
@@ -19,6 +20,7 @@ import pnu.problemsolver.myorder.service.StoreService;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -38,34 +40,45 @@ public class MainController {
     @GetMapping("/")
     public String setting() {
         //store, customer는 연관관계 없어서 먼저 넣을 수 있다
+        insertAll();
+        return "success";
+    }
+    
+    @Transactional
+    public List<DemandDTO> insertAll() {
         List<StoreDTO> storeDTOList = insertStore();
         List<CustomerDTO> customerDTOList = insertCustomer();
 
         //cake에는 store가 필요함.
         List<CakeDTO> cakeDTOList = insertCake(storeDTOList);
-        insertDemand(cakeDTOList, customerDTOList, storeDTOList);
-        
-        return "success";
+        List<DemandDTO> demandDTOList = insertDemand(cakeDTOList, customerDTOList, storeDTOList);
+        return demandDTOList;
     }
     
     //demand는 customer, cake 2개가 필요하다.
     public List<DemandDTO> insertDemand(List<CakeDTO> cakeDTOList, List<CustomerDTO> customerDTOList, List<StoreDTO> storeDTOList) {
         List<DemandDTO> demandDTOList = new ArrayList<>();
         Path p = Paths.get("src/main/resources/static/1.jpg");
-        IntStream.rangeClosed(0, 20).forEach((i) -> {
-            int idx = (int) (Math.random() * storeDTOList.size());
-            
-            DemandDTO demandDTO = DemandDTO.builder()
-                    .filePath(p.toString())
-                    .cakeUUID(cakeDTOList.get(idx).getUuid())
-                    .customerUUID(customerDTOList.get(idx).getUuid())
-                    .storeUUID(storeDTOList.get(idx).getUuid())
-                    .status(DemandStatus.WAITING)
-                    .build();
+        IntStream.rangeClosed(0, storeDTOList.size() - 1).forEach((i) -> {
+//            int idx = (int) (Math.random() * storeDTOList.size());
+            IntStream.rangeClosed(0, 20).forEach(idx->{
     
-            System.out.println("실험 : " + storeDTOList.get(idx).getUuid());
-            demandService.save(demandDTO);
-            demandDTOList.add(demandDTO);
+                DemandDTO demandDTO = DemandDTO.builder()
+                        .filePath(p.toString())
+                        .cakeUUID(cakeDTOList.get(i).getUuid())
+                        .customerUUID(customerDTOList.get(i).getUuid())
+                        .storeUUID(storeDTOList.get(i).getUuid())
+                        .status(DemandStatus.WAITING)
+                        .build();
+//                System.out.println("실험 : " + storeDTOList.get(idx).getUuid());
+                demandService.save(demandDTO);
+                Demand byId = demandService.findById(param -> param, demandDTO.getUuid());
+    
+                byId.setCreated(byId.getCreated().minusHours(1));
+    
+    
+                demandDTOList.add(demandDTO);
+            });
         });
         return demandDTOList;
         

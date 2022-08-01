@@ -9,9 +9,10 @@ import pnu.problemsolver.myorder.dto.DemandSaveDTO;
 
 import javax.persistence.*;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
-@ToString
+@ToString(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -91,6 +92,12 @@ public class Demand extends BaseTimeEntitiy {
         return demand;
     }
     
+    public void setCreated(LocalDateTime ldt) {
+        created = ldt;
+        
+    }
+
+    
     //저장까지 여기서 하면 안된다. 너무 많은 기능을 함. 하나의 함수 = 하나의 기능.
     public static Demand toEntity(DemandSaveDTO d, Path filePath) {
         
@@ -108,6 +115,7 @@ public class Demand extends BaseTimeEntitiy {
         return demand;
         
     }
+    
     
     
 }

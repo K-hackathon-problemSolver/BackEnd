@@ -1,15 +1,21 @@
 package pnu.problemsolver.myorder.repository;
 
+import net.bytebuddy.asm.Advice;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
+import pnu.problemsolver.myorder.controller.MainController;
 import pnu.problemsolver.myorder.domain.*;
 import pnu.problemsolver.myorder.domain.constant.DemandStatus;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @Transactional
+@Commit
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)//이게 있어야 BeforeAll가능. 기본값은 PER_METHOD라고 함!
 class DemandRepositoryTest {
 	
@@ -32,35 +39,13 @@ class DemandRepositoryTest {
 	@Autowired
 	CakeRepositroy cakeRepositroy;
 	
+	@Autowired
+	MainController mainController;
+	
 	
 	@BeforeAll
 	public void beforeAll() {
-		Store s = Store.builder()
-				.build();
-		storeRepository.save(s);
-		
-		
-		Customer customer = Customer.builder().build();
-		customerRepository.save(customer);
-		
-		Cake cake = Cake.builder()
-				.store(s)
-				.name("cakeName")
-				.minPrice(10000)
-				.description("설명")
-				.build();
-		cakeRepositroy.save(cake);
-		
-		Demand demand = Demand.builder()
-				.customer(customer)
-				.cake(cake)
-				.store(s)
-				.price(20000)
-				.status(DemandStatus.WAITING)
-				.build();
-		
-		demandRepository.save(demand);
-		
+		mainController.insertAll();
 	}
 	
 	@Test
@@ -103,26 +88,41 @@ class DemandRepositoryTest {
 		assertEquals(d.isPresent(), true);
 		assertEquals(d.get().getStatus(), DemandStatus.ACCEPTED);
 	}
-
+	
 	@Test
 	public void findByCustomerTest() {
 		List<Customer> all = customerRepository.findAll();
 		Customer customer = all.get(0);
-		List<Demand> demandList = demandRepository.findByCustomerAndStatus(customer, DemandStatus.WAITING);
+		PageRequest of = PageRequest.of(0, 5, Sort.by("created").descending());//sort.by()에는 필드이름을 넣으면 된다.
 		
+		List<Demand> demandList = demandRepository.findByCustomerAndStatus(customer, DemandStatus.WAITING, of);
+		assertEquals(demandList.size(), 5);
+//		System.out.println(demandList);
+		LocalDateTime max = demandList.get(0).getCreated();
 		for (Demand d : demandList) {
+//			System.out.println(d.getCustomer());
+//			System.out.println(customer);
+			int i = max.compareTo(d.getCreated());
+			assertEquals(i == 1 || i == 0, true);
+			max = d.getCreated();
 			assertEquals(d.getCustomer().equals(customer), true);
-			
 		}
 	}
 	
 	@Test
 	public void findByStoreTest() {
 		List<Store> all = storeRepository.findAll();
-		Store  st = all.get(0);
-		List<Demand> demandList = demandRepository.findByStoreAndStatus(st, DemandStatus.WAITING);
+		Store st = all.get(0);
+		PageRequest of = PageRequest.of(0, 5, Sort.by("created").descending());
 		
+		List<Demand> demandList = demandRepository.findByStoreAndStatus(st, DemandStatus.WAITING, of);
+		assertEquals(demandList.size(), 5);
+		
+		
+		LocalDateTime max = demandList.get(0).getCreated();
 		for (Demand d : demandList) {
+			int i = max.compareTo(d.getCreated());
+			assertEquals(i == 1 || i == 0, true);
 			assertEquals(d.getStore().equals(st), true);
 			
 		}
