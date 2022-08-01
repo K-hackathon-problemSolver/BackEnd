@@ -51,7 +51,7 @@ public class JwtTokenProvider {
                 .setSubject("access_token")
                 .setIssuedAt(new Date())
                 .setExpiration(date);//하루 뒤로 설정
-
+        
         claims.put("memberType", memberType.toString());
 //        claims.put("key", "value");//임의로 내가 넣으면 된다.
 
@@ -66,18 +66,28 @@ public class JwtTokenProvider {
 
     public boolean isValidate(String jwt) {
             try {
-                Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(jwt);
+                Jwts.parser().setSigningKey(SECRET_KEY.getBytes()).parseClaimsJws(jwt);//SECRET_KEY.getBytes()를 반드시 호출해야한다.
+                
                 return true;
             } catch (SignatureException ex) {
                 log.error("Invalid JWT signature");
+                ex.printStackTrace();
             } catch (MalformedJwtException ex) {
                 log.error("Invalid JWT token");
+                                ex.printStackTrace();
+
             } catch (ExpiredJwtException ex) {
                 log.error("Expired JWT token");
+                ex.printStackTrace();
+
             } catch (UnsupportedJwtException ex) {
                 log.error("Unsupported JWT token");
+                ex.printStackTrace();
+
             } catch (IllegalArgumentException ex) {
                 log.error("JWT claims string is empty.");
+                ex.printStackTrace();
+
             }
             return false;
         }

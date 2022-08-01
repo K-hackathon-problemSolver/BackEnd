@@ -16,8 +16,10 @@ import pnu.problemsolver.myorder.dto.DemandListRequestDTO;
 import pnu.problemsolver.myorder.dto.DemandSaveDTO;
 import pnu.problemsolver.myorder.service.DemandService;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Member;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -66,9 +68,11 @@ public class DemandController {
 		
 	}
 	
-	@PostMapping("/{status}")//TODO : memberType이 header로 오는게 아닐텐데..알아보자.
-	public List<DemandListResponseDTO> customerDemandList(@PathVariable("status") DemandStatus status, @RequestBody DemandListRequestDTO dto, @RequestHeader MemberType memberType) {//@RequestHeader도 있다!
+	@PostMapping("/{status}")//TODO : 테스트 필요
+	public List<DemandListResponseDTO> customerDemandList(@PathVariable("status") DemandStatus status, @RequestBody DemandListRequestDTO dto, HttpServletRequest request) {//@RequestHeader도 있다!
 		List<DemandListResponseDTO> resList = null;
+		MemberType memberType = (MemberType) request.getAttribute("memberType");
+		
 		String sortStr = dto.getSort();
 		PageRequest pageRequest = PageRequest.of(dto.getSize(), dto.getPage(), Sort.by(sortStr == null ? "created" : sortStr).descending());//기본값은 최신순!
 		
@@ -85,6 +89,7 @@ public class DemandController {
 	}
 	
 	@PostMapping("/detailed")
+	//TODO : 하나씩 제공하는 것 보단 리스트로 제공하는게 더 유연성있다. 필요하면 제공하자.
 	public DemandDetailResponseDTO detailed(@RequestBody UUID demandId) {
 		return demandService.findById(i -> DemandDetailResponseDTO.toDTO(i), demandId);
 	}

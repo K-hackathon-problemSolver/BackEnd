@@ -9,6 +9,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import pnu.problemsolver.myorder.domain.constant.MemberType;
 import pnu.problemsolver.myorder.dto.StoreDTO;
 import pnu.problemsolver.myorder.security.JwtTokenProvider;
 import pnu.problemsolver.myorder.service.CakeService;
@@ -103,7 +104,8 @@ class StoreControllerTest {
         System.out.println(map1);
         System.out.println(map1.getClass());
     }
-
+    
+   
 
 
 }
