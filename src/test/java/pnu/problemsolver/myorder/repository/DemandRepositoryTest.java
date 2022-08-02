@@ -13,12 +13,16 @@ import org.springframework.transaction.annotation.Transactional;
 import pnu.problemsolver.myorder.controller.MainController;
 import pnu.problemsolver.myorder.domain.*;
 import pnu.problemsolver.myorder.domain.constant.DemandStatus;
+import pnu.problemsolver.myorder.dto.DemandSaveDTO;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
+import static java.time.LocalDateTime.of;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
@@ -126,6 +130,24 @@ class DemandRepositoryTest {
 			assertEquals(d.getStore().equals(st), true);
 			
 		}
+	}
+	
+	@Test
+	public void findByStatusAndCreatedBetweenTest() {
+		//말일 구하기..
+		Calendar cal = Calendar.getInstance();
+		cal.set(2019, 7, 1);//0이 1월임.
+		int actualMaximum = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+		LocalDateTime a = LocalDateTime.of(2022, Month.of(8), 1, 0, 0, 0);
+		LocalDateTime b = LocalDateTime.of(2022, Month.of(8), actualMaximum, 0, 0, 0);
+		
+		List<Demand> byStatusAndCreatedBetween = demandRepository.findByStatusAndCreatedBetween(DemandStatus.WAITING, a, b);
+		
+		for (Demand i : byStatusAndCreatedBetween) {
+			System.out.println("1");
+			System.out.println(i);
+		}
+		
 	}
 	
 	

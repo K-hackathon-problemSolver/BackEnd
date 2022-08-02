@@ -61,7 +61,7 @@ public class MainController {
         Path p = Paths.get("src/main/resources/static/1.jpg");
         IntStream.rangeClosed(0, storeDTOList.size() - 1).forEach((i) -> {
 //            int idx = (int) (Math.random() * storeDTOList.size());
-            IntStream.rangeClosed(0, 20).forEach(idx->{
+            IntStream.rangeClosed(0, 10).forEach(idx->{
     
                 DemandDTO demandDTO = DemandDTO.builder()
                         .filePath(p.toString())
@@ -70,7 +70,6 @@ public class MainController {
                         .storeUUID(storeDTOList.get(i).getUuid())
                         .status(DemandStatus.WAITING)
                         .build();
-//                System.out.println("실험 : " + storeDTOList.get(idx).getUuid());
                 demandService.save(demandDTO);
                 Demand byId = demandService.findById(param -> param, demandDTO.getUuid());
     
@@ -79,10 +78,14 @@ public class MainController {
                 demandDTOList.add(demandDTO);
             });
         });
+        
+        
         return demandDTOList;
         
         
     }
+    
+    
 
     public List<CustomerDTO> insertCustomer() {
 

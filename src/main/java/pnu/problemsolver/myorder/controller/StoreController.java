@@ -44,7 +44,6 @@ public class StoreController {
 	 * @throws IOException
 	 */
 	@PostMapping("/editMenu")
-	//자동으로 StoreEditDTO로 맵핑된다!
 	public String editStoreMenu(@RequestBody StoreEditDTO storeEditDTO) throws IOException {
 		if (!isFileExtensionOk(storeEditDTO.getExtension())) {
 			return "\"jpg\", \"jpeg\", \"png\", \"bmp\", \"jfif\"확장자만 가능합니다."; //pdf는 지움.
@@ -121,12 +120,14 @@ public class StoreController {
 	
 	/**
 	 * 사용자 위치기반 추천
+	 *
 	 * @param d
 	 * @return
 	 */
 	@PostMapping("/list")
 	public List<StoreListResponseDTO> list(@RequestBody StoreListRequestDTO d) {
-		System.out.println("테스트" + d);
+		log.info(d.toString());
+		
 		List<StoreListResponseDTO> byLocation = storeService.findByLocation(a -> StoreListResponseDTO.toDTO(a), d.getLocation(), d.getLimit(), d.getOffset());
 //        List<StoreDTOForList> all = storeService.findAll(a -> StoreDTOForList.toDTO(a)); //store->T로 변환 함수만 넣어주면 된다.!
 		return byLocation;
@@ -134,6 +135,7 @@ public class StoreController {
 	
 	/**
 	 * 테스트용 함수. 실제로 사용되지는 않음.
+	 *
 	 * @return
 	 */
 	@GetMapping("/list")
@@ -142,19 +144,20 @@ public class StoreController {
 		List<String> res = all.stream().map(i -> i.getName()).collect(Collectors.toList());
 		return res;
 	}
-    
-    /**
-     * 가게 하나를 보여줄 때에도 StoreEditDTO를 사용한다.
-     * @param id
-     * @return
-     */
+	
+	/**
+	 * 가게 하나를 보여줄 때에도 StoreEditDTO를 사용한다.
+	 *
+	 * @param id
+	 * @return
+	 */
 	@GetMapping("")// /store?id=~ 이런식이니까 아무것도 들어가면 안된다.
 	public StoreEditDTO oneStore(@RequestParam UUID id) {
 		//store id로 cake모두 찾기
-		List<CakeEditDTO> cakeEditDTOList = cakeService.findByStoreUUID(CakeEditDTO::toDTO,id);
+		List<CakeEditDTO> cakeEditDTOList = cakeService.findByStoreUUID(CakeEditDTO::toDTO, id);
 		//store 찾기
 		StoreEditDTO storeEditDTO = storeService.findById(i -> StoreEditDTO.toDTO(i), id);
-        //cakeList연결
+		//cakeList연결
 		storeEditDTO.setCakeList(cakeEditDTOList);//cakeList는 toDTO에서 처리 못하기 때문에 따로 설정해줘야 한다.
 		return storeEditDTO;
 	}
@@ -183,4 +186,12 @@ public class StoreController {
 	}
 	
 	//TODO : 통계만 하면 된다.
+	@PostMapping("/statistic")
+	public void statistic() {
+		//store에서 제공하는 모든 종류를 알아야한다. 이걸 알아야 보여주기 가능!
+		//status가 completed이고, 한달단위로 가져온다. sql을 여러번 보내는 것 보다 다 가져오는게 좋아보인다.. 탐색을 너무 많이하게 하면 안좋음.
+		//잘 정리해서 보여준다.
+		//
+	}
+	
 }

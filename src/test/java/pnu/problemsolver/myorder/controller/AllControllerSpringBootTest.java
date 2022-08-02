@@ -73,16 +73,14 @@ public class AllControllerSpringBootTest {
     
 
     @Test
-    public void listTest() throws Exception {
+    public void storeListTest() throws Exception {
         List<DemandDTO> demandDTOList = mainController.insertAll();
-    
         StoreListRequestDTO requestDTO = StoreListRequestDTO.builder()
                 .location(PusanLocation.DONGLAE)
                 .limit(3)//limit을 3으로 해놔서 2까지 온다.
                 .offset(0)
                 .build();
         String json = Mapper.objectMapper.writeValueAsString(requestDTO);
-        System.out.println(json);
         mvc.perform(post("/store/list")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
@@ -90,8 +88,9 @@ public class AllControllerSpringBootTest {
                 .andExpect(jsonPath("$[0].uuid").exists())
                 .andExpect(jsonPath("$[0].name").value("store1"))
                 .andExpect(jsonPath("$[0].mainImg").exists());
-                
-        
+    
+    
+        System.out.println(json);
     }
     @Test
     public void editStoreMenuTest() throws Exception {

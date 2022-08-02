@@ -9,6 +9,8 @@ import pnu.problemsolver.myorder.domain.Demand;
 import pnu.problemsolver.myorder.domain.Store;
 import pnu.problemsolver.myorder.domain.constant.DemandStatus;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,5 +18,12 @@ public interface DemandRepository extends JpaRepository<Demand, UUID> {
 	List<Demand> findByCustomerAndStatus(Customer customer, DemandStatus status, Pageable pageable);
 	List<Demand> findByStoreAndStatus(Store store, DemandStatus status, Pageable pageable);
 	
+	/**
+	 * And와 between을 어떻게 사용하는지 봐놓아라
+	 * @param a
+	 * @param b
+	 * @return
+	 */
+	List<Demand> findByStatusAndCreatedBetween(DemandStatus status, LocalDateTime a, LocalDateTime b);
 	
 }
