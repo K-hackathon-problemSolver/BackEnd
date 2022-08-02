@@ -15,16 +15,16 @@ public class EnumToUpperCaseFilter extends OncePerRequestFilter {
 	
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-		System.out.println("enum필터!");
 		String requestURI = request.getRequestURI();
-		if (requestURI.startsWith("/demand/") ) {
+		if (requestURI.startsWith("/demand/")) {
 			String s = requestURI.substring(8).toUpperCase();
 			if (isStatus(s)) {
+				System.out.println("enum필터에서 forwarding됨!");
 				request.getRequestDispatcher("/demand/" + s).forward(request, response);//소문자를 대문자로 만들어주는 필터
-				
 			}
 			
 		}
+		filterChain.doFilter(request, response);
 	}
 	
 	

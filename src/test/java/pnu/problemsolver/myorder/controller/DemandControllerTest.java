@@ -23,8 +23,10 @@ import java.util.Base64;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest
 @MockBean(JpaMetamodelMappingContext.class)//jpaAuditing때문에 해줘야함.
@@ -82,6 +84,9 @@ class DemandControllerTest {
 						.contentType(MediaType.APPLICATION_JSON))
 				.andDo(print());
 	}
+	
+	
+	
 	
 	
 	

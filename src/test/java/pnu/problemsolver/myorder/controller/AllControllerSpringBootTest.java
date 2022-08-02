@@ -194,7 +194,7 @@ public class AllControllerSpringBootTest {
     }
     
     @Test
-    public void DemandListTest() throws Exception {
+    public void customerDemandListTest() throws Exception {
         //given
         mainController.insertAll();
         List<CustomerDTO> all = customerService.findAll(CustomerDTO::toDTO);
@@ -214,29 +214,31 @@ public class AllControllerSpringBootTest {
         jwt = "Bearer " + jwt;
         
         //when, then
-        mvc.perform(post("/demand/waiting").contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post("/demand/WAITING").contentType(MediaType.APPLICATION_JSON)
                         .header("Authorization", jwt) //헤더 Authorization : Bearer {jwt}
                         .content(json))
                 .andExpect(status().isOk())
                 .andDo(print());
         
-        mvc.perform(post("/demand/completed").contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post("/demand/COMPLETED").contentType(MediaType.APPLICATION_JSON)
                         .header("Authorization", jwt)
                         .content(json))
                 .andExpect(status().isOk())
                 .andDo(print());
         
-        mvc.perform(post("/demand/accepted").contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post("/demand/ACCEPTED").contentType(MediaType.APPLICATION_JSON)
                         .header("Authorization", jwt)
                         .content(json))
                 .andExpect(status().isOk())
                 .andDo(print());
         
-        mvc.perform(post("/demand/completed").contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post("/demand/REJECTED").contentType(MediaType.APPLICATION_JSON)
                         .header("Authorization", jwt)
                         .content(json))
                 .andExpect(status().isOk())
                 .andDo(print());
         
     }
+    
+   
 }

@@ -68,13 +68,14 @@ public class WebMvcConfig implements WebMvcConfigurer {//converter등록을 위�
         return registrationBean;
     }
     
-    @Bean
-    public FilterRegistrationBean<EnumToUpperCaseFilter> enumToUpperCaseFilter() {
-        FilterRegistrationBean<EnumToUpperCaseFilter> registrationBean = new FilterRegistrationBean<>();
-        registrationBean.setFilter(new EnumToUpperCaseFilter());
-//        registrationBean.addUrlPatterns("/*"); //디폴트값
-        registrationBean.setOrder(3);
-        registrationBean.setName("EmumToUpperCaseFileter : enum사용을 위해 대문자로 변경");
-        return registrationBean;
-    }
+    //TODO : 시간남으면 enum 소문자로 써도 되게 하기
+//    @Bean
+//    public FilterRegistrationBean<EnumToUpperCaseFilter> enumToUpperCaseFilter() {
+//        FilterRegistrationBean<EnumToUpperCaseFilter> registrationBean = new FilterRegistrationBean<>();
+//        registrationBean.setFilter(new EnumToUpperCaseFilter());
+////        registrationBean.addUrlPatterns("/*"); //디폴트값
+//        registrationBean.setOrder(3);
+//        registrationBean.setName("EmumToUpperCaseFileter : enum사용을 위해 대문자로 변경");
+//        return registrationBean;
+//    }
 }
