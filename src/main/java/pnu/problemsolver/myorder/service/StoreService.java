@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pnu.problemsolver.myorder.domain.Store;
 import pnu.problemsolver.myorder.domain.constant.PusanLocation;
+import pnu.problemsolver.myorder.domain.constant.SNSType;
 import pnu.problemsolver.myorder.dto.StoreDTO;
 import pnu.problemsolver.myorder.dto.StoreListResponseDTO;
 import pnu.problemsolver.myorder.dto.StoreEditDTO;
@@ -24,8 +25,6 @@ import java.util.function.Function;
 @Slf4j
 public class StoreService {
     private final StoreRepository storeRepository;
-//    private final ModelMapper mapper;
-
     /**
      * findById()를 오버로딩. 필요에 따라 2개 필요할 것 같아서! 그리고 다른 함수를 사용해서 작성하는게 수정에 유리.
      *
@@ -95,14 +94,17 @@ public class StoreService {
         }
         return resList;
     }
-    public StoreDTO findBySnsTypeAndSnsIdentifyKey(StoreDTO storeDTO) {
-        List<Store> resList = storeRepository.findBySnsTypeAndSnsIdentifyKey(storeDTO.getSnsType(), storeDTO.getSnsIdentifyKey());
+    
+    public <T> T findBySnsTypeAndSnsIdentifyKey(Function<Store, T> func, SNSType snsType, String snsIdKey) {
+    
+        List<Store> resList = storeRepository.findBySnsTypeAndSnsIdentifyKey(snsType, snsIdKey);
+        
         if (resList.size() == 1) {
-            return StoreDTO.toDTO(resList.get(0));
+            return func.apply(resList.get(0));
         } else if (resList.isEmpty()) {
             return null;
         }
-
+        
         throw new RuntimeException("snsType and snsIdentifyKey 중복!");
     }
 
@@ -117,7 +119,8 @@ public class StoreService {
     }
     
     public <T> List<T> findByLocation(Function<Store, T> function, PusanLocation loc, int limit, int offset) {//내위치,limit, offset,
-        log.error(loc.toString());
+        log.error(String.valueOf(loc.latitude));
+        log.error(String.valueOf(loc.longitude));
         log.error(String.valueOf(limit));
         log.error(String.valueOf(offset));
         List<Store> li = storeRepository.findByLocation(loc.latitude, loc.longitude, limit, offset);

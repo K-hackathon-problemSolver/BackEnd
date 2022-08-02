@@ -34,7 +34,7 @@ public class StoreController {
 	
 	@PostMapping("/save")
 	public StoreDTO saveStore(@RequestBody StoreDTO storeDTO) {
-		storeService.save(storeDTO); //없으면 저장하고 있다면 null아닌 것만 자동으로 덮어써진다.!
+		storeService.save(storeDTO); //기존의 값을 다 포함해서 넣어야 한다.
 		return storeDTO;
 	}
 	
@@ -136,8 +136,6 @@ public class StoreController {
 	
 	/**
 	 * 테스트용 함수. 실제로 사용되지는 않음.
-	 *
-	 * @return
 	 */
 	@GetMapping("/list")
 	public List<String> list() {
@@ -156,7 +154,7 @@ public class StoreController {
 	public StoreEditDTO oneStore(@RequestParam UUID id) {
 		//store id로 cake모두 찾기
 		List<CakeEditDTO> cakeEditDTOList = cakeService.findByStoreUUID(CakeEditDTO::toDTO, id);
-		//store 찾기
+		//store 찾기.
 		StoreEditDTO storeEditDTO = storeService.findById(i -> StoreEditDTO.toDTO(i), id);
 		//cakeList연결
 		storeEditDTO.setCakeList(cakeEditDTOList);//cakeList는 toDTO에서 처리 못하기 때문에 따로 설정해줘야 한다.

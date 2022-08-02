@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import pnu.problemsolver.myorder.domain.Store;
 import pnu.problemsolver.myorder.domain.constant.Gender;
 import pnu.problemsolver.myorder.domain.constant.MemberType;
 import pnu.problemsolver.myorder.domain.constant.SNSType;
@@ -23,5 +24,7 @@ public class GeneralOAuthDTO { //없는 것은 안보내도 된다.
     String birthday;
     int birthyear;
     int age;
+    
+    
 
 }

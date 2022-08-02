@@ -37,8 +37,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -87,7 +86,8 @@ public class AllControllerSpringBootTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].uuid").exists())
                 .andExpect(jsonPath("$[0].name").value("store1"))
-                .andExpect(jsonPath("$[0].mainImg").exists());
+                .andExpect(jsonPath("$[0].mainImg").exists())
+                .andDo(print());
     
     
         System.out.println(json);
@@ -183,6 +183,10 @@ public class AllControllerSpringBootTest {
         mvc.perform(get("/store").param("id", storeDTO.getUuid().toString()))
                 .andExpect(jsonPath("$.mainImg").exists())
                 .andExpect(jsonPath("$.cakeList[0].img").exists())
+                .andExpect(jsonPath("$.cakeList[0].uuid").exists())
+                .andExpect(jsonPath("$.extension").exists())
+                .andExpect(jsonPath("$.name").exists())
+                .andExpect(jsonPath("$.description").exists())
                 .andDo(print());
         
     }
@@ -293,11 +297,12 @@ public class AllControllerSpringBootTest {
 		
 		String json = Mapper.objectMapper.writeValueAsString(demandSaveDTO);
 		System.out.println(json);
-		
-		mvc.perform(post("/demand/save")
-						.content(json)
-						.contentType(MediaType.APPLICATION_JSON))
-				.andDo(print());
+        
+        mvc.perform(post("/demand/save")
+                        .content(json)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().string("success"))
+                .andDo(print());
 	}
- 
 }

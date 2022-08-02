@@ -90,7 +90,6 @@ public class DemandController {
 	
 	@PostMapping("/change-status")//필요한 정보
 	public DemandDTO changeStatus(@RequestBody ChangeStatusRequestDTO dto) {
-		System.out.println("changeStatus()");
 		demandService.changeStatus(dto);
 		DemandDTO demandDTO = demandService.findById(i -> DemandDTO.toDTO(i), dto.getDemandId());
 		return demandDTO;

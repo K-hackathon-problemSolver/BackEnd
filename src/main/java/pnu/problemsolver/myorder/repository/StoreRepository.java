@@ -19,7 +19,7 @@ public interface StoreRepository extends JpaRepository<Store, UUID> {//extends J
     
     
     //페이징 필요
-    @Query(nativeQuery = true, value = "select * from store order by (latitude-:lati) + (longitude-:longi) limit :limit offset :offset")
+    @Query(nativeQuery = true, value = "select * from store order by (latitude- :lati) + (longitude- :longi ) limit :limit offset :offset")
     List<Store> findByLocation(@Param("lati") double lati, @Param("longi")double longi, @Param("limit")int limit, @Param("offset")int offset);
     
     
