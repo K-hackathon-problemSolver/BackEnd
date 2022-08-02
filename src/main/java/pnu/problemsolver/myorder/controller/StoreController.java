@@ -119,14 +119,23 @@ public class StoreController {
 //        return li;
 //    }
 	
+	/**
+	 * 사용자 위치기반 추천
+	 * @param d
+	 * @return
+	 */
 	@PostMapping("/list")
-	public List<StoreListResponseDTO> list(StoreListRequestDTO d) {
-		//TODO : 위치기반 보여주기
+	public List<StoreListResponseDTO> list(@RequestBody StoreListRequestDTO d) {
+		System.out.println("테스트" + d);
 		List<StoreListResponseDTO> byLocation = storeService.findByLocation(a -> StoreListResponseDTO.toDTO(a), d.getLocation(), d.getLimit(), d.getOffset());
 //        List<StoreDTOForList> all = storeService.findAll(a -> StoreDTOForList.toDTO(a)); //store->T로 변환 함수만 넣어주면 된다.!
 		return byLocation;
 	}
 	
+	/**
+	 * 테스트용 함수. 실제로 사용되지는 않음.
+	 * @return
+	 */
 	@GetMapping("/list")
 	public List<String> list() {
 		List<StoreListResponseDTO> all = storeService.findAll(a -> StoreListResponseDTO.toDTO(a)); //store->T로 변환 함수만 넣어주면 된다.!
@@ -172,4 +181,6 @@ public class StoreController {
 	public String makeCakePath(String storeDirPath, CakeEditDTO cakeEditDTO) {
 		return storeDirPath + File.separator + cakeEditDTO.getName() + "." + cakeEditDTO.getExtension();
 	}
+	
+	//TODO : 통계만 하면 된다.
 }

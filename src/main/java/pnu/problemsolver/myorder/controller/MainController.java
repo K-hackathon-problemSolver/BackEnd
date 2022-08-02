@@ -74,7 +74,7 @@ public class MainController {
                 demandService.save(demandDTO);
                 Demand byId = demandService.findById(param -> param, demandDTO.getUuid());
     
-                //TODO : 동작안함..
+                //TODO : 동작안함..왜일까..영속성 때문인 것 같긴 하다.
 //                byId.setCreated(byId.getCreated().minusHours(1));
                 demandDTOList.add(demandDTO);
             });

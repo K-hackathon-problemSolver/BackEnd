@@ -1,5 +1,6 @@
 package pnu.problemsolver.myorder.controller;
 
+import org.jboss.jandex.Main;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import pnu.problemsolver.myorder.domain.Customer;
 import pnu.problemsolver.myorder.domain.Demand;
+import pnu.problemsolver.myorder.domain.Store;
 import pnu.problemsolver.myorder.domain.constant.MemberType;
+import pnu.problemsolver.myorder.domain.constant.PusanLocation;
 import pnu.problemsolver.myorder.dto.*;
 import pnu.problemsolver.myorder.security.JwtTokenProvider;
 import pnu.problemsolver.myorder.service.CakeService;
@@ -65,16 +68,29 @@ public class AllControllerSpringBootTest {
     
     @Autowired
     JwtTokenProvider jwtTokenProvider;
+    
 
-//    @Test
-//    public void listTest() throws Exception {
-//        mvc.perform(get("/"));
-//        mvc.perform(get("/store/list"))
-//                .andExpect(status().isOk())
-//                .andDo(print());
-//    }
+    @Test
+    public void listTest() throws Exception {
+        List<DemandDTO> demandDTOList = mainController.insertAll();
     
-    
+        StoreListRequestDTO requestDTO = StoreListRequestDTO.builder()
+                .location(PusanLocation.DONGLAE)
+                .limit(3)//limit을 3으로 해놔서 2까지 온다.
+                .offset(0)
+                .build();
+        String json = Mapper.objectMapper.writeValueAsString(requestDTO);
+        System.out.println(json);
+        mvc.perform(post("/store/list")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].uuid").exists())
+                .andExpect(jsonPath("$[0].name").value("store1"))
+                .andExpect(jsonPath("$[0].mainImg").exists());
+                
+        
+    }
     @Test
     public void editStoreMenuTest() throws Exception {
         
