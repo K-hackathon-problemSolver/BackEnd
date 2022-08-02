@@ -126,6 +126,7 @@ public class StoreController {
 	 */
 	@PostMapping("/list")
 	public List<StoreListResponseDTO> list(@RequestBody StoreListRequestDTO d) {
+		log.info("/store/list!");
 		log.info(d.toString());
 		
 		List<StoreListResponseDTO> byLocation = storeService.findByLocation(a -> StoreListResponseDTO.toDTO(a), d.getLocation(), d.getLimit(), d.getOffset());
