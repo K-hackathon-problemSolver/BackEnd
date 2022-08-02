@@ -10,7 +10,6 @@ import java.util.UUID;
 @AllArgsConstructor
 public class DemandListResponseDTO {
 	private UUID uuid;
-    
 //    private Customer customer;
     
     private String cakeName;

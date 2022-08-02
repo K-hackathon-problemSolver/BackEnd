@@ -74,9 +74,8 @@ public class MainController {
                 demandService.save(demandDTO);
                 Demand byId = demandService.findById(param -> param, demandDTO.getUuid());
     
-                byId.setCreated(byId.getCreated().minusHours(1));
-    
-    
+                //TODO : 동작안함..
+//                byId.setCreated(byId.getCreated().minusHours(1));
                 demandDTOList.add(demandDTO);
             });
         });

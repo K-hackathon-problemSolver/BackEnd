@@ -10,16 +10,12 @@ import org.springframework.web.bind.annotation.*;
 import pnu.problemsolver.myorder.domain.Demand;
 import pnu.problemsolver.myorder.domain.constant.DemandStatus;
 import pnu.problemsolver.myorder.domain.constant.MemberType;
-import pnu.problemsolver.myorder.dto.DemandDetailResponseDTO;
-import pnu.problemsolver.myorder.dto.DemandListResponseDTO;
-import pnu.problemsolver.myorder.dto.DemandListRequestDTO;
-import pnu.problemsolver.myorder.dto.DemandSaveDTO;
+import pnu.problemsolver.myorder.dto.*;
 import pnu.problemsolver.myorder.service.DemandService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Member;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -79,7 +75,7 @@ public class DemandController {
 		if (memberType == MemberType.CUSTOMER) {
 			resList = demandService.findByCustomer(i -> DemandListResponseDTO.toDTO(i), dto.getUuid(), status, pageRequest);
 		} else if (memberType == MemberType.STORE) {
-			resList = demandService.findByStore(i -> DemandListResponseDTO.toDTO(i), dto.getUuid(), status, pageRequest);
+			resList = demandService.findByStoreIdAndDemandStatusPageable(i -> DemandListResponseDTO.toDTO(i), dto.getUuid(), status, pageRequest);
 
 		} else {
 			log.error("GUEST can't access to /demand/{status}");
@@ -93,11 +89,14 @@ public class DemandController {
 	public DemandDetailResponseDTO detailed(@RequestBody UUID demandId) {
 		return demandService.findById(i -> DemandDetailResponseDTO.toDTO(i), demandId);
 	}
-	@PostMapping("/change-status")
-	public String changeStatus(@RequestParam("status") DemandStatus status) {
+	
+	@PostMapping("/change-status")//필요한 정보
+	public DemandDTO changeStatus(@RequestBody ChangeStatusRequestDTO dto) {
 		System.out.println("changeStatus()");
-		System.out.println(status);
-		return "success";
-		
+		demandService.changeStatus(dto);
+		DemandDTO demandDTO = demandService.findById(i -> DemandDTO.toDTO(i), dto.getDemandId());
+		return demandDTO;
 	}
+	
+	
 }

@@ -13,7 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChangeStatusRequestDTO {
-	UUID storeUUID;
-	UUID demandUUID;
-	DemandStatus changeStatusTO;
+//	UUID storeId; //TODO : 사실 필요는 없는데 검사하고 바꾸는게 맞지 않을까?...
+	UUID demandId;
+	DemandStatus changeStatusTo;
 }

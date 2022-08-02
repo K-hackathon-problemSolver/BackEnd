@@ -92,10 +92,9 @@ public class Demand extends BaseTimeEntitiy {
         return demand;
     }
     
-    public void setCreated(LocalDateTime ldt) {
-        created = ldt;
-        
-    }
+//    public void setCreated(LocalDateTime ldt) {
+//        created = ldt;
+//    }
 
     
     //저장까지 여기서 하면 안된다. 너무 많은 기능을 함. 하나의 함수 = 하나의 기능.
@@ -116,6 +115,41 @@ public class Demand extends BaseTimeEntitiy {
         
     }
     
+    
+    /**
+     * 이렇게 용도에 따라 함수를 다르게 사용하는게 복잡성을 줄일 수 있다.
+     * changeStatus(DemandStatus status) 이런 함수를 만들면 어디서 사용될지 모르고 잘못된 동작 유발 가능
+     *
+     * @return
+     */
+    public boolean changeToAccepted() {
+        if (status == DemandStatus.WAITING) {
+            status = DemandStatus.ACCEPTED;
+            return true;
+        }
+        return false;
+    }
+    
+    public boolean changeToRejected() {
+        
+        if (status == DemandStatus.WAITING) {
+            status = DemandStatus.REJECTED;
+            return true;
+        }
+        return false;
+    }
+    
+    public boolean changeToCompleted() {
+        
+        if (status == DemandStatus.ACCEPTED) {
+            status = DemandStatus.COMPLETED;
+            return true;
+        }
+        return false;
+    }
+    
+    
+
     
     
 }

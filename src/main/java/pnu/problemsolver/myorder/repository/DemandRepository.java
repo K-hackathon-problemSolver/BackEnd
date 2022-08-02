@@ -14,8 +14,7 @@ import java.util.UUID;
 
 public interface DemandRepository extends JpaRepository<Demand, UUID> {
 	List<Demand> findByCustomerAndStatus(Customer customer, DemandStatus status, Pageable pageable);
-	
-	
-	
 	List<Demand> findByStoreAndStatus(Store store, DemandStatus status, Pageable pageable);
+	
+	
 }
