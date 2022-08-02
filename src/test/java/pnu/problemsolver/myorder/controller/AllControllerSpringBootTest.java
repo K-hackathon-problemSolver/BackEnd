@@ -25,10 +25,12 @@ import pnu.problemsolver.myorder.service.StoreService;
 import pnu.problemsolver.myorder.util.Mapper;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -256,5 +258,47 @@ public class AllControllerSpringBootTest {
         
     }
     
-   
+    
+	@Test
+	@Commit
+	public void saveDemandTest() throws Exception {
+        List<CustomerDTO> customerDTOS = mainController.insertCustomer();
+        List<StoreDTO> storeDTOS = mainController.insertStore();
+        List<CakeDTO> cakeDTOS = mainController.insertCake(storeDTOS);
+        mainController.insertDemand(cakeDTOS, customerDTOS, storeDTOS);
+        
+        File file = new File("src/main/resources/static/testPicture.jpg");
+		assertEquals(file.exists(), true);
+		byte[] bytes;
+		try {
+			bytes = Base64.getEncoder().encode(Files.readAllBytes(file.toPath()));
+			
+		} catch (IOException e) {
+			throw new RuntimeException("Files.readAllBytes Exception!!");
+		}
+        UUID cakeUUID = cakeDTOS.get(0).getUuid();
+        UUID customerUUID = customerDTOS.get(0).getUuid();
+        UUID storeUUID = storeDTOS.get(0).getUuid();
+        
+        assertEquals(cakeUUID!=null, true);
+        assertEquals(customerUUID!=null, true);
+        assertEquals(storeUUID!=null, true);
+		DemandSaveDTO demandSaveDTO = DemandSaveDTO.builder()
+				.cakeUUID(cakeUUID)
+				.customerUUID(customerUUID)
+				.storeUUID(storeUUID)
+				.file(bytes)
+				.extension("jpg")
+				.price(1000)
+				.build();
+		
+		String json = Mapper.objectMapper.writeValueAsString(demandSaveDTO);
+		System.out.println(json);
+		
+		mvc.perform(post("/demand/save")
+						.content(json)
+						.contentType(MediaType.APPLICATION_JSON))
+				.andDo(print());
+	}
+ 
 }

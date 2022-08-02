@@ -27,7 +27,7 @@ class StoreRepositoryTest {
     public StoreRepository storeRepository;
 
 
-    @BeforeEach//static이어야한다.
+    @BeforeEach
     public void testinsertDummies(){
         IntStream.rangeClosed(1, 20).forEach(i->{
             Store store = Store.builder()
@@ -57,23 +57,7 @@ class StoreRepositoryTest {
         assertEquals(storeRepository.save(store).getEmail(), "id5");//저장한 엔티티를 반환한다.
     }
 
-    @Test
-    public void findById테스트() {//key로 찾는다.
-//        Optional<Store> store = storeRepository.findById("id5");
-//        store.ifPresent(st -> {
-//            assertEquals(st.getEmail(), "id5");
-//        });
-    }
 
-    @Test
-    public void delete테스트() {//key로 찾는다.
-//        String id = "id5";
-//        storeRepository.deleteById(id);
-//
-//        Optional<Store> res = storeRepository.findById(id);
-//        assertEquals(res.isPresent(), false);
-
-    }
 
     @Test
     public void 페이징테스트() {
@@ -93,11 +77,11 @@ class StoreRepositoryTest {
         for(Store i : list){
             uuidList.add(i.getUuid());
         }
-
         List<Store> resList = storeRepository.findAllInUUIDList(uuidList);
-        System.out.println(resList);
-        System.out.println(resList.size());
-
+        assertEquals(resList.size(), uuidList.size());
+        for (Store i : resList) {
+            assertEquals(i == null, false);
+        }
     }
     
     @Test

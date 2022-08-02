@@ -15,11 +15,13 @@ import pnu.problemsolver.myorder.dto.ChangeStatusRequestDTO;
 import pnu.problemsolver.myorder.dto.DemandDTO;
 import pnu.problemsolver.myorder.repository.DemandRepository;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -126,5 +128,20 @@ public class DemandService {
 			throw new IllegalArgumentException("ENUM에 정의되어 있지 않음.");
 		}
 	}
+	public <T> List<T> findAll(Function<Demand, T> func) {
+        List<Demand> all = demandRepository.findAll();
+        return all.stream().map(i -> func.apply(i)).collect(Collectors.toList());
+        
+    }
+    
+    public void setFilePath(UUID uuid, Path imgPath) {
+        Optional<Demand> byId = demandRepository.findById(uuid);
+        if (!byId.isPresent()) {
+            throw new NullPointerException("findById() not found!!");
+        }
+        Demand demand = byId.get();
+        demand.setFilePath(imgPath);
+        
+    }
 	
 }

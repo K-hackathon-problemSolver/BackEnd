@@ -13,11 +13,13 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 public class DemandSaveDTO {
-	private UUID uuid;
+//	private UUID uuid;
 	
 	private UUID customerUUID;
 	
 	private UUID cakeUUID;
+	
+	private UUID storeUUID;
 	
 //	private DemandStatus status;
 	

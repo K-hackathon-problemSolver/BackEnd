@@ -35,7 +35,6 @@ public class DemandDTO {
     
     public static DemandDTO toDTO(DemandSaveDTO d, Path filePath) {
         DemandDTO demandDTO = DemandDTO.builder()
-                .uuid(d.getUuid())
                 .customerUUID(d.getCustomerUUID())
                 .cakeUUID(d.getCakeUUID())
                 .option(d.getOption())

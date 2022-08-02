@@ -52,37 +52,6 @@ class DemandControllerTest {
 	CakeService cakeService;
 	
 	
-	@Test
-	public void saveDemandTest() throws Exception {
-		File file = new File("src/main/resources/static/testPicture.jpg");
-		assertEquals(file.exists(), true);
-		byte[] bytes;
-		try {
-			bytes = Base64.getEncoder().encode(Files.readAllBytes(file.toPath()));
-			
-		} catch (IOException e) {
-			throw new RuntimeException("Files.readAllBytes Exception!!");
-		}
-		UUID cakeUUID = UUID.randomUUID();
-		UUID customerUUID = UUID.randomUUID();
-		UUID demandUUID = UUID.randomUUID();
-		
-		DemandSaveDTO demandSaveDTO = DemandSaveDTO.builder()
-				.uuid(demandUUID)
-				.cakeUUID(cakeUUID)
-				.customerUUID(customerUUID)
-				.file(bytes)
-				.extension("jpg")
-				.price(1000)
-				.build();
-		
-		String json = Mapper.objectMapper.writeValueAsString(demandSaveDTO);
-		System.out.println(json);
-		
-		mvc.perform(post("/demand/save")
-						.content(json)
-						.contentType(MediaType.APPLICATION_JSON))
-				.andDo(print());
-	}
+	
 	
 }

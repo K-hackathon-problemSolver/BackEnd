@@ -42,14 +42,15 @@ public class DemandController {
 	
 	@PostMapping("/save")
 	public String saveDemand(@RequestBody DemandSaveDTO d) {
+		//DB에 저장. 먼저 저장해야 demand의 uuid를 알 수 있다.
+		UUID uuid = demandService.saveWithFunction(i -> Demand.toEntity(i, null), d);
 		//사진저장
 		byte[] bytes = Base64.getDecoder().decode(d.getFile());
-		
 		File dir = new File(demandUploadPath + File.separator + d.getCustomerUUID().toString());
 		if (!dir.exists()) {//존재하지 않으면 생성.
 			dir.mkdirs();
 		}
-		Path imgPath = Paths.get(dir.toPath() + File.separator + d.getUuid().toString() + "." + d.getExtension());
+		Path imgPath = Paths.get(dir.toPath() + File.separator + uuid.toString() + "." + d.getExtension());
 		try {
 			Files.write(imgPath, bytes);
 			
@@ -57,11 +58,8 @@ public class DemandController {
 			log.error("img write error!");
 			e.printStackTrace();
 		}
-		
-		//DB에 저장. uuid를 반환하지만 사실 필요없다.
-		demandService.saveWithFunction(i -> Demand.toEntity(i, imgPath), d);
+		demandService.setFilePath(uuid, imgPath);//저장해야 알 수 있기 때문에 sql두번 날리는 것은 어쩔 수 없다.
 		return "success";
-		
 	}
 	
 	@PostMapping("/{status}")
@@ -71,12 +69,12 @@ public class DemandController {
 		
 		String sortStr = dto.getSort();
 		PageRequest pageRequest = PageRequest.of(dto.getPage(), dto.getSize(), Sort.by(sortStr == null ? "created" : sortStr).descending());//기본값은 최신순!
-
+		
 		if (memberType == MemberType.CUSTOMER) {
 			resList = demandService.findByCustomer(i -> DemandListResponseDTO.toDTO(i), dto.getUuid(), status, pageRequest);
 		} else if (memberType == MemberType.STORE) {
 			resList = demandService.findByStoreIdAndDemandStatusPageable(i -> DemandListResponseDTO.toDTO(i), dto.getUuid(), status, pageRequest);
-
+			
 		} else {
 			log.error("GUEST can't access to /demand/{status}");
 		}

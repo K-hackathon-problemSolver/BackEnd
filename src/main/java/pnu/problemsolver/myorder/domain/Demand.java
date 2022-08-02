@@ -102,19 +102,25 @@ public class Demand extends BaseTimeEntitiy {
         
         UUID customerUUID = d.getCustomerUUID();
         UUID cakeUUID = d.getCakeUUID();
-        
+        UUID storeUUID = d.getStoreUUID();
+    
+    
         Demand demand = Demand.builder()
-                .uuid(d.getUuid())
                 .customer(customerUUID == null ? null : Customer.builder().uuid(customerUUID).build())
                 .cake(cakeUUID == null ? null : Cake.builder().uuid(cakeUUID).build())
+                .store(storeUUID == null ? null : Store.builder().uuid(storeUUID).build())
                 .option(d.getOption())
                 .price(d.getPrice())
-                .filePath(filePath.toString())
+                .status(DemandStatus.WAITING)//처음에는 waiting이다.
+                .filePath(filePath == null ? null : filePath.toString())
                 .build();
+        
         return demand;
         
     }
-    
+    public void setFilePath(Path path) {
+        filePath = path.toString();
+    }
     
     /**
      * 이렇게 용도에 따라 함수를 다르게 사용하는게 복잡성을 줄일 수 있다.
