@@ -7,10 +7,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 import pnu.problemsolver.myorder.domain.Store;
-import pnu.problemsolver.myorder.service.StoreService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,6 +101,8 @@ class StoreRepositoryTest {
         assertEquals(res.get(0).getLatitude(), 0);
         assertEquals(res.get(0).getLongitude(), 0);
     }
+    
+    
 
 
 }

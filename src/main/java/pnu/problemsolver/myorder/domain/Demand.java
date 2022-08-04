@@ -65,12 +65,7 @@ public class Demand extends BaseTimeEntitiy {
 //        this.customer = customer;
 //    }
     
-    public void acceptDemand() {
-        if (status == DemandStatus.WAITING) {
-            status = DemandStatus.ACCEPTED;
-        }
-        
-    }
+   
     
     public static Demand toEntity(DemandDTO dto) {
         UUID storeUUID = dto.getStoreUUID();
@@ -129,7 +124,6 @@ public class Demand extends BaseTimeEntitiy {
      */
     public boolean changeToAccepted() {
         if (status == DemandStatus.WAITING) {
-            System.out.println("테스트 : changeToAccepted! ");
             status = DemandStatus.ACCEPTED;
             return true;
         }

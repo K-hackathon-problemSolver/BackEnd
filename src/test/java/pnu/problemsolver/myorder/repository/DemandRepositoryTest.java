@@ -7,14 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.test.annotation.Commit;
-import org.springframework.transaction.annotation.Transactional;
 import pnu.problemsolver.myorder.domain.Cake;
 import pnu.problemsolver.myorder.domain.Customer;
 import pnu.problemsolver.myorder.domain.Demand;
 import pnu.problemsolver.myorder.domain.Store;
 import pnu.problemsolver.myorder.domain.constant.DemandStatus;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Calendar;
@@ -51,7 +50,6 @@ class DemandRepositoryTest {
 	
 	@Test
 	public void setterTest() {
-		
 		List<Cake> all = cakeRepositroy.findAll();
 		Cake cake = all.get(0);
 		List<Store> all1 = storeRepository.findAll();
@@ -82,7 +80,7 @@ class DemandRepositoryTest {
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);
 		}
-		demand.acceptDemand();//주문수락.
+		demand.changeToAccepted();//주문수락.
 //		assertEquals(demand.getCreated().equals(demand.getModified()), false);//트랜잭션이 안일어나서 그런듯.
 //		demandRepository.save(demand); //저장하지 않고 set만 호출해도 된다. set만 호출해야 update됨.
 		Optional<Demand> d = demandRepository.findById(demand.getUuid());
@@ -146,6 +144,11 @@ class DemandRepositoryTest {
 		}
 		
 	}
+	
+	@Test
+	    public void setTest() {
+	    
+	    }
 	
 	
 }

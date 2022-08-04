@@ -5,13 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.transaction.annotation.Transactional;
 import pnu.problemsolver.myorder.domain.Demand;
 import pnu.problemsolver.myorder.domain.Store;
 import pnu.problemsolver.myorder.domain.constant.DemandStatus;
 import pnu.problemsolver.myorder.dto.ChangeStatusRequestDTO;
 import pnu.problemsolver.myorder.repository.TestRepository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -54,7 +54,7 @@ public class AllServiceSpringBootTest {
 				.build();
 		
 		//when
-		demandService.changeStatus(dto);
+		demandService.changeStatus(dto);//영속성 컨텍스트에서만 바뀐다. Commit을 하지 않아서 SQL은 실행안됨.
 		Demand byId = demandService.findById(i -> i, demand.getUuid());//select문이 실행안됨.
 		System.out.println(demand);
 		
@@ -62,7 +62,5 @@ public class AllServiceSpringBootTest {
 		assertEquals(demand == byId, true);//영속성에서 가져오기 때문에 둘은 주소도 같다.
 		assertEquals("a", "a");//주소가 아니라 실제 값을 비교함.
 		assertEquals(byId.getStatus(), DemandStatus.ACCEPTED);
-		
-		
 	}
 }
