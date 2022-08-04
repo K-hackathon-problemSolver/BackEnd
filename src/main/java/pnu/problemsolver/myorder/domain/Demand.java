@@ -9,7 +9,6 @@ import pnu.problemsolver.myorder.dto.DemandSaveDTO;
 
 import javax.persistence.*;
 import java.nio.file.Path;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @ToString(callSuper = true)
@@ -130,6 +129,7 @@ public class Demand extends BaseTimeEntitiy {
      */
     public boolean changeToAccepted() {
         if (status == DemandStatus.WAITING) {
+            System.out.println("테스트 : changeToAccepted! ");
             status = DemandStatus.ACCEPTED;
             return true;
         }

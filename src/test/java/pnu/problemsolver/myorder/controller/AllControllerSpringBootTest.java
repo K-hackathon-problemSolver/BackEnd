@@ -7,9 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.Commit;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
 import pnu.problemsolver.myorder.domain.Cake;
 import pnu.problemsolver.myorder.domain.Customer;
 import pnu.problemsolver.myorder.domain.Demand;
@@ -19,9 +17,13 @@ import pnu.problemsolver.myorder.domain.constant.PusanLocation;
 import pnu.problemsolver.myorder.dto.*;
 import pnu.problemsolver.myorder.repository.TestRepository;
 import pnu.problemsolver.myorder.security.JwtTokenProvider;
-import pnu.problemsolver.myorder.service.*;
+import pnu.problemsolver.myorder.service.CakeService;
+import pnu.problemsolver.myorder.service.CustomerService;
+import pnu.problemsolver.myorder.service.DemandService;
+import pnu.problemsolver.myorder.service.StoreService;
 import pnu.problemsolver.myorder.util.Mapper;
 
+import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -39,7 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Transactional
+@Transactional//테스트별로 독립적이기 위해서는 이게 필수임.
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class AllControllerSpringBootTest {
 
@@ -85,7 +87,7 @@ public class AllControllerSpringBootTest {
                         .content(json))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].uuid").exists())
-                .andExpect(jsonPath("$[0].name").value("store1"))
+                .andExpect(jsonPath("$[0].name").exists())
                 .andExpect(jsonPath("$[0].mainImg").exists())
                 .andDo(print());
     
@@ -192,13 +194,14 @@ public class AllControllerSpringBootTest {
     }
     
     @Test
-    @Commit//commit하지 않으면 uuid를 받지 못한다.
+//    @Commit//commit하지 않으면 uuid를 받지 못한다.
     public void demandDetailedTest() {
         //given
         List<Demand> demandList = testRepository.insertAll();
         UUID uuid = demandList.get(0).getUuid();
     
         //when
+        System.out.println("테스트 : "+uuid);
         Demand demand = demandService.findById(i -> i, uuid);
         System.out.println("테스트 : "+demand);
         DemandDetailResponseDTO res = DemandDetailResponseDTO.toDTO(demand);
@@ -254,7 +257,6 @@ public class AllControllerSpringBootTest {
     
     
 	@Test
-	@Commit
 	public void saveDemandTest() throws Exception {
         List<Customer> customers = testRepository.insertCustomer();
         List<Store> stores = testRepository.insertStore();

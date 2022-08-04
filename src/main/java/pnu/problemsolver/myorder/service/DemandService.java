@@ -2,9 +2,7 @@ package pnu.problemsolver.myorder.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pnu.problemsolver.myorder.domain.Customer;
@@ -76,21 +74,21 @@ public class DemandService {
 	}
 	
 	//pageable만 기본값으로 제공.
-	public <T> List<T> findByStoreIdAndDemandStatus(Function<Demand, T> func, UUID uuid, DemandStatus status, int page) {
-		Store s = Store.builder()//service에선 엔티티를 생서해서 다룰 수 있다. 그래서 편하고 좋다.
-				.uuid(uuid)
-				.build();
-		
-		PageRequest pageable = PageRequest.of(page, 5, Sort.by("created"));
-		
-		List<Demand> byCustomer = demandRepository.findByStoreAndStatus(s, status, pageable);
-		
-		List<T> resList = new ArrayList<>();
-		for (Demand i : byCustomer) {
-			resList.add(func.apply(i));
-		}
-		return resList;
-	}
+//	public <T> List<T> findByStoreIdAndDemandStatus(Function<Demand, T> func, UUID uuid, DemandStatus status, int page) {
+//		Store s = Store.builder()//service에선 엔티티를 생서해서 다룰 수 있다. 그래서 편하고 좋다.
+//				.uuid(uuid)
+//				.build();
+//
+//		PageRequest pageable = PageRequest.of(page, 5, Sort.by("created"));
+//
+//		List<Demand> byCustomer = demandRepository.findByStoreAndStatus(s, status, pageable);
+//
+//		List<T> resList = new ArrayList<>();
+//		for (Demand i : byCustomer) {
+//			resList.add(func.apply(i));
+//		}
+//		return resList;
+//	}
 	
 	/**
 	 * @param func demand->want type converter넣어주면 된다.
@@ -109,7 +107,7 @@ public class DemandService {
 	
 	public void changeStatus(ChangeStatusRequestDTO dto) {
 		UUID demandId = dto.getDemandId();
-		Optional<Demand> demandOpt = demandRepository.findById(demandId);
+		Optional<Demand> demandOpt = demandRepository.findById(demandId);//select 호출안됨. 영속성 컨텍스트에 있기 때문이다.
 		if (!demandOpt.isPresent()) {
 			throw new NullPointerException("demandRepository.findById() not found!");
 		}

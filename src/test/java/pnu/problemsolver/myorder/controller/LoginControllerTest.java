@@ -5,9 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.Commit;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import pnu.problemsolver.myorder.domain.constant.Gender;
@@ -15,19 +13,18 @@ import pnu.problemsolver.myorder.domain.constant.MemberType;
 import pnu.problemsolver.myorder.domain.constant.SNSType;
 import pnu.problemsolver.myorder.dto.GeneralOAuthDTO;
 import pnu.problemsolver.myorder.repository.StoreRepository;
-import pnu.problemsolver.myorder.security.JwtTokenProvider;
 import pnu.problemsolver.myorder.util.Mapper;
 
 import java.util.Map;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 //@WebMvcTest
 @SpringBootTest
 @AutoConfigureMockMvc//MVC와 통합테스트 같이하고 싶을 떄 사용.
-    @Transactional
+@Transactional
 class LoginControllerTest {
 
     @Autowired

@@ -25,7 +25,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @Transactional
-@Commit
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)//이게 있어야 BeforeAll가능. 기본값은 PER_METHOD라고 함!
 class DemandRepositoryTest {
 	

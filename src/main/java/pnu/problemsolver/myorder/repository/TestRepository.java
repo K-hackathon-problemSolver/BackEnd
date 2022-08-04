@@ -3,7 +3,6 @@ package pnu.problemsolver.myorder.repository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import pnu.problemsolver.myorder.domain.Cake;
 import pnu.problemsolver.myorder.domain.Customer;
 import pnu.problemsolver.myorder.domain.Demand;
@@ -20,7 +19,7 @@ import java.util.stream.IntStream;
 
 @RequiredArgsConstructor
 @Slf4j
-@Transactional
+//@Transactional
 @Repository
 public class TestRepository {
 	
