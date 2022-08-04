@@ -3,11 +3,11 @@ package pnu.problemsolver.myorder.service;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import pnu.problemsolver.myorder.controller.MainController;
 import pnu.problemsolver.myorder.domain.Demand;
 import pnu.problemsolver.myorder.domain.Store;
 import pnu.problemsolver.myorder.domain.constant.DemandStatus;
 import pnu.problemsolver.myorder.dto.ChangeStatusRequestDTO;
+import pnu.problemsolver.myorder.repository.TestRepository;
 
 import java.util.List;
 
@@ -30,11 +30,11 @@ public class AllServiceSpringBootTest {
 	CakeService cakeService;
 	
 	@Autowired
-	MainController mainController;
+	TestRepository testRepository;
 	
 	@Test
 	public void Demand_changeStatusTest() {
-		mainController.insertAll();
+		testRepository.insertAll();
 		List<Store> storeList = storeService.findAll(i -> i);
 		List<Demand> demandList = demandService.findByStoreIdAndDemandStatus(i -> i, storeList.get(0).getUuid(), DemandStatus.WAITING, 0);
 		Demand demand = demandList.get(0);

@@ -52,9 +52,10 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
 
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310
-implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.3'//jackson에서 LocalDateTime을 지원하기 위함.
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.3'//jackson에서 LocalDateTime을 지원하기 위함.
 
 
+    implementation 'com.google.firebase:firebase-admin:6.8.1'
 
 }
 

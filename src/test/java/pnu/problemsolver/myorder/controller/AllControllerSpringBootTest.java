@@ -1,6 +1,5 @@
 package pnu.problemsolver.myorder.controller;
 
-import org.jboss.jandex.Main;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,17 +10,16 @@ import org.springframework.http.MediaType;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+import pnu.problemsolver.myorder.domain.Cake;
 import pnu.problemsolver.myorder.domain.Customer;
 import pnu.problemsolver.myorder.domain.Demand;
 import pnu.problemsolver.myorder.domain.Store;
 import pnu.problemsolver.myorder.domain.constant.MemberType;
 import pnu.problemsolver.myorder.domain.constant.PusanLocation;
 import pnu.problemsolver.myorder.dto.*;
+import pnu.problemsolver.myorder.repository.TestRepository;
 import pnu.problemsolver.myorder.security.JwtTokenProvider;
-import pnu.problemsolver.myorder.service.CakeService;
-import pnu.problemsolver.myorder.service.CustomerService;
-import pnu.problemsolver.myorder.service.DemandService;
-import pnu.problemsolver.myorder.service.StoreService;
+import pnu.problemsolver.myorder.service.*;
 import pnu.problemsolver.myorder.util.Mapper;
 
 import java.io.File;
@@ -55,7 +53,8 @@ public class AllControllerSpringBootTest {
     CakeService cakeService;
     
     @Autowired
-    MainController mainController;
+//    MainController mainController;
+    TestRepository testRepository;
     
     @Autowired
     DemandService demandService;
@@ -73,7 +72,8 @@ public class AllControllerSpringBootTest {
 
     @Test
     public void storeListTest() throws Exception {
-        List<DemandDTO> demandDTOList = mainController.insertAll();
+        List<Demand> demandList = testRepository.insertAll();
+        
         StoreListRequestDTO requestDTO = StoreListRequestDTO.builder()
                 .location(PusanLocation.DONGLAE)
                 .limit(3)//limit을 3으로 해놔서 2까지 온다.
@@ -177,9 +177,10 @@ public class AllControllerSpringBootTest {
     
     @Test
     public void oneStoreTest() throws Exception {
-        List<StoreDTO> storeDTOList = mainController.insertStore();//dummy객체 넣을 때 사용했던 함수.
-        mainController.insertCake(storeDTOList);
-        StoreDTO storeDTO = storeDTOList.get(0);
+        List<Store> storeList = testRepository.insertStore();//dummy객체 넣을 때 사용했던 함수.
+        testRepository.insertCake(storeList);
+        StoreDTO storeDTO = StoreDTO.toDTO(storeList.get(0));
+        
         mvc.perform(get("/store").param("id", storeDTO.getUuid().toString()))
                 .andExpect(jsonPath("$.mainImg").exists())
                 .andExpect(jsonPath("$.cakeList[0].img").exists())
@@ -188,28 +189,19 @@ public class AllControllerSpringBootTest {
                 .andExpect(jsonPath("$.name").exists())
                 .andExpect(jsonPath("$.description").exists())
                 .andDo(print());
-        
     }
     
     @Test
     @Commit//commit하지 않으면 uuid를 받지 못한다.
     public void demandDetailedTest() {
         //given
-        List<CustomerDTO> customerDTOS = mainController.insertCustomer();
-//        for (CustomerDTO i : customerDTOS) {
-//            System.out.println(i);
-//        }
-        List<StoreDTO> storeDTOList = mainController.insertStore();
-//        for (StoreDTO i : storeDTOList) {
-//            System.out.println(i);
-//        }
-        List<CakeDTO> cakeDTOS = mainController.insertCake(storeDTOList);
-        List<DemandDTO> demandDTOList = mainController.insertDemand(cakeDTOS, customerDTOS, storeDTOList);
-//        for (DemandDTO i : demandDTOList) {
-//            System.out.println(i);
-//        }
+        List<Demand> demandList = testRepository.insertAll();
+        UUID uuid = demandList.get(0).getUuid();
+    
         //when
-        DemandDetailResponseDTO res = demandService.findById(DemandDetailResponseDTO::toDTO, demandDTOList.get(0).getUuid());
+        Demand demand = demandService.findById(i -> i, uuid);
+        System.out.println("테스트 : "+demand);
+        DemandDetailResponseDTO res = DemandDetailResponseDTO.toDTO(demand);
         //then
         assertEquals(res.getImg() == null, false);
     }
@@ -217,10 +209,9 @@ public class AllControllerSpringBootTest {
     @Test
     public void customerDemandListTest() throws Exception {
         //given
-        mainController.insertAll();
+        testRepository.insertAll();
         List<CustomerDTO> all = customerService.findAll(CustomerDTO::toDTO);
         CustomerDTO customerDTO = all.get(0);
-    
     
         DemandListRequestDTO requestDTO = DemandListRequestDTO.builder()
                 .uuid(customerDTO.getUuid())
@@ -265,10 +256,11 @@ public class AllControllerSpringBootTest {
 	@Test
 	@Commit
 	public void saveDemandTest() throws Exception {
-        List<CustomerDTO> customerDTOS = mainController.insertCustomer();
-        List<StoreDTO> storeDTOS = mainController.insertStore();
-        List<CakeDTO> cakeDTOS = mainController.insertCake(storeDTOS);
-        mainController.insertDemand(cakeDTOS, customerDTOS, storeDTOS);
+        List<Customer> customers = testRepository.insertCustomer();
+        List<Store> stores = testRepository.insertStore();
+        List<Cake> cakes = testRepository.insertCake(stores);
+        
+        List<Demand> demands = testRepository.insertDemand(cakes, customers, stores);
         
         File file = new File("src/main/resources/static/testPicture.jpg");
 		assertEquals(file.exists(), true);
@@ -279,9 +271,9 @@ public class AllControllerSpringBootTest {
 		} catch (IOException e) {
 			throw new RuntimeException("Files.readAllBytes Exception!!");
 		}
-        UUID cakeUUID = cakeDTOS.get(0).getUuid();
-        UUID customerUUID = customerDTOS.get(0).getUuid();
-        UUID storeUUID = storeDTOS.get(0).getUuid();
+        UUID cakeUUID = cakes.get(0).getUuid();
+        UUID customerUUID = customers.get(0).getUuid();
+        UUID storeUUID = stores.get(0).getUuid();
         
         assertEquals(cakeUUID!=null, true);
         assertEquals(customerUUID!=null, true);

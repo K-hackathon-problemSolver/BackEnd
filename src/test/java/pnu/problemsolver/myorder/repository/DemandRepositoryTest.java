@@ -1,6 +1,5 @@
 package pnu.problemsolver.myorder.repository;
 
-import net.bytebuddy.asm.Advice;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -10,19 +9,18 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
-import pnu.problemsolver.myorder.controller.MainController;
-import pnu.problemsolver.myorder.domain.*;
+import pnu.problemsolver.myorder.domain.Cake;
+import pnu.problemsolver.myorder.domain.Customer;
+import pnu.problemsolver.myorder.domain.Demand;
+import pnu.problemsolver.myorder.domain.Store;
 import pnu.problemsolver.myorder.domain.constant.DemandStatus;
-import pnu.problemsolver.myorder.dto.DemandSaveDTO;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
-import static java.time.LocalDateTime.of;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
@@ -44,12 +42,12 @@ class DemandRepositoryTest {
 	CakeRepositroy cakeRepositroy;
 	
 	@Autowired
-	MainController mainController;
+	TestRepository testRepository;
 	
 	
 	@BeforeAll
 	public void beforeAll() {
-		mainController.insertAll();
+		testRepository.insertAll();
 	}
 	
 	@Test

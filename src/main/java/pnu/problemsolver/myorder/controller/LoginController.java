@@ -18,33 +18,32 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class LoginController {
-
+    
     private final JwtTokenProvider jwtTokenProvider;
     private final StoreService storeService;
     private final CustomerService customerService;
-
-
+    
+    
     private final String clientID;
     private final String secret;
     private final String redirectURL;
     private final String stateToken;
     private final String naverTokenURL = "https://nid.naver.com/oauth2.0/token";
     private final String naverMemberInfoURL = "https://openapi.naver.com/v1/nid/me";
-
-
+    
+    
     @Autowired
     public LoginController(Environment environment, JwtTokenProvider tokenProvider, StoreService storeService, CustomerService customerService) {
 //        this.restTemplate = restTemplate;
         this.jwtTokenProvider = tokenProvider;
         this.storeService = storeService;
         this.customerService = customerService;
-
+        
         stateToken = environment.getProperty("OAuth.stateToken");
         redirectURL = environment.getProperty("OAuth.naver.redirectURL");
         clientID = environment.getProperty("OAuth.naver.clientID");
         secret = environment.getProperty("OAuth.naver.secret");
     }
-
 
 
 //    @GetMapping("/login")
@@ -64,7 +63,7 @@ public class LoginController {
 //
 //        return urlMap;
 //    }
-
+    
     /**
      * redirect URL
      *
@@ -129,7 +128,7 @@ public class LoginController {
 //                .build();
 //        return res;
 //    }
-
+    
     /**
      * 소셜로그인은 따로 함수를 만들어서 사용한다. 있는지 확인해야 하기 떄문임!
      * @param naverOAuthDTO
@@ -144,7 +143,7 @@ public class LoginController {
 //        }
 //        return res.getUuid();
 //    }
-
+    
     /**
      * @param dto
      * @return 기존회원이건 아니건 uuid를 반환한다.!
@@ -160,7 +159,7 @@ public class LoginController {
         
         return res.getUuid();
     }
-
+    
     private UUID SNSgeneralStoreLogin(GeneralOAuthDTO dto) {
         //TODO : 여기서 추가적인 검증을 필요로 할 수도 있다!
         StoreDTO storeDTO = StoreDTO.GeneralOAuthDTOtoDTO(dto);
@@ -171,13 +170,13 @@ public class LoginController {
         }
         return res.getUuid();
     }
-
+    
     //이렇게 회사마다 로그인을 구현할 필요가 없어졌다. 클라이언트에서 알아서 해 줄 것임. 데이터 형식만 하나 정해주면 된다.!
 //    @GetMapping("login/kakao")
 //    public void kakaoLogin() {
 //    }
-
-
+    
+    
     /**
      * naver, kakao등 모두 대입가능한 login, 회원가입 컨트롤러 !
      *
@@ -191,7 +190,7 @@ public class LoginController {
         if (dto.getMemberType() == MemberType.STORE) {//store일 때
             uuid = SNSgeneralStoreLogin(dto);
             jwt = jwtTokenProvider.createToken(MemberType.STORE); //payload추가!
-
+            
         } else if (dto.getMemberType() == MemberType.CUSTOMER) {//customer일 때
             uuid = SNSgeneralCustomerLogin(dto);
             jwt = jwtTokenProvider.createToken(MemberType.CUSTOMER);
@@ -199,15 +198,17 @@ public class LoginController {
             throw new RuntimeException("storeLogin()에서 memberType이 CUSTOMER, STORE 중에 없습니다!");
         }
         //jwt 만들기.
-
+        
         LoginResponseDTO res = LoginResponseDTO.builder()
                 .jwt(jwt)
                 .uuid(uuid)
                 .build();
         return res;
         //멤버 타입에 따라 insert가 달라진다. 그리고 있는지 확인부터 해야함.
-
     }
-
-
+    
+    @PostMapping("/logout")
+    public void logout() {
+    
+    }
 }

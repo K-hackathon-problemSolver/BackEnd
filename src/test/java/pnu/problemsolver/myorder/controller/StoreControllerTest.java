@@ -9,8 +9,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import pnu.problemsolver.myorder.domain.constant.MemberType;
 import pnu.problemsolver.myorder.dto.StoreDTO;
+import pnu.problemsolver.myorder.repository.TestRepository;
 import pnu.problemsolver.myorder.security.JwtTokenProvider;
 import pnu.problemsolver.myorder.service.CakeService;
 import pnu.problemsolver.myorder.service.CustomerService;
@@ -19,13 +19,12 @@ import pnu.problemsolver.myorder.service.StoreService;
 import pnu.problemsolver.myorder.util.Mapper;
 
 import java.time.LocalTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -52,7 +51,12 @@ class StoreControllerTest {
     
     @MockBean
     DemandService demandService;
-
+    
+    
+    @MockBean
+    TestRepository testRepository;
+    
+    
     @Test
     public void saveTest() throws Exception {
         LocalTime open = LocalTime.parse("09:00");
