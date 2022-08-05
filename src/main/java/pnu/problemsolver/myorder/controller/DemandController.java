@@ -7,7 +7,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import pnu.problemsolver.myorder.domain.Demand;
 import pnu.problemsolver.myorder.domain.constant.DemandStatus;
 import pnu.problemsolver.myorder.domain.constant.MemberType;
 import pnu.problemsolver.myorder.dto.*;
@@ -43,22 +42,26 @@ public class DemandController {
 	@PostMapping("/save")
 	public String saveDemand(@RequestBody DemandSaveDTO d) {
 		//DB에 저장. 먼저 저장해야 demand의 uuid를 알 수 있다.
-		UUID uuid = demandService.saveWithFunction(i -> Demand.toEntity(i, null), d);
-		//사진저장
-		byte[] bytes = Base64.getDecoder().decode(d.getFile());
-		File dir = new File(demandUploadPath + File.separator + d.getCustomerUUID().toString());
-		if (!dir.exists()) {//존재하지 않으면 생성.
-			dir.mkdirs();
+		UUID uuid = demandService.saveDemandSaveDTO(d);//TODO : 여기서 저장할 때 uuid만 가지고 나머지는 null인 cake, store, customer를 저장한다. toEntity()를 들어가 봐!
+//		UUID uuid = demandService.saveWithFunction(i->Demand.toEntity(i, null), d);//TODO : 여기 모르겠다.
+		
+		//사진저장. 사진은 없을 수도 있다. 없으면 위에서 saveWithFunction()으로 끝난 것임.
+		if (d.getFile() != null) {
+			byte[] bytes = Base64.getDecoder().decode(d.getFile());
+			File dir = new File(demandUploadPath + File.separator + d.getCustomerUUID().toString());
+			if (!dir.exists()) {//존재하지 않으면 생성.
+				dir.mkdirs();
+			}
+			Path imgPath = Paths.get(dir.toPath() + File.separator + uuid.toString() + "." + d.getExtension());
+			try {
+				Files.write(imgPath, bytes);
+				
+			} catch (IOException e) {
+				log.error("img write error!");
+				e.printStackTrace();
+			}
+			demandService.setFilePath(uuid, imgPath);//저장해야 알 수 있기 때문에 sql두번 날리는 것은 어쩔 수 없다.
 		}
-		Path imgPath = Paths.get(dir.toPath() + File.separator + uuid.toString() + "." + d.getExtension());
-		try {
-			Files.write(imgPath, bytes);
-			
-		} catch (IOException e) {
-			log.error("img write error!");
-			e.printStackTrace();
-		}
-		demandService.setFilePath(uuid, imgPath);//저장해야 알 수 있기 때문에 sql두번 날리는 것은 어쩔 수 없다.
 		return "success";
 	}
 	
@@ -71,14 +74,16 @@ public class DemandController {
 		PageRequest pageRequest = PageRequest.of(dto.getPage(), dto.getSize(), Sort.by(sortStr == null ? "created" : sortStr).descending());//기본값은 최신순!
 		
 		if (memberType == MemberType.CUSTOMER) {
-			resList = demandService.findByCustomer(i -> DemandListResponseDTO.toDTO(i), dto.getUuid(), status, pageRequest);
+			resList = demandService.findByCustomerIdAndDemandStatusPageable(i -> DemandListResponseDTO.toDTO(i), dto.getUuid(), status, pageRequest);
 		} else if (memberType == MemberType.STORE) {
+			
 			resList = demandService.findByStoreIdAndDemandStatusPageable(i -> DemandListResponseDTO.toDTO(i), dto.getUuid(), status, pageRequest);
 			
-		} else {
+		} else if (memberType == MemberType.GUEST) {
 			log.error("GUEST can't access to /demand/{status}");
+		} else {
+			log.error("invalid memberType can't access to /demand/{status}");
 		}
-//		demandService
 		return resList;
 	}
 	

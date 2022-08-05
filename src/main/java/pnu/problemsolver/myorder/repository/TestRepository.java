@@ -9,6 +9,7 @@ import pnu.problemsolver.myorder.domain.Demand;
 import pnu.problemsolver.myorder.domain.Store;
 import pnu.problemsolver.myorder.domain.constant.DemandStatus;
 import pnu.problemsolver.myorder.domain.constant.Gender;
+import pnu.problemsolver.myorder.domain.constant.PusanLocation;
 import pnu.problemsolver.myorder.domain.constant.SNSType;
 
 import java.nio.file.Path;
@@ -49,7 +50,6 @@ public class TestRepository {
 			//            int idx = (int) (Math.random() * storeDTOList.size());
 			IntStream.rangeClosed(0, 10).forEach(idx -> {
 				Path p = Paths.get("src/main/resources/static/" + (idx+1) + ".jpg");
-				
 				Demand demand = Demand.builder()
 						.filePath(p.toString())
 						.cake(cakeList.get(i))
@@ -100,7 +100,7 @@ public class TestRepository {
 		}
 		Customer c = Customer.builder()
 				.email("test.pusan.ac.kr")
-				.name("테스트 고객")
+				.name("진윤정")
 				.phone_num("010-1234-5678")
 				.birthYear(1999)
 				.snsIdentifyKey("snsId~")
@@ -134,15 +134,15 @@ public class TestRepository {
 		}
 		
 		Store s = Store.builder()
-				.name("솔루션 메이커")
+				.name("솔루션 메이커(동래점)")
 				.snsIdentifyKey("snskey")
 				.birthYear(1999)
 				.description("맛있는 가게!")
 				.location("부산시 금정구 부산대학로~")
 				.email("zhdhfhd33@zsdf")
 				.snsType(SNSType.KAKAO)
-				.latitude(35.163761)
-				.longitude(129.11328)
+				.latitude(PusanLocation.DONGLAE.latitude)
+				.longitude(PusanLocation.DONGLAE.longitude)
 				.owner_phone_num("010-3391-6486")
 				.filePath("src/main/resources/static/" + 4 + ".jpg")
 				.build();
@@ -157,35 +157,33 @@ public class TestRepository {
 	public List<Cake> insertCake(List<Store> list) {//cake는 연관관계가 있어서 store를 필요로 한다.
 		List<Cake> li = new ArrayList<>();
 		String option = "{\"시트 선택\" : [\"기본맛(커스터드)\", \"크림치즈\", \"버터크림\"], \"사이즈\" : [\"1호\", \"2호\", \"3호\"], \"모양 선택\" : [\"원형\", \"네모\", \"하트\", \"별\"], \"보냉 유무\" : [\"유\", \"무]\"], \"문구\" : \"null\"}";
+		
 		for (int i = 0; i < list.size(); ++i) {//lise.size() = 11
 			Cake cake = Cake.builder()
 					.minPrice(14900)
 					.name("도시락 케이크")
 					.option(option)
 					.store(list.get(i)) //연관관계
-					.description("생일 선물로 딱맞음!!")
-					.filePath("src/main/resources/static/" + (4) + ".jpg")
+					.description("기념일에 딱 좋은 도식락 케이크")
+					.filePath("src/main/resources/static/" + (5) + ".jpg")
 					.build();
-			
 			cakeRepositroy.save(cake);
 			li.add(cake);
 		}
 		
 		for (int i = 0; i < list.size(); ++i) {//lise.size() = 11
-			Cake cake = Cake.builder()
-					.minPrice(19900)
-					.name("시그니처 케이크")
-					.option(option)
-					.store(list.get(i)) //연관관계
-					.description("생일 선물로 딱맞음!!")
-					.filePath("src/main/resources/static/" + (5) + ".jpg")
-					.build();
-			
-			cakeRepositroy.save(cake);
-			li.add(cake);
-		}
+					Cake cake = Cake.builder()
+							.minPrice(19900)
+							.name("시그니처 케이크")
+							.option(option)
+							.store(list.get(i)) //연관관계
+							.description("주인장이 직접 만든 시그니처 메뉴")
+							.filePath("src/main/resources/static/" + (5) + ".jpg")
+							.build();
+					cakeRepositroy.save(cake);
+					li.add(cake);
+				}
 		return li;
-		
 	}
 	
 }

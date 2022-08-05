@@ -10,5 +10,8 @@ import java.util.UUID;
 public interface CustomerRepository extends JpaRepository<Customer, UUID> {
 
     public List<Customer> findBySnsTypeAndSnsIdentifyKey(SNSType type, String key);
+    
+    public List<Customer> findByName(String name);
+    
 
 }

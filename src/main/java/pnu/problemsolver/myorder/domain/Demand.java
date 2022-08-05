@@ -28,13 +28,12 @@ public class Demand extends BaseTimeEntitiy {
     private UUID uuid;
     
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @ToString.Exclude //일단 기본으로 lazy설정해놓고 서비스 운영하면서 성능 최적화 하면 된다.!
+    @ToString.Exclude
     private Customer customer;
     
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @ToString.Exclude
     private Cake cake;
-    
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @ToString.Exclude
     private Store store;
@@ -65,13 +64,11 @@ public class Demand extends BaseTimeEntitiy {
 //        this.customer = customer;
 //    }
     
-   
     
     public static Demand toEntity(DemandDTO dto) {
         UUID storeUUID = dto.getStoreUUID();
         UUID customerUUID = dto.getCustomerUUID();
         UUID cakeUUID = dto.getCakeUUID();
-    
     
         Demand demand = Demand.builder()
                 .uuid(dto.getUuid())
@@ -89,20 +86,15 @@ public class Demand extends BaseTimeEntitiy {
 //    public void setCreated(LocalDateTime ldt) {
 //        created = ldt;
 //    }
-
+    
     
     //저장까지 여기서 하면 안된다. 너무 많은 기능을 함. 하나의 함수 = 하나의 기능.
-    public static Demand toEntity(DemandSaveDTO d, Path filePath) {
+    public static Demand toEntity(DemandSaveDTO d, Path filePath, Store s, Customer c, Cake cake) {
         
-        UUID customerUUID = d.getCustomerUUID();
-        UUID cakeUUID = d.getCakeUUID();
-        UUID storeUUID = d.getStoreUUID();
-    
-    
         Demand demand = Demand.builder()
-                .customer(customerUUID == null ? null : Customer.builder().uuid(customerUUID).build())
-                .cake(cakeUUID == null ? null : Cake.builder().uuid(cakeUUID).build())
-                .store(storeUUID == null ? null : Store.builder().uuid(storeUUID).build())
+                .customer(c)
+                .cake(cake)
+                .store(s)
                 .option(d.getOption())
                 .price(d.getPrice())
                 .status(DemandStatus.WAITING)//처음에는 waiting이다.
@@ -112,6 +104,25 @@ public class Demand extends BaseTimeEntitiy {
         return demand;
         
     }
+    
+    public static Demand toEntity(DemandSaveDTO d, Path filePath) {
+            
+            UUID customerUUID = d.getCustomerUUID();
+            UUID cakeUUID = d.getCakeUUID();
+            UUID storeUUID = d.getStoreUUID();
+            Demand demand = Demand.builder()
+                    .customer(customerUUID == null ? null : Customer.builder().uuid(customerUUID).build())
+                    .cake(cakeUUID == null ? null : Cake.builder().uuid(cakeUUID).build())
+                    .store(storeUUID == null ? null : Store.builder().uuid(storeUUID).build())
+                    .option(d.getOption())
+                    .price(d.getPrice())
+                    .status(DemandStatus.WAITING)//처음에는 waiting이다.
+                    .filePath(filePath == null ? null : filePath.toString())
+                    .build();
+            
+            return demand;
+            
+        }
     public void setFilePath(Path path) {
         filePath = path.toString();
     }

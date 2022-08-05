@@ -41,9 +41,9 @@ public class TestController {
 		
 	}
 	
-	@GetMapping("/get-test-customer")
+	@GetMapping("/get-test-customer")//
 	public LoginResponseDTO getTestCustomer() {
-		List<Customer> all = customerService.findAll(i -> i);
+		List<Customer> all = customerService.findByName(i->i, "진윤정");
 		Customer customer = all.get(0);
 		LoginResponseDTO loginResponseDTO = LoginResponseDTO.builder()
 				.jwt(jwtTokenProvider.createToken(MemberType.CUSTOMER))
@@ -55,7 +55,7 @@ public class TestController {
 	
 	@GetMapping("/get-test-store")
 	public LoginResponseDTO getTestStore() {
-		List<Store> all = storeService.findAll(i -> i);
+		List<Store> all = storeService.findByName(i -> i, "솔루션 메이커(동래점)");
 		Store store = all.get(0);
 		LoginResponseDTO loginResponseDTO = LoginResponseDTO.builder()
 				.jwt(jwtTokenProvider.createToken(MemberType.STORE))

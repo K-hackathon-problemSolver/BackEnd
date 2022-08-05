@@ -1,11 +1,10 @@
 package pnu.problemsolver.myorder.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import pnu.problemsolver.myorder.domain.constant.SNSType;
 import pnu.problemsolver.myorder.domain.Store;
+import pnu.problemsolver.myorder.domain.constant.SNSType;
 
 import java.util.List;
 import java.util.UUID;
@@ -19,7 +18,7 @@ public interface StoreRepository extends JpaRepository<Store, UUID> {//extends J
     
     
     //페이징 필요
-    @Query(nativeQuery = true, value = "select * from store order by (latitude- :lati) + (longitude- :longi ) limit :limit offset :offset")
+    @Query(nativeQuery = true, value = "select * from store order by abs(latitude- :lati) + abs(longitude- :longi) limit :limit offset :offset")//기본 오름차순. 절댓값을 붙여야한다.
     List<Store> findByLocation(@Param("lati") double lati, @Param("longi")double longi, @Param("limit")int limit, @Param("offset")int offset);
     
     

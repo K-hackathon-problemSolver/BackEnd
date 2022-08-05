@@ -93,21 +93,17 @@ class DemandRepositoryTest {
 		List<Customer> all = customerRepository.findAll();
 		Customer customer = all.get(0);
 		PageRequest of = PageRequest.of(0, 5, Sort.by("created").descending());//sort.by()에는 필드이름을 넣으면 된다.
-		
+		System.out.println(customer);
 		List<Demand> demandList = demandRepository.findByCustomerAndStatus(customer, DemandStatus.WAITING, of);
-		assertEquals(demandList.size(), 5);
-//		System.out.println(demandList);
+		assertEquals( 5, demandList.size());
 		LocalDateTime max = demandList.get(0).getCreated();
 		for (Demand d : demandList) {
-//			System.out.println(d.getCustomer());
-//			System.out.println(customer);
 			int i = max.compareTo(d.getCreated());
 			assertEquals(i == 1 || i == 0, true);
 			max = d.getCreated();
 			assertEquals(d.getCustomer().equals(customer), true);
 		}
 	}
-	
 	@Test
 	public void findByStoreTest() {
 		List<Store> all = storeRepository.findAll();

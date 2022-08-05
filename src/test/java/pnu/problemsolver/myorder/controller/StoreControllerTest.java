@@ -1,7 +1,6 @@
 package pnu.problemsolver.myorder.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -108,10 +107,6 @@ class StoreControllerTest {
         System.out.println(map1);
         System.out.println(map1.getClass());
     }
-}
-
-@AllArgsConstructor
-class Tmp {
-    public String start;
-    public String end;
+    
+    
 }

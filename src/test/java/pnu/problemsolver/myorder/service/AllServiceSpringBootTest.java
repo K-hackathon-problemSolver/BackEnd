@@ -64,3 +64,4 @@ public class AllServiceSpringBootTest {
 		assertEquals(byId.getStatus(), DemandStatus.ACCEPTED);
 	}
 }
+

@@ -16,7 +16,6 @@ import pnu.problemsolver.myorder.repository.DemandRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -58,7 +57,7 @@ class DemandServiceTest {
 		
 		//when
 		PageRequest of = PageRequest.of(0, 5);
-		List<Demand> byCustomer = demandService.findByCustomer(i -> i, customer1.getUuid(), DemandStatus.WAITING, of);
+		List<Demand> byCustomer = demandService.findByCustomerIdAndDemandStatusPageable(i -> i, customer1.getUuid(), DemandStatus.WAITING, of);
 		
 		//then
 		assertEquals(byCustomer.size(), 1);

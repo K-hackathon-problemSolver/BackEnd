@@ -37,6 +37,7 @@ public class StoreListResponseDTO {
                 .name(s.getName())
                 .extension(extension)
                 .build();
+        
         File file = new File(filePath);
         byte[] mainImg=null;
         try {

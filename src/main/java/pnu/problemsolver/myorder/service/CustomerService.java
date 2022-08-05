@@ -3,10 +3,7 @@ package pnu.problemsolver.myorder.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pnu.problemsolver.myorder.domain.Customer;
-import pnu.problemsolver.myorder.domain.Store;
 import pnu.problemsolver.myorder.dto.CustomerDTO;
-import pnu.problemsolver.myorder.dto.GeneralOAuthDTO;
-import pnu.problemsolver.myorder.dto.StoreDTO;
 import pnu.problemsolver.myorder.repository.CustomerRepository;
 
 import javax.transaction.Transactional;
@@ -67,7 +64,11 @@ public class CustomerService {
         List<T> list = all.stream().map(i -> func.apply(i)).collect(Collectors.toList());
         return list;
     }
-
+    
+    public <T> List<T> findByName(Function<Customer, T> func, String name) {
+        return customerRepository.findByName(name).stream().map(i -> func.apply(i)).collect(Collectors.toList());
+    }
+    
 
 
 

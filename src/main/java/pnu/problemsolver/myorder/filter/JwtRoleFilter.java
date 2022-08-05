@@ -1,5 +1,6 @@
 package pnu.problemsolver.myorder.filter;
 
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+
 
 public class JwtRoleFilter extends OncePerRequestFilter {
 
