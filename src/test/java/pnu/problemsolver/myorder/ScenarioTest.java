@@ -1,6 +1,7 @@
 package pnu.problemsolver.myorder;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -15,7 +16,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import pnu.problemsolver.myorder.domain.Customer;
-import pnu.problemsolver.myorder.domain.Store;
 import pnu.problemsolver.myorder.domain.constant.PusanLocation;
 import pnu.problemsolver.myorder.dto.*;
 import pnu.problemsolver.myorder.filter.JwtAuthenticationFilter;
@@ -38,6 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional//테스트별로 독립적이기 위해서는 이게 필수임. TODO : 왜 이거 붙이면 주문목록 들고오는 테스트를 통과하지 못했는지 알아보자.
 @Commit
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Slf4j
 class ScenarioTest {//여기서 시나리오 테스트 하면 되겠다.
 	@Autowired
 	
@@ -58,6 +59,7 @@ class ScenarioTest {//여기서 시나리오 테스트 하면 되겠다.
 	
 	@BeforeAll
 	public void setup() {
+		testRepository.deleteAll();
 		this.mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
 						.addFilters(new CharacterEncodingFilter("UTF-8", true))
 						.addFilters(jwtAuthenticationFilter)
@@ -67,17 +69,17 @@ class ScenarioTest {//여기서 시나리오 테스트 하면 되겠다.
 	@Test
 	public void midtermVideoScenarioTest() throws Exception {
 		//init
-		testRepository.insertCustomer();
-		List<Store> storeList = testRepository.insertStore();
-		testRepository.insertCake(storeList);
-//		testRepository.insertAll();
-		//사용자 가져오기
+//		testRepository.insertCustomer();
+//		List<Store> storeList = testRepository.insertStore();
+//		testRepository.insertCake(storeList);
+		testRepository.insertAll();
+		
+		//소비자 가져오기
 		MvcResult mvcResult = mvc.perform(get("/get-test-customer"))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.jwt").exists())
 				.andExpect(jsonPath("$.uuid").exists())
 				.andReturn();
-		
 		
 		String reponse = mvcResult.getResponse().getContentAsString();
 		LoginResponseDTO cusLoginResponseDTO = Mapper.objectMapper.readValue(reponse, LoginResponseDTO.class);
@@ -105,17 +107,20 @@ class ScenarioTest {//여기서 시나리오 테스트 하면 되겠다.
 		
 		//가게 하나 눌러서 케이크 자세히 보기
 		List<StoreListResponseDTO> li = Mapper.objectMapper.readValue(StoreListResponseDTOJSON, new TypeReference<>(){});//abstract class라서 {}가 붙는다. 추상클래스를 익명클래스로 생성한 것임. 구현해야할 메소드가 하나도 없기 때문에 빈 {}이다.
-		StoreListResponseDTO storeListReponseDTO = li.get(0);
-		String strResult = mvc.perform(get("/store?id=" + storeListReponseDTO.getUuid()))
+		StoreListResponseDTO storeListResponseDTO = li.get(0);
+		String strResult = mvc.perform(get("/store?id=" + storeListResponseDTO.getUuid()))
 				.andExpect(jsonPath("$.uuid").exists())
 				.andExpect(jsonPath("$.mainImg").exists())
 				.andExpect(jsonPath("$.extension").exists())
 				.andExpect(jsonPath("$.cakeList").exists())
 				.andExpect(jsonPath("$.cakeList[0]").exists())
 				.andExpect(jsonPath("$.cakeList[1]").exists())
+				.andExpect(jsonPath("$.name").value("솔루션 메이커(동래점)"))
 				.andReturn().getResponse().getContentAsString();
 		
 		StoreEditDTO storeEditDTO = Mapper.objectMapper.readValue(strResult, StoreEditDTO.class);
+		assertEquals(storeListResponseDTO.getUuid(), storeEditDTO.getUuid());
+		
 //		System.out.println(storeEditDTO.getCakeList().size());
 		CakeEditDTO cakeEditDTO = storeEditDTO.getCakeList().get(0);
 //		System.out.println(cakeEditDTO);
@@ -124,7 +129,7 @@ class ScenarioTest {//여기서 시나리오 테스트 하면 되겠다.
 		String option = "{\"시트 선택\" : \"기본맛(커스터드)\", \"사이즈\" : \"2호\", \"모양 선택\" : \"하트\", \"보냉 유무\" : \"유\", \"문구\" : \"솔루션 메이커 축하해~\"}";
 		DemandSaveDTO demandSaveDTO = DemandSaveDTO.builder()
 				.customerUUID(cusLoginResponseDTO.getUuid())
-				.storeUUID(storeListReponseDTO.getUuid())
+				.storeUUID(storeListResponseDTO.getUuid())
 				.cakeUUID(cakeEditDTO.getUuid())
 				.option(option)
 				.price(25000)
@@ -147,7 +152,6 @@ class ScenarioTest {//여기서 시나리오 테스트 하면 되겠다.
 				.size(6)
 				.page(0)//0부터 시작.
 				.build();
-		
 		String s2 = Mapper.objectMapper.writeValueAsString(demandListRequestDTO);
 		String res = mvc.perform(post("/demand/WAITING")
 						.contentType(MediaType.APPLICATION_JSON)
@@ -157,8 +161,35 @@ class ScenarioTest {//여기서 시나리오 테스트 하면 되겠다.
 				.andExpect(jsonPath("$[0].uuid").exists())
 				.andExpect(jsonPath("$[0].cakeName").exists())
 				.andExpect(jsonPath("$[0].price").exists())//option은 없을 수도 있기 때문에 이렇게 진행함.
+				.andExpect(jsonPath("$.size()").value(6))//option은 없을 수도 있기 때문에 이렇게 진행함.
 				.andReturn().getResponse().getContentAsString();
-		System.out.println(res);;
+		
+		
+		//가게 로그인
+		String storeStr = mvc.perform(get("/get-test-store"))
+				.andExpect(jsonPath("$.uuid").exists())
+				.andExpect(jsonPath("$.jwt").exists())
+				.andReturn().getResponse().getContentAsString();
+		LoginResponseDTO storeUser = Mapper.objectMapper.readValue(storeStr, LoginResponseDTO.class);
+		
+		//가게 주문 확인하기
+		DemandListRequestDTO demandListRequestDTO1 = DemandListRequestDTO.builder()
+						.uuid(storeListResponseDTO.getUuid())
+						.size(6)
+						.page(0)//0부터 시작.
+						.build();
+				String s3 = Mapper.objectMapper.writeValueAsString(demandListRequestDTO1);
+				String res1 = mvc.perform(post("/demand/WAITING")
+								.contentType(MediaType.APPLICATION_JSON)
+								.header("Authorization", "Bearer " + storeUser.getJwt())
+								.content(s3))
+						.andExpect(status().isOk())
+						.andExpect(jsonPath("$[0].uuid").exists())
+						.andExpect(jsonPath("$[0].cakeName").exists())
+						.andExpect(jsonPath("$[0].price").exists())
+						.andExpect(jsonPath("$.size()").value(6))//option은 없을 수도 있기 때문에 이렇게 진행함.
+						.andReturn().getResponse().getContentAsString();
 	}
+	
 }
 

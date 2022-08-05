@@ -46,6 +46,9 @@ public class TestRepository {
 	//demand는 customer, cake 2개가 필요하다.
 	public List<Demand> insertDemand(List<Cake> cakeList, List<Customer> customerList, List<Store> storeList) {
 		List<Demand> demandDTOList = new ArrayList<>();
+		if (storeList.size() != customerList.size()) {
+			throw new RuntimeException("storeList, customerList의 크기가 다릅니다");
+		}
 		IntStream.rangeClosed(0, storeList.size() - 1).forEach((i) -> {
 			//            int idx = (int) (Math.random() * storeDTOList.size());
 			IntStream.rangeClosed(0, 10).forEach(idx -> {
@@ -184,6 +187,14 @@ public class TestRepository {
 					li.add(cake);
 				}
 		return li;
+	}
+	
+	public void deleteAll() {
+		demandRepository.deleteAll();
+		cakeRepositroy.deleteAll();
+		customerRepository.deleteAll();
+		storeRepository.deleteAll();
+		
 	}
 	
 }
