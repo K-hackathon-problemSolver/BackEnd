@@ -49,5 +49,15 @@ public class CakeService {
         return byStore.stream().map(i -> func.apply(i)).collect(Collectors.toList());
     }
     
+    public <T> T findById(Function<Cake, T> func, UUID uuid) {
+    
+        Optional<Cake> byId = cakeRepositroy.findById(uuid);
+        if (!byId.isPresent()) {
+            return null;
+        }
+        Cake cake = byId.get();
+        return func.apply(cake);
+    }
+    
 
 }

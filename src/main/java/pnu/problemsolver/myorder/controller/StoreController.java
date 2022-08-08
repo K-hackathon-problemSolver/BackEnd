@@ -62,15 +62,10 @@ public class StoreController {
 		List<Path> cakePathList = saveCakeImg(storeDirPath, cakeEditDTOList);
 		//store update
 		storeService.saveOnlyNotNUll(storeEditDTO, mainImgPath);
-//        StoreDTO storeDTOById = storeService.findById(storeEditDTO.getUuid());
-//        StoreDTO storeDTO = StoreDTO.toDTO(storeEditDTO, mainImgPath.toString());
-//        storeService.save(storeDTO);
 		
 		//cake update.
 		//TODO 시간 남으면 sql하나로 만들기. 아래처럼 하면 성능 bad.
 		for (int i = 0; i < cakeEditDTOList.size(); ++i) {
-//            CakeDTO cakeDTO = CakeDTO.toDTO(cakeDTOList.get(i), cakePathList.get(i).toString(), storeEditDTO.getUuid());
-//            cakeService.save(cakeDTO);
 			cakeService.saveOnlyNotNUll(cakeEditDTOList.get(i), cakePathList.get(i));
 		}
 		return "success";
@@ -128,9 +123,7 @@ public class StoreController {
 	public List<StoreListResponseDTO> list(@RequestBody StoreListRequestDTO d) {
 		log.info("/store/list!");
 		log.info(d.toString());
-		
 		List<StoreListResponseDTO> byLocation = storeService.findByLocation(a -> StoreListResponseDTO.toDTO(a), d.getLocation(), d.getLimit(), d.getOffset());
-		
 //        List<StoreDTOForList> all = storeService.findAll(a -> StoreDTOForList.toDTO(a)); //store->T로 변환 함수만 넣어주면 된다.!
 		return byLocation;
 	}

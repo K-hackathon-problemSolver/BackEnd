@@ -40,7 +40,7 @@ public class DemandController {
 	}
 	
 	@PostMapping("/save")
-	public String saveDemand(@RequestBody DemandSaveDTO d) {
+	public UUID saveDemand(@RequestBody DemandSaveDTO d) {
 		//DB에 저장. 먼저 저장해야 demand의 uuid를 알 수 있다.
 		UUID uuid = demandService.saveDemandSaveDTO(d);//TODO : 여기서 저장할 때 uuid만 가지고 나머지는 null인 cake, store, customer를 저장한다. toEntity()를 들어가 봐!
 //		UUID uuid = demandService.saveWithFunction(i->Demand.toEntity(i, null), d);//TODO : 여기 모르겠다.
@@ -62,7 +62,7 @@ public class DemandController {
 			}
 			demandService.setFilePath(uuid, imgPath);//저장해야 알 수 있기 때문에 sql두번 날리는 것은 어쩔 수 없다.
 		}
-		return "success";
+		return uuid;
 	}
 	
 	@PostMapping("/{status}")
