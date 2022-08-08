@@ -43,7 +43,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 		String jwt = getJwtFromRequest(request); //request에서 jwt 토큰을 꺼낸다.
-		System.out.println("테스트!");
 		if (jwt != null && !jwt.isEmpty()) {
 			if (tokenProvider.isValidate(jwt)) {
 				Claims claims = tokenProvider.getClaims(jwt);

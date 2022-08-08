@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Base64;
 import java.util.UUID;
 
 @Data
@@ -21,7 +22,7 @@ import java.util.UUID;
 public class CakeEditDTO {
 	private UUID uuid;
 	
-	private byte[] img;
+	private String img;
 	private String extension;
 	private String name;//케잌이름.
 	private String description;
@@ -33,10 +34,11 @@ public class CakeEditDTO {
 	public static CakeEditDTO toDTO(Cake c) {
 		String filePath = c.getFilePath();
 		Path path = Paths.get(filePath);
-		byte[] bytes = null;
+		String bytes = null;
 		try {
 //			bytes = Base64.getEncoder().encode(Files.readAllBytes(path));
-			bytes = (Files.readAllBytes(path));
+			bytes = Base64.getEncoder().encodeToString(Files.readAllBytes(path));
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 			log.warn("파일이 존재하지 않습니다. : " + path.toAbsolutePath());//디버깅할 때에는 absolutePath정보가 유의미하다.!
@@ -56,8 +58,6 @@ public class CakeEditDTO {
 				.extension(extension)
 				.option(c.getOption())
 				.build();
-		
-		
 		return dto;
 	}
 	

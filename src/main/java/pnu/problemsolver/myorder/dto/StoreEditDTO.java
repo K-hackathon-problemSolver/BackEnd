@@ -27,7 +27,7 @@ import java.util.UUID;
 @Slf4j
 public class StoreEditDTO {
     private UUID uuid;
-    private byte[] mainImg; //base64인코딩 된 상태.
+    private String mainImg; //base64인코딩 된 상태.
     private String extension; //byte파일의 확장자.
 
     private String name;//가게이름.
@@ -40,9 +40,9 @@ public class StoreEditDTO {
     
     public static StoreEditDTO toDTO(Store s) {
         Path path = Paths.get(s.getFilePath());
-        byte[] bytes=null;
+        String bytes=null;
         try {
-            bytes = Base64.getEncoder().encode(Files.readAllBytes(path));//항상 까먹지말자!
+            bytes = Base64.getEncoder().encodeToString(Files.readAllBytes(path));//항상 까먹지말자!
         } catch (IOException e) {
             e.printStackTrace();
             log.warn("파일이 존재하지 않습니다. : " + path.toAbsolutePath());

@@ -37,7 +37,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -70,29 +71,24 @@ public class AllControllerSpringBootTest {
     
     @Autowired
     JwtTokenProvider jwtTokenProvider;
-    
-
     @Test
     public void storeListTest() throws Exception {
         List<Demand> demandList = testRepository.insertAll();
-        
         StoreListRequestDTO requestDTO = StoreListRequestDTO.builder()
                 .location(PusanLocation.DONGLAE)
                 .limit(3)//limit을 3으로 해놔서 2까지 온다.
                 .offset(0)
                 .build();
         String json = Mapper.objectMapper.writeValueAsString(requestDTO);
-        mvc.perform(post("/store/list")
+        String contentAsString = mvc.perform(post("/store/list")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].uuid").exists())
                 .andExpect(jsonPath("$[0].name").exists())
                 .andExpect(jsonPath("$[0].mainImg").exists())
-                .andDo(print());
-    
-    
-        System.out.println(json);
+                .andReturn().getResponse().getContentAsString();
+        
     }
     @Test
     public void editStoreMenuTest() throws Exception {
@@ -121,14 +117,15 @@ public class AllControllerSpringBootTest {
         //파일 읽기
         File mainImgFile = new File("src/main/resources/static/testPicture.jpg");
         byte[] mainImg = Files.readAllBytes(mainImgFile.toPath());
-        mainImg = Base64.getEncoder().encode(mainImg);
+        String mainImgStr = Base64.getEncoder().encodeToString(mainImg);
         
+        System.out.println("테스트1 : " + mainImg);//TODO : 출력이 잘 안된다... 널문자?..
         List<CakeEditDTO> cakeList = new ArrayList<>();
         CakeEditDTO cake1 = new CakeEditDTO();
         cake1.setName("cake1");
         cake1.setMinPrice(200);
         cake1.setOption("{\"plate\":\"1\"}");
-        cake1.setImg(mainImg);
+        cake1.setImg(mainImgStr);
         cake1.setExtension("jpg");
         cake1.setUuid(cakeDTO1.getUuid());
         
@@ -136,7 +133,7 @@ public class AllControllerSpringBootTest {
         cake2.setName("cake2");
         cake2.setMinPrice(300);
         cake2.setOption("{\"plate\":\"2\"}");
-        cake2.setImg(mainImg);
+        cake2.setImg(mainImgStr);
         cake2.setExtension("jpg");
         cake2.setUuid(cakeDTO2.getUuid());
         
@@ -148,7 +145,7 @@ public class AllControllerSpringBootTest {
 //                .name("가게1")
                 .description("맛있다!")
                 .cakeList(cakeList)
-                .mainImg(mainImg)
+                .mainImg(mainImgStr)
                 .extension("jpg")
 //                .impossibleDate("[{start:2022-07-02, end:2022-07-06}, {start:2022-07-08, end:2022-07-10}]")
                 .build();
@@ -173,8 +170,6 @@ public class AllControllerSpringBootTest {
         StoreDTO byId = storeService.findById(storeDTO.getUuid());
         assertEquals(byId.getName().equals("초기화"), true);
         assertEquals(byId.getDescription().equals("맛있다!"), true);
-        
-        
     }
     
     @Test

@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 @RequestMapping("/store")
 @Slf4j
 public class StoreController {
-	
 	private final StoreService storeService;
 	private final CakeService cakeService;
 	
