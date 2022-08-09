@@ -168,7 +168,7 @@ public class TestRepository {
 					.option(option)
 					.store(list.get(i)) //연관관계
 					.description("기념일에 딱 좋은 도식락 케이크")
-					.filePath("src/main/resources/static/" + (5) + ".jpg")
+					.filePath("src/main/resources/static/" + (7) + ".jpg")
 					.build();
 			cakeRepositroy.save(cake);
 			li.add(cake);
@@ -181,7 +181,7 @@ public class TestRepository {
 							.option(option)
 							.store(list.get(i)) //연관관계
 							.description("주인장이 직접 만든 시그니처 메뉴")
-							.filePath("src/main/resources/static/" + (5) + ".jpg")
+							.filePath("src/main/resources/static/" + (8) + ".jpg")
 							.build();
 					cakeRepositroy.save(cake);
 					li.add(cake);

@@ -13,7 +13,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/store")
@@ -118,24 +117,24 @@ public class StoreController {
 	 * @param d
 	 * @return
 	 */
-	@PostMapping("/list")
-	public List<StoreListResponseDTO> list(@RequestBody StoreListRequestDTO d) {
-		log.info("/store/list!");
-		log.info(d.toString());
+	@GetMapping("/list")
+	public List<StoreListResponseDTO> list(StoreListRequestDTO d) {
+		if (d.getLocation() == null || d.getLimit() == 0) {
+			return null;
+		}
 		List<StoreListResponseDTO> byLocation = storeService.findByLocation(a -> StoreListResponseDTO.toDTO(a), d.getLocation(), d.getLimit(), d.getOffset());
-//        List<StoreDTOForList> all = storeService.findAll(a -> StoreDTOForList.toDTO(a)); //store->T로 변환 함수만 넣어주면 된다.!
 		return byLocation;
 	}
 	
 	/**
 	 * 테스트용 함수. 실제로 사용되지는 않음.
 	 */
-	@GetMapping("/list")
-	public List<String> list() {
-		List<StoreListResponseDTO> all = storeService.findAll(a -> StoreListResponseDTO.toDTO(a)); //store->T로 변환 함수만 넣어주면 된다.!
-		List<String> res = all.stream().map(i -> i.getName()).collect(Collectors.toList());
-		return res;
-	}
+//	@GetMapping("/list")
+//	public List<String> list() {
+//		List<StoreListResponseDTO> all = storeService.findAll(a -> StoreListResponseDTO.toDTO(a)); //store->T로 변환 함수만 넣어주면 된다.!
+//		List<String> res = all.stream().map(i -> i.getName()).collect(Collectors.toList());
+//		return res;
+//	}
 	
 	/**
 	 * 가게 하나를 보여줄 때에도 StoreEditDTO를 사용한다.

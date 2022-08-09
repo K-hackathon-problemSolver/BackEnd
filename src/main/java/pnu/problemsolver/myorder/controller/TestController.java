@@ -62,7 +62,6 @@ public class TestController {
 				.uuid(store.getUuid())
 				.build();
 		return loginResponseDTO;
-		
 	}
 	
 	@GetMapping("/deleteAll")

@@ -13,12 +13,13 @@ import org.springframework.test.annotation.Commit;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import pnu.problemsolver.myorder.domain.Cake;
 import pnu.problemsolver.myorder.domain.Customer;
 import pnu.problemsolver.myorder.domain.constant.DemandStatus;
-import pnu.problemsolver.myorder.domain.constant.PusanLocation;
 import pnu.problemsolver.myorder.dto.*;
 import pnu.problemsolver.myorder.filter.JwtAuthenticationFilter;
 import pnu.problemsolver.myorder.repository.CustomerRepository;
@@ -104,15 +105,18 @@ class ScenarioTest {//여기서 시나리오 테스트 하면 되겠다.
 		assertEquals("진윤정", byId.get().getName());
 
 //		가게 리스트 가져오기
-		StoreListRequestDTO listRequestDTO = StoreListRequestDTO.builder()
-				.location(PusanLocation.DONGLAE)
-				.offset(0)
-				.limit(6)
-				.build();
-		String s = Mapper.objectMapper.writeValueAsString(listRequestDTO);
-		MvcResult mvcResult1 = mvc.perform(post("/store/list")
-						.contentType(MediaType.APPLICATION_JSON)
-						.content(s))
+//		StoreListRequestDTO listRequestDTO = StoreListRequestDTO.builder()
+//				.location(PusanLocation.DONGLAE)
+//				.offset(0)
+//				.limit(6)
+//				.build();
+		MultiValueMap<String, String> paramas = new LinkedMultiValueMap<>();
+		paramas.add("location", "DONGLAE");
+		paramas.add("limit", "6");
+		paramas.add("offset", "0");
+		
+		MvcResult mvcResult1 = mvc.perform(get("/store/list")
+						.params(paramas))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$[0].name").value("솔루션 메이커(동래점)"))//동래에서 가장 가까운 가게는 솔루션메이커임.
 				.andExpect(jsonPath("$.size()").value(6))

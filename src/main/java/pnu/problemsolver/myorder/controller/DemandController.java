@@ -87,9 +87,9 @@ public class DemandController {
 		return resList;
 	}
 	
-	@PostMapping("/detailed")
+	@GetMapping("/detailed")
 	//TODO : 하나씩 제공하는 것 보단 리스트로 제공하는게 더 유연성있다. 필요하면 제공하자.
-	public DemandDetailResponseDTO detailed(@RequestBody UUID demandId) {
+	public DemandDetailResponseDTO detailed(@RequestParam UUID demandId) {
 		return demandService.findById(i -> DemandDetailResponseDTO.toDTO(i), demandId);
 	}
 	
