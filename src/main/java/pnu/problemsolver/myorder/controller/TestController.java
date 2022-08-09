@@ -43,7 +43,7 @@ public class TestController {
 	
 	@GetMapping("/get-test-customer")//
 	public LoginResponseDTO getTestCustomer() {
-		List<Customer> all = customerService.findByName(i->i, "진윤정");
+		List<Customer> all = customerService.findByName(i -> i, "진윤정");
 		Customer customer = all.get(0);
 		LoginResponseDTO loginResponseDTO = LoginResponseDTO.builder()
 				.jwt(jwtTokenProvider.createToken(MemberType.CUSTOMER))
@@ -63,6 +63,11 @@ public class TestController {
 				.build();
 		return loginResponseDTO;
 		
+	}
+	
+	@GetMapping("/deleteAll")
+	public void deleteAll() {
+		testRepository.deleteAll();
 	}
 	
 }

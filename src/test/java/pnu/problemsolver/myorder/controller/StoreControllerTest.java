@@ -17,11 +17,11 @@ import pnu.problemsolver.myorder.service.DemandService;
 import pnu.problemsolver.myorder.service.StoreService;
 import pnu.problemsolver.myorder.util.Mapper;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.time.LocalTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -108,16 +108,7 @@ class StoreControllerTest {
         System.out.println(map1.getClass());
     }
     
-    @Test
-    public void encodeTest() throws IOException {
-        File f = new File("src/main/resources/static/7.jpg");
-        byte[] bytes = Files.readAllBytes(f.toPath());
-//        byte[] encode = Base64.getEncoder().encode(bytes);
-//        System.out.println(encode);
-        String s = Base64.getEncoder().encodeToString(bytes);//.encode가 아니라 encodeToString()을 사용해야한다.
-        System.out.println(s);
-        
-    }
+   
     
     
 }

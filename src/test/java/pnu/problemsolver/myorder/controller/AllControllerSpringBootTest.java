@@ -23,7 +23,7 @@ import pnu.problemsolver.myorder.service.DemandService;
 import pnu.problemsolver.myorder.service.StoreService;
 import pnu.problemsolver.myorder.util.Mapper;
 
-import javax.transaction.Transactional;
+import javax.persistence.EntityManager;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -42,7 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Transactional//테스트별로 독립적이기 위해서는 이게 필수임.
+//@Transactional//테스트별로 독립적이기 위해서는 이게 필수임.
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class AllControllerSpringBootTest {
 
@@ -67,6 +67,9 @@ public class AllControllerSpringBootTest {
     
     @Autowired
     CustomerService customerService;
+    
+    @Autowired
+    EntityManager em;
     
     
     @Autowired
@@ -294,4 +297,18 @@ public class AllControllerSpringBootTest {
 //                .andExpect(content().string("success"))
                 .andDo(print());
 	}
+    
+//    @Test
+//       public void JPATest() {
+//        Store s = Store.builder()
+//                .name("jpa")
+//                .build();
+//        EntityTransaction ts = em.getTransaction();
+//
+//        ts.begin();
+//        em.persist(s);
+//        ts.commit();
+//
+//       }
+    
 }
