@@ -1,13 +1,14 @@
 package pnu.problemsolver.myorder.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import pnu.problemsolver.myorder.domain.Store;
 import pnu.problemsolver.myorder.domain.constant.Gender;
 import pnu.problemsolver.myorder.domain.constant.SNSType;
-import pnu.problemsolver.myorder.domain.Store;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.UUID;
 
@@ -56,6 +57,8 @@ public class StoreDTO {
 	
 	private LocalTime closeTime;
 	
+	private String fcmToken;
+	
 	
 	public static StoreDTO toDTO(Store s) {
 		StoreDTO storeDTO = StoreDTO.builder()
@@ -70,6 +73,7 @@ public class StoreDTO {
 				.latitude(s.getLatitude())
 				.longitude(s.getLongitude())
 //                .filePath(s.getFilePath())
+				.fcmToken(s.getFcmToken())
 				.build();
 		return storeDTO;
 	}

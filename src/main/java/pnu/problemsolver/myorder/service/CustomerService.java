@@ -9,6 +9,7 @@ import pnu.problemsolver.myorder.repository.CustomerRepository;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -17,17 +18,16 @@ import java.util.stream.Collectors;
 @Transactional
 public class CustomerService {
     private final CustomerRepository customerRepository;
-
+    
     /**
      * 매개변수로 DTO보다는 email처럼 핵심만 전달하는 것이 좋은 것 같다.
-     * @param customerDTO DTO를 사용하는게 확장, 수정에 유리하다.
      * @return 성공하면 CustomerDTO, 실패하면 null
      */
-    public CustomerDTO findById(CustomerDTO customerDTO) {
-
-        Optional<Customer> customerOptional = customerRepository.findById(customerDTO.getUuid());
+    public <T> T findById(Function<Customer, T> func, UUID id) {
+        
+        Optional<Customer> customerOptional = customerRepository.findById(id);
         if (customerOptional.isPresent()) {
-            CustomerDTO resDTO = CustomerDTO.toDTO(customerOptional.get());
+            T resDTO = func.apply(customerOptional.get());
             return resDTO;
         }
         return null;
@@ -69,6 +69,15 @@ public class CustomerService {
         return customerRepository.findByName(name).stream().map(i -> func.apply(i)).collect(Collectors.toList());
     }
     
+    public void setFcmToken(UUID uuid, String token) {
+        Optional<Customer> byId = customerRepository.findById(uuid);
+        if (!byId.isPresent()) {
+            throw new NullPointerException("findById() return null");
+        }
+        Customer customer = byId.get();
+        customer.setFcmToken(token);
+        
+    }
 
 
 

@@ -156,7 +156,6 @@ public class LoginController {
             customerService.save(customerDTO);//PK가 uuid이기 때문에 기존 회원이더라도 새로 save해버림. 그래서 이렇게 따로 함수를 만든다.
             return customerDTO.getUuid();
         }
-        
         return res.getUuid();
     }
     

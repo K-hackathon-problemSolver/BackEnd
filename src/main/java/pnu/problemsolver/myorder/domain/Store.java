@@ -10,7 +10,6 @@ import pnu.problemsolver.myorder.dto.StoreEditDTO;
 
 import javax.persistence.*;
 import java.nio.file.Path;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.UUID;
 
@@ -79,6 +78,11 @@ public class Store extends BaseTimeEntitiy {
 	@JsonFormat(pattern = "HH:mm")
 	
 	private LocalTime closeTime;
+	
+	private String fcmToken;
+	public void setFcmToken(String t) {
+        fcmToken = t;
+    }
 	
 	public static Store toEntity(StoreDTO storeDTO) {
 		Store store = Store.builder()

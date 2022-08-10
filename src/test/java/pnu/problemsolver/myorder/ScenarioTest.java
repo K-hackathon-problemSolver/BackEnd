@@ -37,8 +37,7 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -269,6 +268,33 @@ class ScenarioTest {//여기서 시나리오 테스트 하면 되겠다.
 		
 		
 	}
+	
+	@Test//필터가 필요하면 여기서 진행해야함.
+		public void fcmTokenTest() throws Exception {
+			testRepository.insertAll();
+			
+			String cusJson = mvc.perform(get("/get-test-customer"))
+					.andExpect(status().isOk())
+					.andReturn().getResponse().getContentAsString();
+			
+			LoginResponseDTO loginResponseDTO = Mapper.objectMapper.readValue(cusJson, LoginResponseDTO.class);
+			UUID uuid = loginResponseDTO.getUuid();
+			
+			FcmTokenRequest tokenRequest = FcmTokenRequest.builder()
+					.token("this is token")
+					.uuid(uuid)
+					.build();
+		
+		mvc.perform(post("/fcm-token")
+						.contentType(MediaType.APPLICATION_JSON)
+						.header("Authorization", "Bearer " + loginResponseDTO.getJwt())//memberType을 확인하기 때문에 JWT가 필요하다.
+						.content(Mapper.objectMapper.writeValueAsString(tokenRequest)))
+				.andExpect(status().isOk())
+				.andExpect(content().string("success"));
+			
+			Customer byId = customerService.findById(i -> i, uuid);
+			assertEquals("this is token", byId.getFcmToken());
+		}
 	
 }
 

@@ -26,6 +26,7 @@ import pnu.problemsolver.myorder.service.StoreService;
 import pnu.problemsolver.myorder.util.Mapper;
 
 import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -39,12 +40,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-//@Transactional//테스트별로 독립적이기 위해서는 이게 필수임.
+@Transactional//테스트별로 독립적이기 위해서는 이게 필수임.
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class AllControllerSpringBootTest {
 	
@@ -309,18 +309,7 @@ public class AllControllerSpringBootTest {
 //                .andExpect(content().string("success"))
 				.andDo(print());
 	}
-
-//    @Test
-//       public void JPATest() {
-//        Store s = Store.builder()
-//                .name("jpa")
-//                .build();
-//        EntityTransaction ts = em.getTransaction();
-//
-//        ts.begin();
-//        em.persist(s);
-//        ts.commit();
-//
-//       }
+	
+	
 
 }

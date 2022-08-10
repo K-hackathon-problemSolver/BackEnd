@@ -40,6 +40,8 @@ public class Customer extends BaseTimeEntitiy{
 
     @Enumerated(EnumType.STRING)
     private Gender gender; //1 : 남자. 0 : 여자.
+    
+    private String fcmToken;
 
 
     public static Customer toEntity(CustomerDTO c) {
@@ -54,6 +56,10 @@ public class Customer extends BaseTimeEntitiy{
                 .build();
         return customer;
 
+    }
+    
+    public void setFcmToken(String t) {
+        fcmToken = t;
     }
 
 

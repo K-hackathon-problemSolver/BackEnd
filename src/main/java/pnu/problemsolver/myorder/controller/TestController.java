@@ -64,7 +64,7 @@ public class TestController {
 		return loginResponseDTO;
 	}
 	
-	@GetMapping("/deleteAll")
+	@GetMapping("/delete-all")
 	public void deleteAll() {
 		testRepository.deleteAll();
 	}

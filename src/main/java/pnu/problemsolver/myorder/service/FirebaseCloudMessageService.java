@@ -2,14 +2,17 @@ package pnu.problemsolver.myorder.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.auth.oauth2.GoogleCredentials;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import pnu.problemsolver.myorder.dto.FcmMessage;
 import pnu.problemsolver.myorder.util.Mapper;
 import pnu.problemsolver.myorder.util.Request;
 
@@ -26,8 +29,8 @@ public class FirebaseCloudMessageService {
 	public String getAccessToken() throws IOException {
 		String firebaseConfigPath = "firebase/firebase_service_key.json";
 		GoogleCredentials googleCredentials;
-		googleCredentials = GoogleCredentials.fromStream(new ClassPathResource(firebaseConfigPath).getInputStream())
-				.createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
+		googleCredentials = GoogleCredentials.fromStream(new ClassPathResource(firebaseConfigPath).getInputStream())//ClassPathResource라는 객체가 있었다.
+				.createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));//GoogleGredentials : OAuth를 통해서 인증한 대상을 나타내는 객체
 		googleCredentials.refreshIfExpired();
 		String token = googleCredentials.getAccessToken().getTokenValue();
 		int i = token.indexOf("....");
@@ -36,9 +39,9 @@ public class FirebaseCloudMessageService {
 	}
 	
 	public ResponseEntity<?> sendMessageTo(String targetToken, String title, String body) throws IOException {
-        String message = makeMessage(targetToken, title, body, null);
+        String message = makeMessage(targetToken, title, body, null);//img에 null을 넣었다.
 		
-		org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
+		HttpHeaders headers = new HttpHeaders();
 		headers.add("Content-Type", "application/json; charset=utf-8");
 		headers.add("Authorization", "Bearer " + getAccessToken());
 		
@@ -63,7 +66,6 @@ public class FirebaseCloudMessageService {
     }
 	
 	private String makeMessage(String targetToken, String title, String body, String img) throws JsonProcessingException {//img에 넣을 것은 없기에 보통 null을 넣으면 된다.
-		
 		FcmMessage fcmMessage = FcmMessage.builder()
 				.message(FcmMessage.Message.builder()
 						.token(targetToken)
@@ -78,3 +80,28 @@ public class FirebaseCloudMessageService {
 		return Mapper.objectMapper.writeValueAsString(fcmMessage);
 	}
 }
+@Builder
+@Data
+class FcmMessage {
+	private boolean validateOnly;
+    private Message message;
+
+    @Builder
+    @AllArgsConstructor
+    @Data
+    public static class Message {
+        private Notification notification;
+        private String token;
+    }
+
+    @Builder
+    @AllArgsConstructor
+    @Data
+    
+    public static class Notification {
+        private String title;
+        private String body;
+        private String image;
+    }
+}
+
