@@ -30,10 +30,7 @@ import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -310,6 +307,47 @@ public class AllControllerSpringBootTest {
 				.andDo(print());
 	}
 	
+	@Test
+	    public void editImpossibleDateTest() throws Exception {
+	        testRepository.insertAll();
+	        List<Store> testStore = testRepository.getTestStore();
+	        assertEquals(1, testStore.size());
+	        Store store = testStore.get(0);
+	//        Map<String, Object> map = new HashMap<>();
+	//        map.put("uuid", store.getUuid());
+	//
+	//        map.put("impossibleDate", "[{\"start\":\"2022-07-20\", \"end\" : \"2022-07-24\"}]");
+	        String json = "{\"uuid\":\"" + store.getUuid() + "\", \"impossibleDate\" : [{\"start\":\"2022-02-03\", \"end\" : \"2022-02-03\"}]}";
+	        
+	//        List<Tmp> li = new ArrayList<>();
+	//        li.add(new Tmp("2022-07-20", "2022-07-21"));
+	//        li.add(new Tmp("2022-07-20", "2022-07-21"));
+	//        map.put("impossibleDate", li);
+	//        String json = Mapper.objectMapper.writeValueAsString(map);
+	//        System.out.println(json);
 	
+	        //이렇게도 써지는지 테스트
+	        ArrayList res = Mapper.objectMapper.readValue("[{\"start\":\"2022-07-20\", \"end\" : \"2022-07-24\"}]", ArrayList.class);
+	        System.out.println(res);
+	        
+	        //json을 잘 썻는지 테스트
+	        Map map1 = Mapper.objectMapper.readValue(json, Map.class);
+	        System.out.println(map1);
+		
+		String contentAsString = mvc.perform(post("/store/editImpossibleDate")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(json))
+				.andExpect(status().isOk())
+				.andDo(print())
+				.andReturn().getResponse().getContentAsString();
+	        assertEquals(contentAsString, "success");
+	    
+	        StoreDTO byId = storeService.findById(store.getUuid());
+		System.out.println(byId);
+		
+		String impossibleDate = Mapper.objectMapper.writeValueAsString(map1.get("impossibleDate"));
+		assertEquals(byId.getImpossibleDate(), impossibleDate);
+	        
+	    }
 
 }

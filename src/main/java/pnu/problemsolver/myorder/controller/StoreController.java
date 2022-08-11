@@ -1,5 +1,6 @@
 package pnu.problemsolver.myorder.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.*;
@@ -95,12 +96,9 @@ public class StoreController {
 	}
 	
 	@PostMapping("/editImpossibleDate")
-	public String editImpossibleDate(@RequestBody Map map) {
-		StoreDTO storeDTO = StoreDTO.builder()
-				.uuid(UUID.fromString((String) map.get("uuid")))
-				.impossibleDate((String) map.get("impossibleDate"))
-				.build();
-		storeService.save(storeDTO);
+	public String editImpossibleDate(@RequestBody Map map) throws JsonProcessingException {//map으로 받을 때 무조건 string으로 받는게 아니다. list면 ArrayList로 받음
+		ArrayList impossibleDate = (ArrayList) map.get("impossibleDate");
+		storeService.editImpossibleDate(UUID.fromString((String) map.get("uuid")), impossibleDate);
 		return "success";
 		
 	}

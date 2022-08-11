@@ -1,14 +1,17 @@
 package pnu.problemsolver.myorder.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pnu.problemsolver.myorder.domain.Store;
 import pnu.problemsolver.myorder.domain.constant.PusanLocation;
 import pnu.problemsolver.myorder.domain.constant.SNSType;
+import pnu.problemsolver.myorder.dto.EditImpossibleDateDTO;
 import pnu.problemsolver.myorder.dto.StoreDTO;
 import pnu.problemsolver.myorder.dto.StoreEditDTO;
 import pnu.problemsolver.myorder.repository.StoreRepository;
+import pnu.problemsolver.myorder.util.Mapper;
 
 import javax.transaction.Transactional;
 import java.nio.file.Path;
@@ -146,6 +149,15 @@ public class StoreService {
 		Store store = byId.get();
 		store.setFcmToken(token);
 		
+	}
+	
+	public void editImpossibleDate(UUID id, List<EditImpossibleDateDTO> list) throws JsonProcessingException {
+		Optional<Store> byId = storeRepository.findById(id);
+		if (!byId.isPresent()) {
+			throw new NullPointerException("findById return null!");
+		}
+		Store store = byId.get();
+		store.updateImpossibleDate(Mapper.objectMapper.writeValueAsString(list));
 	}
 	
 	

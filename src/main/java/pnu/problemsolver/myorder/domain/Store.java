@@ -121,4 +121,8 @@ public class Store extends BaseTimeEntitiy {
 		String tmpDesc = d.getDescription();
 		description = tmpDesc == null ? description : tmpDesc;
 	}
+	
+	public void updateImpossibleDate(String str) {
+		impossibleDate = str;
+	}
 }

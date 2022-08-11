@@ -197,4 +197,15 @@ public class TestRepository {
 		
 	}
 	
+	
+	public List<Store> getTestStore() {
+		List<Store> res = storeRepository.findByName("솔루션 메이커(동래점)");
+		return res;
+	}
+	
+	public List<Customer> getTestCustomer() {
+		List<Customer> byName = customerRepository.findByName("진윤정");
+		return byName;
+	}
+	
 }
