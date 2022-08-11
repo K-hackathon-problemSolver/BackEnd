@@ -20,14 +20,14 @@ import java.util.Base64;
 @Slf4j
 public class DemandDetailResponseDTO {
 	
-	private byte[] img;
+	private String img;
 	
 	
 	public static DemandDetailResponseDTO toDTO(Demand d) {
 			Path p = Paths.get(d.getFilePath());
-		byte[] bytes = null;
+		String bytes = null;
 		try {
-			bytes = Base64.getEncoder().encode(Files.readAllBytes(p));
+			bytes = Base64.getEncoder().encodeToString(Files.readAllBytes(p));
 			
 		} catch (IOException e) {
 			log.error("Files.readAllBytes Exception!!");
