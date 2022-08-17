@@ -9,8 +9,6 @@ import pnu.problemsolver.myorder.dto.DemandSaveDTO;
 
 import javax.persistence.*;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @ToString(callSuper = true)
@@ -125,15 +123,15 @@ public class Demand extends BaseTimeEntitiy {
 		UUID customerUUID = d.getCustomerUUID();
 		UUID cakeUUID = d.getCakeUUID();
 		UUID storeUUID = d.getStoreUUID();
-		List<UUID> li = new ArrayList<>();
-		li.add(customerUUID);
-		li.add(cakeUUID);
-		li.add(storeUUID);
-		for (UUID i : li) {//리스트로 작성하는 것이 확장성에 더 좋다.
-			if (i == null) {
-				throw new NullPointerException("entity must not be null!");//optional=false이다.
-			}
-		}
+//		List<UUID> li = new ArrayList<>();
+//		li.add(customerUUID);
+//		li.add(cakeUUID);
+//		li.add(storeUUID);
+//		for (UUID i : li) {//리스트로 작성하는 것이 확장성에 더 좋다.
+//			if (i == null) {
+//				throw new NullPointerException("entity must not be null!");//optional=false 이다. 어짜피 자동으로 Exception 발생할 텐데 내가 하는게 맞나 싶기도 하고...
+//			}
+//		}
 		Demand demand = Demand.builder()
 				.customer(Customer.builder().uuid(customerUUID).build())
 				.cake(Cake.builder().uuid(cakeUUID).build())

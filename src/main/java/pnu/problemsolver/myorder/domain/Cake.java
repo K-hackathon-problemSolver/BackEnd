@@ -48,9 +48,9 @@ public class Cake {
 	
 	public static Cake toEntity(CakeDTO cakeDTO) {
 		UUID storeUUID = cakeDTO.getStoreUUID();
-		if (storeUUID == null) {
-			throw new NullPointerException("store must not be null!");//optional=false이다.
-		}
+//		if (storeUUID == null) {//어짜피 자동으로 Exception발생할 텐데 굳이 코드를 짤 필요가 없다.
+//			throw new NullPointerException("store must not be null!");//optional=false이다.
+//		}
 		
 		Cake cake = Cake.builder()
 				.uuid(cakeDTO.getUuid())
@@ -64,7 +64,6 @@ public class Cake {
 				.build();
 		
 //		System.out.println("Cake.toEntity : " + cake);
-		
 		return cake;
 	}
 	
