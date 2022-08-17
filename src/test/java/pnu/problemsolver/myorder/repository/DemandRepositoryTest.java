@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.test.annotation.Commit;
 import pnu.problemsolver.myorder.domain.Cake;
 import pnu.problemsolver.myorder.domain.Customer;
 import pnu.problemsolver.myorder.domain.Demand;
@@ -105,14 +106,14 @@ class DemandRepositoryTest {
 		}
 	}
 	@Test
+	@Commit
 	public void findByStoreTest() {
+		
 		List<Store> all = storeRepository.findAll();
 		Store st = all.get(0);
 		PageRequest of = PageRequest.of(0, 5, Sort.by("created").descending());
-		
 		List<Demand> demandList = demandRepository.findByStoreAndStatus(st, DemandStatus.WAITING, of);
 		assertEquals(demandList.size(), 5);
-		
 		
 		LocalDateTime max = demandList.get(0).getCreated();
 		for (Demand d : demandList) {

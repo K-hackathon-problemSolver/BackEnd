@@ -64,13 +64,11 @@ public class TestRepository {
 				demandDTOList.add(demand);
 			});
 		});
-		
 		return demandDTOList;
 	}
 	
 	
 	public List<Customer> insertCustomer() {
-		
 		List<Customer> li = new ArrayList<>();
 		for (int i = 0; i < 5; ++i) {
 			Customer cus = Customer.builder()

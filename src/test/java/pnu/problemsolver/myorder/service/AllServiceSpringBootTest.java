@@ -60,7 +60,7 @@ public class AllServiceSpringBootTest {
 		
 		assertEquals(demand, byId);//이건 통과한다...
 		assertEquals(demand == byId, true);//영속성에서 가져오기 때문에 둘은 주소도 같다.
-		assertEquals("a", "a");//주소가 아니라 실제 값을 비교함.
+//		assertEquals("a", "a");//주소가 아니라 실제 값을 비교함.
 		assertEquals(byId.getStatus(), DemandStatus.ACCEPTED);
 	}
 }
