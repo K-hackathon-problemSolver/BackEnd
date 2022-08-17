@@ -42,7 +42,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 //@Transactional//테스트별로 독립적이기 위해서는 이게 필수임. TODO : 왜 이거 붙이면 주문목록 들고오는 테스트를 통과하지 못했는지 알아보자.
-@Commit
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Slf4j
 class ScenarioTest {//여기서 시나리오 테스트 하면 되겠다.

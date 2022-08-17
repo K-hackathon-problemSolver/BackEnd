@@ -11,7 +11,6 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @SpringBootTest
-@Commit
 @Transactional
 
 class CustomerRepositoryTest {

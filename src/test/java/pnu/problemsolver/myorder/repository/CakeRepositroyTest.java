@@ -21,7 +21,6 @@ class CakeRepositroyTest {
 	StoreRepository storeRepository;
 	
 	@Test
-	@Commit
 	public void saveTest() {
 		Store s = Store.builder()
 				.name("스토어")

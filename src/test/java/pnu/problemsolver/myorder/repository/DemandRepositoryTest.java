@@ -106,7 +106,6 @@ class DemandRepositoryTest {
 		}
 	}
 	@Test
-	@Commit
 	public void findByStoreTest() {
 		
 		List<Store> all = storeRepository.findAll();
@@ -142,10 +141,7 @@ class DemandRepositoryTest {
 		
 	}
 	
-	@Test
-	    public void setTest() {
-	    
-	    }
+
 	
 	
 }
