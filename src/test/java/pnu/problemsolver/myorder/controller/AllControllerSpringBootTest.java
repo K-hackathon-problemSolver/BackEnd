@@ -1,5 +1,6 @@
 package pnu.problemsolver.myorder.controller;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +75,11 @@ public class AllControllerSpringBootTest {
 	@Autowired
 	JwtTokenProvider jwtTokenProvider;
 	
+	@BeforeAll
+	public void beforeAll() {
+		testRepository.deleteAll();
+	}
+	
 	@Test
 	public void storeListTest() throws Exception {
 		List<Demand> demandList = testRepository.insertAll();
@@ -86,8 +92,8 @@ public class AllControllerSpringBootTest {
 		map.add("location", "DONGLAE");
 		map.add("offset", "0");
 		map.add("limit", "6");
-		
-		
+
+
 //		String json = Mapper.objectMapper.writeValueAsString(requestDTO);
 		String contentAsString = mvc.perform(get("/store/list").params(map))
 				.andExpect(status().isOk())
@@ -308,31 +314,31 @@ public class AllControllerSpringBootTest {
 	}
 	
 	@Test
-	    public void editImpossibleDateTest() throws Exception {
-	        testRepository.insertAll();
-	        List<Store> testStore = testRepository.getTestStore();
-	        assertEquals(1, testStore.size());
-	        Store store = testStore.get(0);
-	//        Map<String, Object> map = new HashMap<>();
-	//        map.put("uuid", store.getUuid());
-	//
-	//        map.put("impossibleDate", "[{\"start\":\"2022-07-20\", \"end\" : \"2022-07-24\"}]");
-	        String json = "{\"uuid\":\"" + store.getUuid() + "\", \"impossibleDate\" : [{\"start\":\"2022-02-03\", \"end\" : \"2022-02-03\"}]}";
-	        
-	//        List<Tmp> li = new ArrayList<>();
-	//        li.add(new Tmp("2022-07-20", "2022-07-21"));
-	//        li.add(new Tmp("2022-07-20", "2022-07-21"));
-	//        map.put("impossibleDate", li);
-	//        String json = Mapper.objectMapper.writeValueAsString(map);
-	//        System.out.println(json);
-	
-	        //이렇게도 써지는지 테스트
-	        ArrayList res = Mapper.objectMapper.readValue("[{\"start\":\"2022-07-20\", \"end\" : \"2022-07-24\"}]", ArrayList.class);
-	        System.out.println(res);
-	        
-	        //json을 잘 썻는지 테스트
-	        Map map1 = Mapper.objectMapper.readValue(json, Map.class);
-	        System.out.println(map1);
+	public void editImpossibleDateTest() throws Exception {
+		testRepository.insertAll();
+		List<Store> testStore = testRepository.getTestStore();
+		assertEquals(1, testStore.size());
+		Store store = testStore.get(0);
+		//        Map<String, Object> map = new HashMap<>();
+		//        map.put("uuid", store.getUuid());
+		//
+		//        map.put("impossibleDate", "[{\"start\":\"2022-07-20\", \"end\" : \"2022-07-24\"}]");
+		String json = "{\"uuid\":\"" + store.getUuid() + "\", \"impossibleDate\" : [{\"start\":\"2022-02-03\", \"end\" : \"2022-02-03\"}]}";
+		
+		//        List<Tmp> li = new ArrayList<>();
+		//        li.add(new Tmp("2022-07-20", "2022-07-21"));
+		//        li.add(new Tmp("2022-07-20", "2022-07-21"));
+		//        map.put("impossibleDate", li);
+		//        String json = Mapper.objectMapper.writeValueAsString(map);
+		//        System.out.println(json);
+		
+		//이렇게도 써지는지 테스트
+		ArrayList res = Mapper.objectMapper.readValue("[{\"start\":\"2022-07-20\", \"end\" : \"2022-07-24\"}]", ArrayList.class);
+		System.out.println(res);
+		
+		//json을 잘 썻는지 테스트
+		Map map1 = Mapper.objectMapper.readValue(json, Map.class);
+		System.out.println(map1);
 		
 		String contentAsString = mvc.perform(post("/store/editImpossibleDate")
 						.contentType(MediaType.APPLICATION_JSON)
@@ -340,14 +346,14 @@ public class AllControllerSpringBootTest {
 				.andExpect(status().isOk())
 				.andDo(print())
 				.andReturn().getResponse().getContentAsString();
-	        assertEquals(contentAsString, "success");
-	    
-	        StoreDTO byId = storeService.findById(store.getUuid());
+		assertEquals(contentAsString, "success");
+		
+		StoreDTO byId = storeService.findById(store.getUuid());
 		System.out.println(byId);
 		
 		String impossibleDate = Mapper.objectMapper.writeValueAsString(map1.get("impossibleDate"));
 		assertEquals(byId.getImpossibleDate(), impossibleDate);
-	        
-	    }
-
+		
+	}
+	
 }
