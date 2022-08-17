@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pnu.problemsolver.myorder.domain.Customer;
 import pnu.problemsolver.myorder.dto.CustomerDTO;
+import pnu.problemsolver.myorder.dto.GeneralOAuthDTO;
 import pnu.problemsolver.myorder.repository.CustomerRepository;
 
 import javax.transaction.Transactional;
@@ -76,6 +77,21 @@ public class CustomerService {
         }
         Customer customer = byId.get();
         customer.setFcmToken(token);
+        
+    }
+    
+    public UUID login(GeneralOAuthDTO dto) {
+        List<Customer> list = customerRepository.findBySnsTypeAndSnsIdentifyKey(dto.getSnsType(), dto.getSnsIdentifyKey());
+        if (list.size() == 1) {//원래 회원
+            return list.get(0).getUuid();
+        } else if (list.size() == 0) {//처음가입
+            Customer customer = Customer.toEntity(dto);
+            customerRepository.save(customer);
+            return customer.getUuid();
+        }
+        else{
+            throw new RuntimeException("sns identifyKey is duplicated");
+        }
         
     }
 

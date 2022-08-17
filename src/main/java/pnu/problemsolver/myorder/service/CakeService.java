@@ -29,7 +29,6 @@ public class CakeService {
         Cake cake = Cake.toEntity(cakeDTO);
         cakeRepositroy.save(cake);
         cakeDTO.setUuid(cake.getUuid());
-        
     }
 
     public void saveOnlyNotNUll(CakeEditDTO cakeEditDTO, Path cakeImgPath) {

@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.Commit;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -149,7 +148,8 @@ class ScenarioTest {//여기서 시나리오 테스트 하면 되겠다.
 //		//주문하기
 		File file = new File("src/main/resources/static/9.jpg");
 		byte[] bytes = Files.readAllBytes(file.toPath());
-		bytes = Base64.getEncoder().encode(bytes);
+		
+		String byteStr = Base64.getEncoder().encodeToString(bytes);
 		
 		String demandOption = "{\"시트 선택\" : \"기본맛(커스터드)\", \"사이즈\" : \"2호\", \"모양 선택\" : \"하트\", \"보냉 유무\" : \"유\", \"문구\" : \"솔루션 메이커 축하해~\"}";
 		DemandSaveDTO demandSaveDTO = DemandSaveDTO.builder()
@@ -158,7 +158,7 @@ class ScenarioTest {//여기서 시나리오 테스트 하면 되겠다.
 				.cakeUUID(cakeEditDTO.getUuid())
 				.option(demandOption)
 				.price(25000)
-				.file(bytes)//파일은 없음. 만듦.
+				.file(byteStr)//파일은 없음. 만듦.
 				.extension("jpg")
 				.build();
 		

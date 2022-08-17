@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import pnu.problemsolver.myorder.domain.constant.Gender;
 import pnu.problemsolver.myorder.domain.constant.SNSType;
+import pnu.problemsolver.myorder.dto.GeneralOAuthDTO;
 import pnu.problemsolver.myorder.dto.StoreDTO;
 import pnu.problemsolver.myorder.dto.StoreEditDTO;
 
@@ -107,6 +108,21 @@ public class Store extends BaseTimeEntitiy {
 		
 		return store;
 	}
+	
+	public static Store toEntity(GeneralOAuthDTO dto) {
+			Store store = Store.builder()
+					.email(dto.getEmail())
+					.name(dto.getName())
+					.owner_phone_num(dto.getPhone_num())
+					.snsType(dto.getSnsType())
+					.snsIdentifyKey(dto.getSnsIdentifyKey())
+					.birthYear(dto.getBirthyear())
+					.gender(dto.getGender())
+					.build();
+			return store;
+		}
+	
+	
 	
 	public void setOnlyNotNull(StoreEditDTO d, Path filePath) {
 		UUID tmpUUID = d.getUuid();

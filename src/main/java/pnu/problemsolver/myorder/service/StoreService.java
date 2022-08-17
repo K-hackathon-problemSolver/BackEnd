@@ -8,6 +8,7 @@ import pnu.problemsolver.myorder.domain.Store;
 import pnu.problemsolver.myorder.domain.constant.PusanLocation;
 import pnu.problemsolver.myorder.domain.constant.SNSType;
 import pnu.problemsolver.myorder.dto.EditImpossibleDateDTO;
+import pnu.problemsolver.myorder.dto.GeneralOAuthDTO;
 import pnu.problemsolver.myorder.dto.StoreDTO;
 import pnu.problemsolver.myorder.dto.StoreEditDTO;
 import pnu.problemsolver.myorder.repository.StoreRepository;
@@ -160,5 +161,17 @@ public class StoreService {
 		store.updateImpossibleDate(Mapper.objectMapper.writeValueAsString(list));
 	}
 	
+	public UUID login(GeneralOAuthDTO dto) {
+		List<Store> list = storeRepository.findBySnsTypeAndSnsIdentifyKey(dto.getSnsType(), dto.getSnsIdentifyKey());
+		if (list.size() == 1) {//원래 회원
+			return list.get(0).getUuid();
+		} else if (list.size() == 0) {//처음가입
+			Store store = Store.toEntity(dto);
+			storeRepository.save(store);
+			return store.getUuid();
+		} else {
+			throw new RuntimeException("sns identifyKey is duplicated");
+		}
+	}
 	
 }

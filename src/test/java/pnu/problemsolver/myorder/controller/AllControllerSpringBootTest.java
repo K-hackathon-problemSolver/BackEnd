@@ -15,6 +15,7 @@ import pnu.problemsolver.myorder.domain.Cake;
 import pnu.problemsolver.myorder.domain.Customer;
 import pnu.problemsolver.myorder.domain.Demand;
 import pnu.problemsolver.myorder.domain.Store;
+import pnu.problemsolver.myorder.domain.constant.DemandStatus;
 import pnu.problemsolver.myorder.domain.constant.MemberType;
 import pnu.problemsolver.myorder.domain.constant.PusanLocation;
 import pnu.problemsolver.myorder.dto.*;
@@ -25,12 +26,14 @@ import pnu.problemsolver.myorder.service.CustomerService;
 import pnu.problemsolver.myorder.service.DemandService;
 import pnu.problemsolver.myorder.service.StoreService;
 import pnu.problemsolver.myorder.util.Mapper;
+import pnu.problemsolver.myorder.util.MyUtil;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -38,7 +41,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -78,6 +82,7 @@ public class AllControllerSpringBootTest {
 	@BeforeAll
 	public void beforeAll() {
 		testRepository.deleteAll();
+		
 	}
 	
 	@Test
@@ -176,6 +181,7 @@ public class AllControllerSpringBootTest {
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(json))
 				.andDo(print());
+		System.out.println("테스트"+json);
 		
 		String storeDir = uploadStorePath + File.separator + storeDTO.getUuid() + File.separator;
 		
@@ -270,7 +276,7 @@ public class AllControllerSpringBootTest {
 	
 	
 	@Test
-	public void saveDemandTest() throws Exception {
+	public void demandSaveTest() throws Exception {
 		List<Customer> customers = testRepository.insertCustomer();
 		List<Store> stores = testRepository.insertStore();
 		List<Cake> cakes = testRepository.insertCake(stores);
@@ -279,9 +285,9 @@ public class AllControllerSpringBootTest {
 		
 		File file = new File("src/main/resources/static/testPicture.jpg");
 		assertEquals(file.exists(), true);
-		byte[] bytes;
+		String bytes;
 		try {
-			bytes = Base64.getEncoder().encode(Files.readAllBytes(file.toPath()));
+			bytes = Base64.getEncoder().encodeToString(Files.readAllBytes(file.toPath()));
 			
 		} catch (IOException e) {
 			throw new RuntimeException("Files.readAllBytes Exception!!");
@@ -304,13 +310,25 @@ public class AllControllerSpringBootTest {
 		
 		String json = Mapper.objectMapper.writeValueAsString(demandSaveDTO);
 		System.out.println(json);
-		
-		mvc.perform(post("/demand/save")
+		String contentAsString = mvc.perform(post("/demand/save")
 						.content(json)
 						.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 //                .andExpect(content().string("success"))
-				.andDo(print());
+				.andDo(print())
+				.andReturn().getResponse().getContentAsString();
+		
+		UUID uuid = UUID.fromString(contentAsString.substring(1, contentAsString.length() - 1));
+		
+		File f = new File("upload/demand/" + demandSaveDTO.getCustomerUUID().toString() + File.separator + uuid + ".jpg");
+		byte[] bytes1 = Files.readAllBytes(f.toPath());
+		byte[] decode = MyUtil.decoder.decode(bytes1);
+		File f2 = new File("upload/test");
+		if (!f2.exists()) {
+			f2.mkdirs();
+		}
+		Files.write(Path.of("upload/test/1.jpg"), decode);//디코딩안하고 저장한 것을 디코딩했을 떄 잘되는지 확인.
+		
 	}
 	
 	@Test
@@ -354,6 +372,26 @@ public class AllControllerSpringBootTest {
 		String impossibleDate = Mapper.objectMapper.writeValueAsString(map1.get("impossibleDate"));
 		assertEquals(byId.getImpossibleDate(), impossibleDate);
 		
+	}
+	
+	@Test
+	public void changeStatus() throws Exception {
+		List<Demand> demandList = testRepository.insertAll();
+		Demand demand = demandList.get(0);
+		ChangeStatusRequestDTO dto = ChangeStatusRequestDTO.builder()
+				.demandId(demand.getUuid())
+				.changeStatusTo(DemandStatus.ACCEPTED)
+				.build();
+		String s = Mapper.objectMapper.writeValueAsString(dto);
+		
+		mvc.perform(post("/demand/change-status")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(s))
+				.andExpect(status().isOk())
+				.andDo(print());
+				
+		Demand byId = demandService.findById(i -> i, demand.getUuid());
+		assertEquals(byId.getStatus(), DemandStatus.ACCEPTED);;
 	}
 	
 }

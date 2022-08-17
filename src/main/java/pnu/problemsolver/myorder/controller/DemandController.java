@@ -11,14 +11,11 @@ import pnu.problemsolver.myorder.domain.constant.DemandStatus;
 import pnu.problemsolver.myorder.domain.constant.MemberType;
 import pnu.problemsolver.myorder.dto.*;
 import pnu.problemsolver.myorder.service.DemandService;
+import pnu.problemsolver.myorder.util.MyUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -47,19 +44,21 @@ public class DemandController {
 		
 		//사진저장. 사진은 없을 수도 있다. 없으면 위에서 saveWithFunction()으로 끝난 것임.
 		if (d.getFile() != null) {
-			byte[] bytes = Base64.getDecoder().decode(d.getFile());
-			File dir = new File(demandUploadPath + File.separator + d.getCustomerUUID().toString());
-			if (!dir.exists()) {//존재하지 않으면 생성.
-				dir.mkdirs();
-			}
-			Path imgPath = Paths.get(dir.toPath() + File.separator + uuid.toString() + "." + d.getExtension());
-			try {
-				Files.write(imgPath, bytes);
-				
-			} catch (IOException e) {
-				log.error("img write error!");
-				e.printStackTrace();
-			}
+//			byte[] bytes = Base64.getDecoder().decode(d.getFile());
+//			File dir = new File(demandUploadPath + File.separator + d.getCustomerUUID().toString());
+//			if (!dir.exists()) {//존재하지 않으면 생성.
+//				dir.mkdirs();
+//			}
+//			Path imgPath = Paths.get(dir.toPath() + File.separator + uuid.toString() + "." + d.getExtension());
+//			try {
+//				Files.write(imgPath, bytes);
+//
+//			} catch (IOException e) {
+//				log.error("img write error!");
+//				e.printStackTrace();
+//			}
+			Path imgPath = MyUtil.saveFile(Path.of(demandUploadPath + File.separator + d.getCustomerUUID().toString()), uuid.toString() + "." + d.getExtension(), d.getFile());
+			
 			demandService.setFilePath(uuid, imgPath);//저장해야 알 수 있기 때문에 sql두번 날리는 것은 어쩔 수 없다.
 		}
 		return uuid;
@@ -69,7 +68,6 @@ public class DemandController {
 	public List<DemandListResponseDTO> customerDemandList(@PathVariable("status") DemandStatus status, @RequestBody DemandListRequestDTO dto, HttpServletRequest request) {//@RequestHeader도 있다!
 		List<DemandListResponseDTO> resList = null;
 		MemberType memberType = (MemberType) request.getAttribute("memberType");
-		
 		String sortStr = dto.getSort();
 		PageRequest pageRequest = PageRequest.of(dto.getPage(), dto.getSize(), Sort.by(sortStr == null ? "created" : sortStr).descending());//기본값은 최신순!
 		
@@ -79,9 +77,7 @@ public class DemandController {
 			
 			resList = demandService.findByStoreIdAndDemandStatusPageable(i -> DemandListResponseDTO.toDTO(i), dto.getUuid(), status, pageRequest);
 			
-		} else if (memberType == MemberType.GUEST) {
-			log.error("GUEST can't access to /demand/{status}");
-		} else {
+		} else {//GUEST인지는 확인안해도 된다. 필터에서 확인함.
 			log.error("invalid memberType can't access to /demand/{status}");
 		}
 		return resList;
@@ -95,8 +91,7 @@ public class DemandController {
 	
 	@PostMapping("/change-status")//필요한 정보
 	public DemandDTO changeStatus(@RequestBody ChangeStatusRequestDTO dto) {
-		demandService.changeStatus(dto);
-		DemandDTO demandDTO = demandService.findById(i -> DemandDTO.toDTO(i), dto.getDemandId());
+		DemandDTO demandDTO = demandService.changeStatus(dto);
 		return demandDTO;
 	}
 	

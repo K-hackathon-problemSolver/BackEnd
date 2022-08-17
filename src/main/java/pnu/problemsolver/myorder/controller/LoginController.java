@@ -150,24 +150,27 @@ public class LoginController {
      */
     private UUID SNSgeneralCustomerLogin(GeneralOAuthDTO dto) {
         //TODO : 여기서 추가적인 검증을 필요로 할 수도 있다!
-        CustomerDTO customerDTO = CustomerDTO.GeneralOAuthDTOtoDTO(dto);
-        CustomerDTO res = customerService.findBySnsTypeAndSnsIdentifyKey(customerDTO);
-        if (res == null) {//회원 아님. 저장.
-            customerService.save(customerDTO);//PK가 uuid이기 때문에 기존 회원이더라도 새로 save해버림. 그래서 이렇게 따로 함수를 만든다.
-            return customerDTO.getUuid();
-        }
-        return res.getUuid();
+//        CustomerDTO customerDTO = CustomerDTO.GeneralOAuthDTOtoDTO(dto);
+        return customerService.login(dto);
+//
+//        CustomerDTO res = customerService.findBySnsTypeAndSnsIdentifyKey(customerDTO);
+//        if (res == null) {//회원 아님. 저장.
+//            customerService.save(customerDTO);//PK가 uuid이기 때문에 기존 회원이더라도 새로 save해버림. 그래서 이렇게 따로 함수를 만든다.
+//            return customerDTO.getUuid();
+//        }
+//        return res.getUuid();
     }
     
     private UUID SNSgeneralStoreLogin(GeneralOAuthDTO dto) {
         //TODO : 여기서 추가적인 검증을 필요로 할 수도 있다!
-        StoreDTO storeDTO = StoreDTO.GeneralOAuthDTOtoDTO(dto);
-        StoreDTO res = storeService.findBySnsTypeAndSnsIdentifyKey(i -> StoreDTO.toDTO(i), dto.getSnsType(), dto.getSnsIdentifyKey());
-        if (res == null) {//회원이 아닐 때!
-            storeService.save(storeDTO);//PK가 uuid이기 때문에 기존 회원이더라도 새로 save해버림. 그래서 이렇게 따로 함수를 만든다.
-            return storeDTO.getUuid();
-        }
-        return res.getUuid();
+//        StoreDTO storeDTO = StoreDTO.GeneralOAuthDTOtoDTO(dto);
+//        StoreDTO res = storeService.findBySnsTypeAndSnsIdentifyKey(i -> StoreDTO.toDTO(i), dto.getSnsType(), dto.getSnsIdentifyKey());
+//        if (res == null) {//회원이 아닐 때!
+//            storeService.save(storeDTO);//PK가 uuid이기 때문에 기존 회원이더라도 새로 save해버림. 그래서 이렇게 따로 함수를 만든다.
+//            return storeDTO.getUuid();
+//        }
+//        return res.getUuid();
+        return storeService.login(dto);
     }
     
     //이렇게 회사마다 로그인을 구현할 필요가 없어졌다. 클라이언트에서 알아서 해 줄 것임. 데이터 형식만 하나 정해주면 된다.!
