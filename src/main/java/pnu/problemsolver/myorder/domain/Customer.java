@@ -24,9 +24,7 @@ public class Customer extends BaseTimeEntitiy{
     private UUID uuid;
 
     private String email;
-
 //    private String pw;
-
     private String name;
 
     private String phone_num;

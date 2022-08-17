@@ -4,19 +4,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Commit;
-import org.springframework.transaction.annotation.Transactional;
-import pnu.problemsolver.myorder.domain.Store;
 import pnu.problemsolver.myorder.dto.CakeDTO;
 import pnu.problemsolver.myorder.dto.StoreDTO;
 
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
 //@Commit
-@Transactional
+//@Transactional
 @Slf4j
 class CakeServiceTest {
 
@@ -32,25 +25,21 @@ class CakeServiceTest {
         StoreDTO storeDTO = StoreDTO.builder()
                 .name("store!!")
                 .build();
-
         storeService.save(storeDTO);
-
         CakeDTO cakeDTO = CakeDTO.builder()
-                .uuid(UUID.randomUUID())
-                .storeUUID(storeDTO.getUuid())//없으면 자꾸 안되더라.
+//                .uuid(UUID.randomUUID())
+                .storeUUID(storeDTO.getUuid())//없으면 자꾸 안되더라. store를 위에서 저장했기 때문에 영컨에 store가 있는 상황임. 근데 Transactional이 끝나니까 같은 컨텍스트는 아닐 텐데..
 //                .demandUUID("UUID.randomUUID()")
                 .filePath("path!")
                 .option("{\"plate\":\"1\"}")
-                .name("신민건")
+                .name("아아")
                 .minPrice(123)
                 .description("설명")
                 .build();
-
-        log.info(cakeDTO.toString());
-
+    
         cakeService.save(cakeDTO);
         log.info(cakeDTO.toString());
-
+        log.info(cakeDTO.toString());
 
     }
 

@@ -29,7 +29,6 @@ public class Cake {
 	@ToString.Exclude
 	private Store store;
 	
-	
 	//    @Column(nullable = false) ManyToOne에는 @Column못쓴다.!
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    private Demand demand;
@@ -49,10 +48,14 @@ public class Cake {
 	
 	public static Cake toEntity(CakeDTO cakeDTO) {
 		UUID storeUUID = cakeDTO.getStoreUUID();
+		if (storeUUID == null) {
+			throw new NullPointerException("store must not be null!");//optional=false이다.
+		}
 		
 		Cake cake = Cake.builder()
 				.uuid(cakeDTO.getUuid())
-				.store(storeUUID == null ? null : Store.builder().uuid(storeUUID).build())//이렇게 해야한다..
+//				.store(storeUUID == null ? null : Store.builder().uuid(storeUUID).build())//어짜피 null이면 예외발생
+				.store(Store.builder().uuid(storeUUID).build())//
 				.filePath(cakeDTO.getFilePath())
 				.option(cakeDTO.getOption())
 				.name(cakeDTO.getName())
