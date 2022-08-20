@@ -15,6 +15,7 @@ public interface DemandRepository extends JpaRepository<Demand, UUID> {
 	
 //	@Query("select * from Demand d where d.customer.uuid = :#{#customer.uuid} and d.status = :#{#status}}")
 	List<Demand> findByCustomerAndStatus(Customer customer, DemandStatus status, Pageable pageable);
+	List<Demand> findByCustomer(Customer customer, Pageable pageable);
 	List<Demand> findByStoreAndStatus(Store store, DemandStatus status, Pageable pageable);
 	
 	/**

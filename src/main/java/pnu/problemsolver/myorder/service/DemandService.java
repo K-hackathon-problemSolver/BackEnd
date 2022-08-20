@@ -99,6 +99,14 @@ public class DemandService {
 		return resList;
 	}
 	
+	public <T> List<T> findByCustomerPageable(Function<Demand, T> func, UUID uuid, Pageable pageable) {
+		Customer customer = Customer.builder()
+				.uuid(uuid)
+				.build();
+		List<Demand> byCustomer = demandRepository.findByCustomer(customer, pageable);
+		return byCustomer.stream().map(i -> func.apply(i)).collect(Collectors.toList());
+	}
+	
 	//pageable만 기본값으로 제공.
 //	public <T> List<T> findByStoreIdAndDemandStatus(Function<Demand, T> func, UUID uuid, DemandStatus status, int page) {
 //		Store s = Store.builder()//service에선 엔티티를 생서해서 다룰 수 있다. 그래서 편하고 좋다.
@@ -169,5 +177,6 @@ public class DemandService {
 		demand.setFilePath(imgPath);
 		
 	}
+	
 	
 }

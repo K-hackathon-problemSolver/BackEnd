@@ -71,10 +71,10 @@ public class DemandController {
 		String sortStr = dto.getSort();
 		PageRequest pageRequest = PageRequest.of(dto.getPage(), dto.getSize(), Sort.by(sortStr == null ? "created" : sortStr).descending());//기본값은 최신순!
 		
-		if (memberType == MemberType.CUSTOMER) {
-			resList = demandService.findByCustomerIdAndDemandStatusPageable(i -> DemandListResponseDTO.toDTO(i), dto.getUuid(), status, pageRequest);
+		if (memberType == MemberType.CUSTOMER) {//customer의 경우 시간대로 한번에 보여준다.
+			resList = demandService.findByCustomerPageable(DemandListResponseDTO::toDTO, dto.getUuid(), pageRequest);
+//			resList = demandService.findByCustomerIdAndDemandStatusPageable(i -> DemandListResponseDTO.toDTO(i), dto.getUuid(), status, pageRequest);
 		} else if (memberType == MemberType.STORE) {
-			
 			resList = demandService.findByStoreIdAndDemandStatusPageable(i -> DemandListResponseDTO.toDTO(i), dto.getUuid(), status, pageRequest);
 			
 		} else {//GUEST인지는 확인안해도 된다. 필터에서 확인함.
@@ -82,6 +82,7 @@ public class DemandController {
 		}
 		return resList;
 	}
+	
 	
 	@GetMapping("/detailed")
 	//TODO : 하나씩 제공하는 것 보단 리스트로 제공하는게 더 유연성있다. 필요하면 제공하자.
