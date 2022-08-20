@@ -166,8 +166,6 @@ public class TestRepository {
 				.filePath("src/main/resources/static/" + 4 + ".jpg")
 				.build();
 		storeRepository.save(s1);
-		li.add(s1);
-		
 		
 		Store s2 = Store.builder()
 				.name("솔루션 메이커(광안점)")
@@ -183,7 +181,6 @@ public class TestRepository {
 				.filePath("src/main/resources/static/" + 4 + ".jpg")
 				.build();
 		storeRepository.save(s2);
-		li.add(s2);
 		
 		return li;
 	}
