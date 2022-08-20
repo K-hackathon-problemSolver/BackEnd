@@ -52,7 +52,7 @@ public class TestRepository {
 		IntStream.rangeClosed(0, storeList.size() - 1).forEach((i) -> {
 			//            int idx = (int) (Math.random() * storeDTOList.size());
 			IntStream.rangeClosed(0, 10).forEach(idx -> {
-				Path p = Paths.get("src/main/resources/static/" + (idx+1) + ".jpg");
+				Path p = Paths.get("src/main/resources/static/" + (idx + 1) + ".jpg");
 				Demand demand = Demand.builder()
 						.filePath(p.toString())
 						.cake(cakeList.get(i))
@@ -151,6 +151,40 @@ public class TestRepository {
 		testStore = s;
 		li.add(s);
 		
+		
+		Store s1 = Store.builder()
+				.name("솔루션 메이커(수영점)")
+				.snsIdentifyKey("snskey")
+				.birthYear(1999)
+				.description("맛있는 가게!")
+				.location("부산시 금정구 부산대학로~")
+				.email("zhdhfhd33@zsdf")
+				.snsType(SNSType.KAKAO)
+				.latitude(PusanLocation.SUYUNG.latitude)
+				.longitude(PusanLocation.SUYUNG.longitude)
+				.owner_phone_num("010-3391-6486")
+				.filePath("src/main/resources/static/" + 4 + ".jpg")
+				.build();
+		storeRepository.save(s1);
+		li.add(s1);
+		
+		
+		Store s2 = Store.builder()
+				.name("솔루션 메이커(광안점)")
+				.snsIdentifyKey("snskey")
+				.birthYear(1999)
+				.description("맛있는 가게!")
+				.location("부산시 금정구 부산대학로~")
+				.email("zhdhfhd33@zsdf")
+				.snsType(SNSType.KAKAO)
+				.latitude(PusanLocation.GUMJUNG.latitude)
+				.longitude(PusanLocation.GUMJUNG.longitude)
+				.owner_phone_num("010-3391-6486")
+				.filePath("src/main/resources/static/" + 4 + ".jpg")
+				.build();
+		storeRepository.save(s2);
+		li.add(s2);
+		
 		return li;
 	}
 	
@@ -173,17 +207,17 @@ public class TestRepository {
 		}
 		
 		for (int i = 0; i < list.size(); ++i) {//lise.size() = 11
-					Cake cake = Cake.builder()
-							.minPrice(19900)
-							.name("시그니처 케이크")
-							.option(option)
-							.store(list.get(i)) //연관관계
-							.description("주인장이 직접 만든 시그니처 메뉴")
-							.filePath("src/main/resources/static/" + (8) + ".jpg")
-							.build();
-					cakeRepositroy.save(cake);
-					li.add(cake);
-				}
+			Cake cake = Cake.builder()
+					.minPrice(19900)
+					.name("시그니처 케이크")
+					.option(option)
+					.store(list.get(i)) //연관관계
+					.description("주인장이 직접 만든 시그니처 메뉴")
+					.filePath("src/main/resources/static/" + (8) + ".jpg")
+					.build();
+			cakeRepositroy.save(cake);
+			li.add(cake);
+		}
 		return li;
 	}
 	

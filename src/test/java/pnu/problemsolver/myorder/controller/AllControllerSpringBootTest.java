@@ -292,9 +292,21 @@ public class AllControllerSpringBootTest {
 		} catch (IOException e) {
 			throw new RuntimeException("Files.readAllBytes Exception!!");
 		}
+		String testStoreStr = mvc.perform(get("/get-test-store"))
+				.andExpect(status().isOk())
+				.andDo(print())
+				.andReturn().getResponse().getContentAsString();
+		LoginResponseDTO store = Mapper.objectMapper.readValue(testStoreStr, LoginResponseDTO.class);
+		
+		String testCustomerStr = mvc.perform(get("/get-test-customer"))
+						.andExpect(status().isOk())
+						.andDo(print())
+						.andReturn().getResponse().getContentAsString();
+		LoginResponseDTO customer = Mapper.objectMapper.readValue(testCustomerStr, LoginResponseDTO.class);
+		
 		UUID cakeUUID = cakes.get(0).getUuid();
-		UUID customerUUID = customers.get(0).getUuid();
-		UUID storeUUID = stores.get(0).getUuid();
+		UUID customerUUID = customer.getUuid();
+		UUID storeUUID = store.getUuid();
 		
 		assertEquals(cakeUUID != null, true);
 		assertEquals(customerUUID != null, true);
@@ -314,7 +326,6 @@ public class AllControllerSpringBootTest {
 						.content(json)
 						.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
-//                .andExpect(content().string("success"))
 				.andDo(print())
 				.andReturn().getResponse().getContentAsString();
 		

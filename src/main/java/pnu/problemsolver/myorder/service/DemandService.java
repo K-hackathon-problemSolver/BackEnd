@@ -60,15 +60,15 @@ public class DemandService {
 		Optional<Store> storeOpt = storeRepository.findById(dto.getStoreUUID());
 		Optional<Customer> customerOpt = customerRepository.findById(dto.getCustomerUUID());
 		Optional<Cake> cakeOpt = cakeRepositroy.findById(dto.getCakeUUID());
-//		if (!storeOpt.isPresent()) {//어짜피 자동으로 예외 띄우기 때문에 내가 굳이 처리할 필요 없다.
-//			throw new NullPointerException("storeRepository.findById() return null");
-//		}
-//		if (!customerOpt.isPresent()) {
-//			throw new NullPointerException("customerRepository.findById() return null");
-//		}
-//		if (!cakeOpt.isPresent()) {
-//			throw new NullPointerException("cakeRepository.findById() return null");
-//		}
+		if (!storeOpt.isPresent()) {//어짜피 자동으로 예외 띄우기 때문에 내가 굳이 처리할 필요 없다.
+			throw new NullPointerException("storeRepository.findById() return null");
+		}
+		if (!customerOpt.isPresent()) {
+			throw new NullPointerException("customerRepository.findById() return null");
+		}
+		if (!cakeOpt.isPresent()) {
+			throw new NullPointerException("cakeRepository.findById() return null");
+		}
 		Demand demand = Demand.toEntity(dto, null, storeOpt.get(), customerOpt.get(), cakeOpt.get());
 		demandRepository.save(demand);
 		return demand.getUuid();
