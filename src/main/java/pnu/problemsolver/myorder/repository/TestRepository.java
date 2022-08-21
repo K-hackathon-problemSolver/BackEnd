@@ -115,12 +115,14 @@ public class TestRepository {
 	}
 	
 	public List<Store> insertStore() {
+		String[] storeName = {"도도 케이크", "일루전 케이크", "짱구네 케이크", "우영우 케이크", "쿠키 케이크", "케이킷", "에마롱 케이크", "두소녀", "세소녀", "다섯소녀", "백설공주와 일곱 난쟁이"};
+		
 		List<Store> li = new ArrayList<>();
 		for (int i = 1; i <= 11; ++i) { //사진이 11개라서 11개만 해야함.
 			Store st = Store.builder()
 					.snsIdentifyKey("snskey")
 					.birthYear(1999)
-					.name("store" + i)
+					.name(storeName[i - 1])
 					.description("맛있는 가게!")
 					.location("부산시 금정구 부산대학로~")
 					.email("zhdhfhd33@zsdf")
@@ -163,7 +165,7 @@ public class TestRepository {
 				.latitude(PusanLocation.SUYUNG.latitude)
 				.longitude(PusanLocation.SUYUNG.longitude)
 				.owner_phone_num("010-3391-6486")
-				.filePath("src/main/resources/static/" + 4 + ".jpg")
+				.filePath("src/main/resources/static/" + 5 + ".jpg")
 				.build();
 		storeRepository.save(s1);
 		
@@ -178,7 +180,7 @@ public class TestRepository {
 				.latitude(PusanLocation.GUMJUNG.latitude)
 				.longitude(PusanLocation.GUMJUNG.longitude)
 				.owner_phone_num("010-3391-6486")
-				.filePath("src/main/resources/static/" + 4 + ".jpg")
+				.filePath("src/main/resources/static/" + 6 + ".jpg")
 				.build();
 		storeRepository.save(s2);
 		

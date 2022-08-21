@@ -32,7 +32,7 @@ public class TestController {
 	private final JwtTokenProvider jwtTokenProvider;
 	
 	
-	@GetMapping("/")
+	@GetMapping("/insertDummy")
 	public String setting() {
 		//store, customer는 연관관계 없어서 먼저 넣을 수 있다
 		testRepository.insertAll();

@@ -124,13 +124,8 @@ public class StoreService {
 	}
 	
 	public <T> List<T> findByLocation(Function<Store, T> function, PusanLocation loc, int limit, int offset) {//내위치,limit, offset,
-//        log.error(String.valueOf(loc.latitude));
-//        log.error(String.valueOf(loc.longitude));
-//        log.error(String.valueOf(limit));
-//        log.error(String.valueOf(offset));
 		List<Store> li = storeRepository.findByLocation(loc.latitude, loc.longitude, limit, offset);
 		List<T> res = new ArrayList<>();
-		
 		for (Store i : li) {
 			res.add(function.apply(i));
 		}
