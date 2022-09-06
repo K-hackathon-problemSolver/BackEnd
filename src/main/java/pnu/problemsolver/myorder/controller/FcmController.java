@@ -15,6 +15,9 @@ import java.util.UUID;
 
 @RestController
 @Slf4j
+/**
+ * FCM기능은 추가 안되었다.
+ */
 public class FcmController {
 	
 	@Autowired

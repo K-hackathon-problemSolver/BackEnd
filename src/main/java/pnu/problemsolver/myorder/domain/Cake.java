@@ -63,7 +63,6 @@ public class Cake {
 				.minPrice(cakeDTO.getMinPrice())
 				.build();
 		
-//		System.out.println("Cake.toEntity : " + cake);
 		return cake;
 	}
 	

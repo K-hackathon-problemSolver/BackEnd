@@ -61,7 +61,7 @@ public class Store extends BaseTimeEntitiy {
 	
 	private String filePath;
 	
-	//bank랑 account는 못받는다.!
+	//bank랑 account는 못받는다.! 법이 있음.
 //    private String account;
 //    @Column(columnDefinition = "varchar(30)")
 //    private String bank;

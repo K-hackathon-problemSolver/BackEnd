@@ -36,7 +36,6 @@ public class CakeEditDTO {
 		Path path = Paths.get(filePath);
 		String bytes = null;
 		try {
-//			bytes = Base64.getEncoder().encode(Files.readAllBytes(path));
 			bytes = Base64.getEncoder().encodeToString(Files.readAllBytes(path));
 			
 		} catch (IOException e) {

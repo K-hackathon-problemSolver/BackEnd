@@ -48,19 +48,6 @@ public class CustomerDTO {
 
     }
 
-//    public static CustomerDTO NaverOAuthDTOToDTO(NaverOAuthDTO c) {
-//         CustomerDTO customerDTO= CustomerDTO.builder()
-//                .email(c.getEmail())
-//                .name(c.getName())
-//                .phone_num(c.getMobile())
-//                .snsType(SNSType.NAVER)
-//                .snsIdentifyKey(c.getId())
-//                .age(c.getAge())
-//                .build();
-//
-//        return customerDTO;
-//
-//    }
 
 
     public static CustomerDTO GeneralOAuthDTOtoDTO(GeneralOAuthDTO d) {

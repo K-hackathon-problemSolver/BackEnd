@@ -29,7 +29,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        //빌더패턴을 사용함.
         http
                 .httpBasic().disable()//기본 로그인 페이지 사용x
                 .csrf().disable()   //REST API 사용하기 때문에 csrf x. cors는 enable해야할듯?

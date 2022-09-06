@@ -50,19 +50,7 @@ public class FirebaseCloudMessageService {
 		
 		ResponseEntity<String> exchange = Request.restTemplate.exchange(API_URL, HttpMethod.POST, entity, String.class);
 		return exchange;
-//        OkHttpClient client = new OkHttpClient();
-//        RequestBody requestBody = RequestBody.create(message,
-//                MediaType.get("application/json; charset=utf-8"));
-//        Request request = new Request.Builder()
-//                .url(API_URL)
-//                .post(requestBody)
-//                .addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
-//                .addHeader(HttpHeaders.CONTENT_TYPE, "application/json; UTF-8")
-//                .build();
-
-//        Response response = client.newCall(request).execute();
 //
-//        System.out.println(response.body().string());
     }
 	
 	private String makeMessage(String targetToken, String title, String body, String img) throws JsonProcessingException {//img에 넣을 것은 없기에 보통 null을 넣으면 된다.

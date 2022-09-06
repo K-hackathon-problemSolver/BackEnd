@@ -46,17 +46,8 @@ public class StoreController {
 			return "\"jpg\", \"jpeg\", \"png\", \"bmp\", \"jfif\"확장자만 가능합니다."; //pdf는 지움.
 		}
 		//store dir 만들기.
-		
-//		Path dirPath = MyUtil.makeStorePath(Path.of(uploadPath), storeEditDTO.getUuid());
-//		MyUtil.saveStoreMainImg(dirPath, "mainImg." + storeEditDTO.getExtension(), storeEditDTO.getMainImg());
 		Path dirPath = Path.of(uploadPath + File.separator + storeEditDTO.getUuid());
 		Path mainImgPath = MyUtil.saveFile(dirPath, "mainImg." + storeEditDTO.getExtension(), storeEditDTO.getMainImg());
-//		Path mainImgPath = Paths.get(dirPath + File.separator + "mainImg." + storeEditDTO.getExtension());
-		//디코딩, 파일 생성.
-//		byte[] encodedBytes = Base64.getDecoder().decode(storeEditDTO.getMainImg());
-		//mainImg 저장
-//		Files.write(mainImgPath, encodedBytes);
-		
 		
 		List<CakeEditDTO> cakeEditDTOList = storeEditDTO.getCakeList();
 		
@@ -78,28 +69,6 @@ public class StoreController {
 		return "success";
 	}
 	
-	//반환하는게 경로라면 string이지만 Path객체를 사용하자. Path 객체를 사용하지 않더라도 그게 더 직관적이다.!
-//	private List<Path> saveCakeImg(Path storeDirPath, List<CakeEditDTO> cakeDTOList) throws IOException {
-//		List<Path> cakePathList = new ArrayList<>();
-//		for (CakeEditDTO i : cakeDTOList) {
-//			Path path = Paths.get(makeCakePath(storeDirPath.toString(), i));
-//			cakePathList.add(path);
-//			File cakeFile = path.toFile();
-//			byte[] decoded = Base64.getDecoder().decode(i.getImg());
-//			Files.write(cakeFile.toPath(), decoded);
-//		}
-//		return cakePathList;
-//	}
-	
-//	private Path makeStorePath(Path uploadPath, StoreEditDTO storeEditDTO) {
-//		Path storeDirPath = Paths.get(uploadPath + File.separator + storeEditDTO.getUuid());
-//		File mainFile = storeDirPath.toFile();
-//		if (!mainFile.exists()) {
-//			log.warn("파일이 없습니다.");
-//			mainFile.mkdirs();//전부 파일로 만들어버림.
-//		}
-//		return storeDirPath;
-//	}
 	
 	@PostMapping("/editImpossibleDate")
 	public String editImpossibleDate(@RequestBody Map map) throws JsonProcessingException {//map으로 받을 때 무조건 string으로 받는게 아니다. list면 ArrayList로 받음
@@ -109,11 +78,6 @@ public class StoreController {
 		
 	}
 
-//    @GetMapping("/list")//GET으로 오면 preflight만 준다.
-//    public List<StoreDTOForListPreflight> listPreflights() {
-//        List<StoreDTOForListPreflight> li = storeService.getAllPreflights();
-//        return li;
-//    }
 	
 	/**
 	 * 사용자 위치기반 추천
@@ -130,15 +94,6 @@ public class StoreController {
 		return byLocation;
 	}
 	
-	/**
-	 * 테스트용 함수. 실제로 사용되지는 않음.
-	 */
-//	@GetMapping("/list")
-//	public List<String> list() {
-//		List<StoreListResponseDTO> all = storeService.findAll(a -> StoreListResponseDTO.toDTO(a)); //store->T로 변환 함수만 넣어주면 된다.!
-//		List<String> res = all.stream().map(i -> i.getName()).collect(Collectors.toList());
-//		return res;
-//	}
 	
 	/**
 	 * 가게 하나를 보여줄 때에도 StoreEditDTO를 사용한다.
@@ -156,28 +111,6 @@ public class StoreController {
 		storeEditDTO.setCakeList(cakeEditDTOList);//cakeList는 toDTO에서 처리 못하기 때문에 따로 설정해줘야 한다.
 		return storeEditDTO;
 	}
-	
-	//유용한데 안쓴다.
-//    @PostMapping("/list")
-//    public List<StoreDTOForList> list(@RequestBody ArrayList<UUID> li) {
-//
-//        List<StoreDTOForList> resList = storeService.findAllInUUIDList(li);
-//        //encoding
-//        for (StoreDTOForList i : resList) {
-//            byte[] encodedImg = Base64.getEncoder().encode(i.getMainImg());
-//            i.setMainImg(encodedImg);
-//        }
-//        return resList;
-//    }
-	
-//	public boolean isFileExtensionOk(String extension) {
-////pdf는 빼기로 했다.
-//		return Arrays.asList("jpg", "jpeg", "png", "bmp", "jfif").contains(extension);
-//	}
-	
-//	public String makeCakePath(String storeDirPath, CakeEditDTO cakeEditDTO) {
-//		return storeDirPath + File.separator + cakeEditDTO.getName() + "." + cakeEditDTO.getExtension();
-//	}
 	
 	//TODO : 통계만 하면 된다.
 	@PostMapping("/statistic")

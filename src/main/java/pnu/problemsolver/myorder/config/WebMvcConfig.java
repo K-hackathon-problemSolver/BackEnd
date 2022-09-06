@@ -22,24 +22,6 @@ public class WebMvcConfig implements WebMvcConfigurer {//converter등록을 위�
 
 
 
-//    @Bean
-//    public RestTemplate restTemplate() {
-//        return new RestTemplate();
-//    }
-
-//    @Bean
-//    public JwtAuthenticationFilter jwtAuthenticationFilter() {
-//        return new JwtAuthenticationFilter((JwtTokenProvider) applicationContext.getBean("jwtTokenProvider")
-//                , (StoreRepository) applicationContext.getBean("storeRepository")
-//                , (CustomerRepository) applicationContext.getBean("customerRepository"));
-//    }
-
-//    @Override
-//    public void addFormatters(FormatterRegistry registry) {
-//        registry.addConverter();
-//
-//    }
-
     @Bean
     public FilterRegistrationBean<JwtAuthenticationFilter> jwtAuthenticationFilterReg() {
         FilterRegistrationBean<JwtAuthenticationFilter> registrationBean = new FilterRegistrationBean<>();
@@ -61,14 +43,5 @@ public class WebMvcConfig implements WebMvcConfigurer {//converter등록을 위�
         return registrationBean;
     }
     
-    //TODO : 시간남으면 enum 소문자로 써도 되게 하기
-//    @Bean
-//    public FilterRegistrationBean<EnumToUpperCaseFilter> enumToUpperCaseFilter() {
-//        FilterRegistrationBean<EnumToUpperCaseFilter> registrationBean = new FilterRegistrationBean<>();
-//        registrationBean.setFilter(new EnumToUpperCaseFilter());
-////        registrationBean.addUrlPatterns("/*"); //디폴트값
-//        registrationBean.setOrder(3);
-//        registrationBean.setName("EmumToUpperCaseFileter : enum사용을 위해 대문자로 변경");
-//        return registrationBean;
-//    }
+ 
 }

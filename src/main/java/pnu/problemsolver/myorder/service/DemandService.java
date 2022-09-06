@@ -107,22 +107,6 @@ public class DemandService {
 		return byCustomer.stream().map(i -> func.apply(i)).collect(Collectors.toList());
 	}
 	
-	//pageable만 기본값으로 제공.
-//	public <T> List<T> findByStoreIdAndDemandStatus(Function<Demand, T> func, UUID uuid, DemandStatus status, int page) {
-//		Store s = Store.builder()//service에선 엔티티를 생서해서 다룰 수 있다. 그래서 편하고 좋다.
-//				.uuid(uuid)
-//				.build();
-//
-//		PageRequest pageable = PageRequest.of(page, 5, Sort.by("created"));
-//
-//		List<Demand> byCustomer = demandRepository.findByStoreAndStatus(s, status, pageable);
-//
-//		List<T> resList = new ArrayList<>();
-//		for (Demand i : byCustomer) {
-//			resList.add(func.apply(i));
-//		}
-//		return resList;
-//	}
 	
 	/**
 	 * @param func demand->want type converter넣어주면 된다.

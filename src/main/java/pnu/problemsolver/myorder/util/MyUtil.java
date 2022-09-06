@@ -33,20 +33,7 @@ public class MyUtil {
 		}
 		return imgPath;
 	}
-	
-//	public static void saveStoreMainImg(Path dirPath, String fileName, String mainImg) throws IOException {
-//		Files.write(Path.of(dirPath + File.separator + fileName), mainImg.getBytes());
-//	}
-	
-//	public static Path makeStorePath(Path uploadPath, UUID storeUUID) {
-//		Path storeDirPath = Paths.get(uploadPath + File.separator + storeUUID.toString());
-//		File mainFile = storeDirPath.toFile();
-//		if (!mainFile.exists()) {
-//			log.warn("파일이 없습니다.");
-//			mainFile.mkdirs();//전부 파일로 만들어버림.
-//		}
-//		return storeDirPath;
-//	}
+
 	
 	public static List<Path> saveCakeImg(Path storeDirPath, List<CakeEditDTO> cakeDTOList) throws IOException {
 		List<Path> cakePathList = new ArrayList<>();

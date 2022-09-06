@@ -56,13 +56,6 @@ public class Demand extends BaseTimeEntitiy {
 	
 	private String filePath;
 
-//    public void setCake(Cake cake) {
-//        this.cake = cake;
-//    }
-
-//    public void setCustomer(Customer customer) {
-//        this.customer = customer;
-//    }
 	
 	
 	public static Demand toEntity(DemandDTO dto) {
@@ -95,9 +88,6 @@ public class Demand extends BaseTimeEntitiy {
 		return demand;
 	}
 
-//    public void setCreated(LocalDateTime ldt) {
-//        created = ldt;
-//    }
 	
 	
 	//저장까지 여기서 하면 안된다. 너무 많은 기능을 함. 하나의 함수 = 하나의 기능.

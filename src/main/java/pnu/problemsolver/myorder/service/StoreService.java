@@ -74,31 +74,6 @@ public class StoreService {
 		storeDTO.setUuid(store.getUuid());//저장하기전에는 uuid가 없다.
 	}
 
-//    public StoreDTO save(StoreDTO storeDTO) {
-//        Store store = Store.toEntity(storeDTO);
-//        Store save = storeRepository.save(store);
-//        return StoreDTO.toDTO(save);
-//    }
-//
-//
-
-//    public List<StoreDTOForListPreflight> getAllPreflights() {
-//        List<Store> li = storeRepository.findAll();
-//        List<StoreDTOForListPreflight> liDTO = new ArrayList<>();
-//        for (Store i : li) {
-//            liDTO.add(StoreDTOForListPreflight.toDTO(i));
-//        }
-//        return liDTO;
-//    }
-
-//    public List<StoreListResponseDTO> findAllInUUIDList(List<UUID> param) {
-//        List<Store> li = storeRepository.findAllInUUIDList(param);
-//        List<StoreListResponseDTO> resList = new ArrayList<>();
-//        for (Store i : li) {
-//            resList.add(StoreListResponseDTO.toDTO(i)); //filePath->encodeing->byte[]로 만든다.
-//        }
-//        return resList;
-//    }
 	
 	public <T> T findBySnsTypeAndSnsIdentifyKey(Function<Store, T> func, SNSType snsType, String snsIdKey) {
 		
